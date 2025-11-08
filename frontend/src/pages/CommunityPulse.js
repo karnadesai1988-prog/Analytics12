@@ -118,25 +118,18 @@ export const CommunityPulse = () => {
       return;
     }
     
-    if (!selectedZone) {
-      toast.error('Please select a zone');
+    if (!selectedTerritory) {
+      toast.error('Please select a territory');
       return;
     }
 
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      
-      // Find territory in selected zone (or create a default one)
-      let territoryId = territories.find(t => t.zone === selectedZone)?.id;
-      if (!territoryId && territories.length > 0) {
-        territoryId = territories[0].id;
-      }
 
       const commentData = {
-        territoryId: territoryId,
+        territoryId: selectedTerritory,
         text: newComment,
-        zone: selectedZone,
         useAI: false
       };
 
