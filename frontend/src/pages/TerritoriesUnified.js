@@ -56,17 +56,25 @@ const highlightedPinIcon = new L.Icon({
   className: 'highlighted-marker'
 });
 
-// Helper to check if a point is inside a polygon
-const isPointInPolygon = (point, polygon) => {
-  const [lat, lng] = point;
-  let inside = false;
-  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-    const [xi, yi] = polygon[i];
-    const [xj, yj] = polygon[j];
-    const intersect = ((yi > lng) !== (yj > lng)) && (lat < (xj - xi) * (lng - yi) / (yj - yi) + xi);
-    if (intersect) inside = !inside;
-  }
-  return inside;
+// Helper to check if a point is inside a circle (using Haversine formula)
+const isPointInCircle = (point, center, radiusInMeters) => {
+  const [lat1, lng1] = point;
+  const lat2 = center.lat;
+  const lng2 = center.lng;
+  
+  const R = 6371e3; // Earth radius in meters
+  const φ1 = lat1 * Math.PI / 180;
+  const φ2 = lat2 * Math.PI / 180;
+  const Δφ = (lat2 - lat1) * Math.PI / 180;
+  const Δλ = (lng2 - lng1) * Math.PI / 180;
+  
+  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c;
+  
+  return distance <= radiusInMeters;
 };
 
 const MapUpdater = ({ center, zoom }) => {
