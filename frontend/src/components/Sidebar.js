@@ -9,8 +9,8 @@ import { MapPin, LayoutDashboard, FileText, MessageSquare, LogOut, Wifi, WifiOff
 const navigation = [
   { name: 'Territories & Map', href: '/territories', icon: MapPin },
   { name: 'Dashboard & Analytics', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Data Gathering', href: '/data-gathering', icon: FileText },
-  { name: 'Comments', href: '/comments', icon: MessageSquare },
+  { name: 'Typo, Feedback & Suggestions', href: '/data-gathering', icon: FileText },
+  { name: 'Community Pulse', href: '/comments', icon: MessageSquare },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
