@@ -125,8 +125,7 @@ class TerritoryCreate(BaseModel):
     zone: str
     pincode: str
     center: Optional[Dict[str, float]] = None
-    radius: float = 5000
-    boundary: Optional[List[List[float]]] = None
+    radius: float = 2500  # 2.5km radius = 5km diameter
     metrics: TerritoryMetrics = Field(default_factory=TerritoryMetrics)
     restrictions: TerritoryRestrictions = Field(default_factory=TerritoryRestrictions)
 
