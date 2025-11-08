@@ -327,6 +327,23 @@ async def validate_comment_ai(text: str, api_key: str) -> tuple:
         return True, f"AI validation failed: {str(e)}", "neutral"
 
 def calculate_ai_insights(metrics: TerritoryMetrics) -> AIInsights:
+    # Check if any data exists
+    has_data = any([
+        metrics.investments > 0,
+        metrics.buildings > 0,
+        metrics.populationDensity > 0,
+        metrics.qualityOfProject > 0,
+        metrics.govtInfra > 0,
+        metrics.livabilityIndex > 0,
+        metrics.airPollutionIndex > 0,
+        metrics.roads > 0,
+        metrics.crimeRate > 0
+    ])
+    
+    if not has_data:
+        # Return zeros when no data
+        return AIInsights(appreciationPercent=0, demandPressure=0, confidenceScore=0, aiSuggestions=["No data available - add metrics to see insights"])
+    
     appreciation = (
         metrics.investments * 0.25 +
         metrics.govtInfra * 0.2 +
