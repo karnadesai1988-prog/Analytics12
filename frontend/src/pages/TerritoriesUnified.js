@@ -174,7 +174,6 @@ export const TerritoriesUnified = () => {
   const [territoryForm, setTerritoryForm] = useState({
     name: '',
     city: 'Ahmedabad',
-    zone: '',
     pincode: ''
   });
   
