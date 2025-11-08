@@ -161,7 +161,7 @@ export const TerritoriesUnified = () => {
   const [showTerritoryDialog, setShowTerritoryDialog] = useState(false);
   const [showPinDialog, setShowPinDialog] = useState(false);
   const [showFilterDialog, setShowFilterDialog] = useState(false);
-  const [isPickingLocation, setIsPickingLocation] = useState(false);
+  const [isPickingLocation, setIsPickingLocation] = useState(true); // Always true by default
   
   const [selectedTerritory, setSelectedTerritory] = useState(null);
   const [viewOnlySelected, setViewOnlySelected] = useState(false);
