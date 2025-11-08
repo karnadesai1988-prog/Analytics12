@@ -88,7 +88,7 @@ const MapUpdater = ({ center, zoom }) => {
 };
 
 // Draggable Place Picker Component
-const DraggablePlacePicker = ({ initialPosition, onLocationChange }) => {
+const DraggablePlacePicker = ({ initialPosition, onLocationChange, onMarkerClick }) => {
   const [position, setPosition] = useState(initialPosition);
   const markerRef = useRef(null);
   
@@ -107,8 +107,12 @@ const DraggablePlacePicker = ({ initialPosition, onLocationChange }) => {
           onLocationChange(location);
         }
       },
+      click() {
+        // Open pin creation dialog when marker is clicked
+        onMarkerClick();
+      },
     }),
-    [onLocationChange],
+    [onLocationChange, onMarkerClick],
   );
 
   const placePickerIcon = new L.Icon({
@@ -130,7 +134,7 @@ const DraggablePlacePicker = ({ initialPosition, onLocationChange }) => {
       <Popup>
         <div className="text-sm">
           <strong>📍 Place Picker</strong><br/>
-          <span className="text-xs text-gray-600">Drag me to select location</span><br/>
+          <span className="text-xs text-gray-600">Drag to move • Click to create pin</span><br/>
           <div className="mt-2 p-2 bg-blue-50 rounded">
             <strong>Current Position:</strong><br/>
             Lat: {position.lat.toFixed(6)}<br/>
