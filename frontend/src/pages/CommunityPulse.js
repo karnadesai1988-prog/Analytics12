@@ -7,21 +7,10 @@ import { Textarea } from '../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { toast } from 'sonner';
-import { MessageSquare, Send, Upload, X, MapPin, User } from 'lucide-react';
+import { MessageSquare, Send, Upload, X, User } from 'lucide-react';
 import axios from 'axios';
-import L from 'leaflet';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const AHMEDABAD_CENTER = [23.0225, 72.5714];
-
-// Comment marker icon
-const commentIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34]
-});
 
 export const CommunityPulse = () => {
   const [territories, setTerritories] = useState([]);
