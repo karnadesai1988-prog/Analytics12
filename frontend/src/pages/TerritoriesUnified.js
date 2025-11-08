@@ -713,31 +713,51 @@ export const TerritoriesUnified = () => {
       {/* Create Pin Dialog */}
       <Dialog open={showPinDialog} onOpenChange={(open) => {
         setShowPinDialog(open);
-        if (!open) setIsPickingLocation(false);
+        if (!open) {
+          setIsPickingLocation(false);
+          // Reset form when closing
+          setPinForm({
+            location: { lat: AHMEDABAD_CENTER[0], lng: AHMEDABAD_CENTER[1] },
+            type: [],
+            label: '',
+            description: '',
+            hasGeofence: false,
+            geofenceRadius: 1000,
+            territoryId: '',
+            generateAIInsights: false
+          });
+        }
       }}>
         <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Add New Pin</DialogTitle>
             <DialogDescription>
-              <span className="text-blue-600 font-semibold">📍 Drag the red marker on the map to select location</span>
+              <div className="flex items-center gap-2 text-blue-600 font-semibold">
+                <span>📍 Step 1: Drag the red marker on map to select location</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600 text-xs mt-1">
+                <span>Step 2: Fill in the details below</span>
+              </div>
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreatePin} className="space-y-4">
             <div>
-              <Label>Location (Drag marker on map)</Label>
-              <div className="space-y-2">
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div className="text-sm font-medium text-blue-900">
-                    📍 Current Position:
+              <Label className="text-sm font-semibold">📍 Selected Location</Label>
+              <div className="mt-2 p-3 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="text-gray-600">Latitude:</span>
+                    <div className="font-mono font-bold text-blue-900">{pinForm.location.lat.toFixed(6)}</div>
                   </div>
-                  <div className="text-xs text-blue-700 mt-1 font-mono">
-                    Lat: {pinForm.location.lat.toFixed(6)}<br/>
-                    Lng: {pinForm.location.lng.toFixed(6)}
+                  <div>
+                    <span className="text-gray-600">Longitude:</span>
+                    <div className="font-mono font-bold text-blue-900">{pinForm.location.lng.toFixed(6)}</div>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500">
-                  💡 Drag the red marker on the map to change location
-                </p>
+                <div className="mt-2 text-xs text-blue-700 flex items-center gap-1">
+                  <span>💡</span>
+                  <span>Drag the <strong className="text-red-600">RED MARKER</strong> on the map to change location</span>
+                </div>
               </div>
             </div>
 
