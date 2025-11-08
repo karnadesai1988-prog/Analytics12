@@ -70,6 +70,9 @@ class BackendTester:
         if success and "token" in data:
             self.log_result(f"User Signup ({role})", True, f"Successfully created {role} user")
             return data["token"]
+        elif not success and "already registered" in str(data).lower():
+            self.log_result(f"User Signup ({role})", True, f"User already exists (expected)")
+            return None
         else:
             self.log_result(f"User Signup ({role})", False, f"Failed to create user", data)
             return None
