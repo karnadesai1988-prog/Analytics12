@@ -196,6 +196,16 @@ export const TerritoriesUnified = () => {
     setPinForm({ ...pinForm, location });
   };
 
+  const handleShowPinDialog = () => {
+    // Reset to map center when opening dialog
+    setPinForm({
+      ...pinForm,
+      location: { lat: mapCenter[0], lng: mapCenter[1] }
+    });
+    setShowPinDialog(true);
+    setIsPickingLocation(true);
+  };
+
   const handleCreateTerritory = async (e) => {
     e.preventDefault();
     
