@@ -626,7 +626,7 @@ export const TerritoriesUnified = () => {
                 placeholder="380015"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Geofence boundary will be fetched automatically
+                A 5km diameter circle will be created around this pincode
               </p>
             </div>
 
