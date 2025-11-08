@@ -194,6 +194,8 @@ class Comment(BaseModel):
     userId: str
     userName: str
     text: str
+    zone: Optional[str] = None
+    photo: Optional[str] = None
     validationStatus: str
     validationReason: Optional[str] = None
     sentiment: Optional[str] = None
