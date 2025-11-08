@@ -649,6 +649,49 @@ export const TerritoriesUnified = () => {
                 </React.Fragment>
               );
             })}
+            
+            {/* Comment Markers */}
+            {comments.map(comment => {
+              const territory = territories.find(t => t.id === comment.territoryId);
+              if (!territory || !territory.center) return null;
+              
+              return (
+                <Marker
+                  key={`comment-${comment.id}`}
+                  position={[territory.center.lat, territory.center.lng]}
+                  icon={commentIcon}
+                >
+                  <Popup maxWidth={280}>
+                    <div className="text-sm space-y-2">
+                      <div className="flex items-center gap-2 border-b pb-2">
+                        <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-purple-700">
+                            {comment.userName.split(' ').map(n => n[0]).join('')}
+                          </span>
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-semibold">{comment.userName}</div>
+                          <div className="text-xs text-gray-500">{territory.name}</div>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-gray-700">{comment.text}</p>
+                      </div>
+                      {comment.photo && (
+                        <img
+                          src={comment.photo}
+                          alt="Comment attachment"
+                          className="w-full h-32 object-cover rounded"
+                        />
+                      )}
+                      <div className="text-xs text-gray-400 pt-2 border-t">
+                        {new Date(comment.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
           </MapContainer>
         </div>
       </div>
