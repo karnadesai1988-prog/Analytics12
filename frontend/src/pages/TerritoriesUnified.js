@@ -456,12 +456,53 @@ export const TerritoriesUnified = () => {
                       click: () => handleTerritoryClick(territory)
                     }}
                   >
-                    <Popup>
-                      <div className="text-sm">
-                        <strong>{territory.name}</strong><br/>
-                        Zone: {territory.zone}<br/>
-                        Pincode: {territory.pincode}<br/>
-                        Appreciation: {territory.aiInsights?.appreciationPercent || 0}%
+                    <Popup maxWidth={300}>
+                      <div className="text-sm space-y-2">
+                        <div className="border-b pb-2">
+                          <h3 className="font-bold text-base">{territory.name}</h3>
+                          <p className="text-xs text-gray-600">Zone: {territory.zone} | Pincode: {territory.pincode}</p>
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <h4 className="font-semibold text-xs text-orange-600">AI Insights</h4>
+                          <div className="grid grid-cols-2 gap-1 text-xs">
+                            <span className="text-gray-600">Appreciation:</span>
+                            <span className="font-semibold text-green-600">{territory.aiInsights?.appreciationPercent || 0}%</span>
+                            <span className="text-gray-600">Confidence:</span>
+                            <span className="font-semibold">{territory.aiInsights?.confidenceScore || 0}%</span>
+                            <span className="text-gray-600">Demand:</span>
+                            <span className="font-semibold">{territory.aiInsights?.demandPressure || 0}</span>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <h4 className="font-semibold text-xs text-blue-600">Key Metrics</h4>
+                          <div className="grid grid-cols-2 gap-1 text-xs">
+                            <span className="text-gray-600">Investments:</span>
+                            <span className="font-semibold">{territory.metrics?.investments || 0}/10</span>
+                            <span className="text-gray-600">Buildings:</span>
+                            <span className="font-semibold">{territory.metrics?.buildings || 0}</span>
+                            <span className="text-gray-600">Population:</span>
+                            <span className="font-semibold">{territory.metrics?.populationDensity || 0}/10</span>
+                            <span className="text-gray-600">Livability:</span>
+                            <span className="font-semibold text-green-600">{territory.metrics?.livabilityIndex || 0}/10</span>
+                            <span className="text-gray-600">Crime Rate:</span>
+                            <span className="font-semibold text-red-600">{territory.metrics?.crimeRate || 0}/10</span>
+                            <span className="text-gray-600">Govt Infra:</span>
+                            <span className="font-semibold">{territory.metrics?.govtInfra || 0}/10</span>
+                          </div>
+                        </div>
+
+                        {territory.aiInsights?.aiSuggestions && territory.aiInsights.aiSuggestions.length > 0 && (
+                          <div className="pt-2 border-t">
+                            <h4 className="font-semibold text-xs text-purple-600 mb-1">AI Suggestions</h4>
+                            <ul className="text-xs space-y-0.5 list-disc list-inside">
+                              {territory.aiInsights.aiSuggestions.map((suggestion, idx) => (
+                                <li key={idx} className="text-gray-700">{suggestion}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     </Popup>
                   </Polygon>
