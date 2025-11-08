@@ -425,13 +425,15 @@ export const TerritoriesUnified = () => {
             
             {isPickingLocation && <LocationPicker onLocationSelect={handleLocationPicked} />}
             
-            {/* Territories */}
+            {/* Territories as Circles */}
             {visibleTerritories.map(territory => {
-              if (territory.boundary && territory.boundary.length > 0) {
+              if (territory.center) {
+                const radius = territory.radius || 2500; // Default 2.5km radius
                 return (
-                  <Polygon
+                  <Circle
                     key={territory.id}
-                    positions={territory.boundary}
+                    center={[territory.center.lat, territory.center.lng]}
+                    radius={radius}
                     pathOptions={{
                       color: selectedTerritory?.id === territory.id ? '#f97316' : '#3b82f6',
                       weight: selectedTerritory?.id === territory.id ? 3 : 2,
@@ -446,6 +448,9 @@ export const TerritoriesUnified = () => {
                         <div className="border-b pb-2">
                           <h3 className="font-bold text-base">{territory.name}</h3>
                           <p className="text-xs text-gray-600">Zone: {territory.zone} | Pincode: {territory.pincode}</p>
+                          <p className="text-xs text-blue-600 font-semibold mt-1">
+                            🔵 5km diameter coverage area
+                          </p>
                         </div>
                         
                         <div className="space-y-1">
@@ -490,7 +495,7 @@ export const TerritoriesUnified = () => {
                         )}
                       </div>
                     </Popup>
-                  </Polygon>
+                  </Circle>
                 );
               }
               return null;
