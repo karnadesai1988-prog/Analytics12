@@ -6,7 +6,7 @@ import { Toaster } from './components/ui/sonner';
 import { Auth } from './components/Auth';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './pages/Dashboard';
-import { Territories } from './pages/Territories';
+import { TerritoriesNew } from './pages/TerritoriesNew';
 import { DataGathering } from './pages/DataGathering';
 import { Analytics } from './pages/Analytics';
 import { Comments } from './pages/Comments';
