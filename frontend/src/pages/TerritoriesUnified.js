@@ -702,7 +702,7 @@ export const TerritoriesUnified = () => {
           <DialogHeader>
             <DialogTitle>Add New Pin</DialogTitle>
             <DialogDescription>
-              {isPickingLocation ? 'Click on the map to select location' : 'Configure pin details'}
+              <span className="text-blue-600 font-semibold">📍 Drag the red marker on the map to select location</span>
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreatePin} className="space-y-4">
