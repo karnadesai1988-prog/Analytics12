@@ -216,20 +216,9 @@ export const TerritoriesUnified = () => {
     setPinForm({ ...pinForm, location });
   };
 
-  const handleShowPinDialog = () => {
-    // Reset form and enable place picker
-    setPinForm({
-      location: { lat: mapCenter[0], lng: mapCenter[1] },
-      type: [],
-      label: '',
-      description: '',
-      hasGeofence: false,
-      geofenceRadius: 1000,
-      territoryId: '',
-      generateAIInsights: false
-    });
+  const handlePlacePickerClick = () => {
+    // Open pin dialog when place picker is clicked
     setShowPinDialog(true);
-    setIsPickingLocation(true);
   };
 
   const handleCreateTerritory = async (e) => {
