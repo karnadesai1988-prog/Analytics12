@@ -24,23 +24,10 @@ const commentIcon = new L.Icon({
   popupAnchor: [1, -34]
 });
 
-const ZONES = [
-  'Central Zone',
-  'West Zone',
-  'East Zone',
-  'North Zone',
-  'South Zone',
-  'Satellite Zone',
-  'Bodakdev Zone',
-  'Vastrapur Zone',
-  'Maninagar Zone',
-  'Navrangpura Zone'
-];
-
 export const CommunityPulse = () => {
   const [territories, setTerritories] = useState([]);
   const [comments, setComments] = useState([]);
-  const [selectedZone, setSelectedZone] = useState('');
+  const [selectedTerritory, setSelectedTerritory] = useState('');
   const [newComment, setNewComment] = useState('');
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
