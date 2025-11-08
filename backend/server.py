@@ -182,6 +182,8 @@ class PinUpdate(BaseModel):
 class CommentCreate(BaseModel):
     territoryId: str
     text: str
+    zone: Optional[str] = None
+    photo: Optional[str] = None  # Base64 encoded image
     useAI: bool = False
     apiKey: Optional[str] = None
 
