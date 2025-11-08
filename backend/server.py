@@ -333,6 +333,89 @@ async def validate_comment_ai(text: str, api_key: str) -> tuple:
     except Exception as e:
         return True, f"AI validation failed: {str(e)}", "neutral"
 
+# Pin type weightages for territory rating
+PIN_TYPE_WEIGHTAGES = {
+    'job': 9,
+    'supplier': 8,
+    'vendor': 8,
+    'shop': 7,
+    'office': 9,
+    'warehouse': 7,
+    'service_center': 6,
+    'event_venue': 6,
+    'project_site': 10,
+    'residential_area': 9,
+    'parking_logistics': 5,
+    'landmark': 6
+}
+
+def is_pin_in_territory(pin_location: Dict[str, float], territory_center: Dict[str, float], radius_meters: float) -> bool:
+    """Check if a pin is within territory radius using Haversine formula"""
+    from math import radians, sin, cos, sqrt, atan2
+    
+    lat1 = radians(pin_location['lat'])
+    lon1 = radians(pin_location['lng'])
+    lat2 = radians(territory_center['lat'])
+    lon2 = radians(territory_center['lng'])
+    
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    
+    # Earth radius in meters
+    R = 6371000
+    distance = R * c
+    
+    return distance <= radius_meters
+
+async def calculate_territory_rating(territory_id: str, territory_center: Dict[str, float], radius: float) -> TerritoryRating:
+    """Calculate territory rating based on pins within radius"""
+    # Get all pins
+    pins = await db.pins.find().to_list(length=None)
+    
+    # Count pins by type within territory
+    pin_type_counts = {pin_type: 0 for pin_type in PIN_TYPE_WEIGHTAGES.keys()}
+    
+    for pin in pins:
+        if is_pin_in_territory(pin['location'], territory_center, radius):
+            # A pin can have multiple types
+            for pin_type in pin.get('type', []):
+                if pin_type in pin_type_counts:
+                    pin_type_counts[pin_type] += 1
+    
+    # Calculate scores
+    pin_type_scores = {}
+    total_score = 0
+    
+    for pin_type, count in pin_type_counts.items():
+        if pin_type in PIN_TYPE_WEIGHTAGES:
+            score = PIN_TYPE_WEIGHTAGES[pin_type] * count
+            pin_type_scores[pin_type] = score
+            total_score += score
+    
+    # Calculate top contributors (top 3)
+    top_contributors = []
+    if total_score > 0:
+        sorted_scores = sorted(pin_type_scores.items(), key=lambda x: x[1], reverse=True)[:3]
+        for pin_type, score in sorted_scores:
+            if score > 0:
+                percentage = (score / total_score) * 100
+                top_contributors.append({
+                    'type': pin_type.replace('_', ' ').title(),
+                    'score': score,
+                    'percentage': round(percentage, 2),
+                    'count': pin_type_counts[pin_type]
+                })
+    
+    return TerritoryRating(
+        totalScore=total_score,
+        pinTypeScores=pin_type_scores,
+        pinTypeCounts=pin_type_counts,
+        topContributors=top_contributors
+    )
+
 def calculate_ai_insights(metrics: TerritoryMetrics) -> AIInsights:
     # Check if any data exists
     has_data = any([
