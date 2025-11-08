@@ -255,7 +255,7 @@ export const TerritoriesUnified = () => {
       
       toast.success(`Territory created with 5km diameter circle for pincode ${territoryForm.pincode}!`);
       setShowTerritoryDialog(false);
-      setTerritoryForm({ name: '', city: 'Ahmedabad', zone: '', pincode: '' });
+      setTerritoryForm({ name: '', city: 'Ahmedabad', pincode: '' });
       loadData();
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to create territory');
