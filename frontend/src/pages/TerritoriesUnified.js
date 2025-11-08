@@ -90,9 +90,13 @@ const MapUpdater = ({ center, zoom }) => {
 // Draggable Place Picker Component
 const DraggablePlacePicker = ({ initialPosition, onLocationChange }) => {
   const [position, setPosition] = useState(initialPosition);
-  const markerRef = React.useRef(null);
+  const markerRef = useRef(null);
   
-  const eventHandlers = React.useMemo(
+  useEffect(() => {
+    setPosition(initialPosition);
+  }, [initialPosition]);
+  
+  const eventHandlers = useMemo(
     () => ({
       dragend() {
         const marker = markerRef.current;
