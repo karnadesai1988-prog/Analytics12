@@ -341,7 +341,7 @@ export const TerritoriesUnified = () => {
             </Button>
             
             <Button
-              onClick={() => setShowPinDialog(true)}
+              onClick={handleShowPinDialog}
               variant="outline"
               size="sm"
             >
