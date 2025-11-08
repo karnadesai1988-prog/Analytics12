@@ -437,8 +437,9 @@ async def update_territory(
     
     updated = await db.territories.find_one({"id": territory_id}, {"_id": 0})
     
-    # Broadcast update
-    await manager.broadcast(json.dumps({"type": "territory_updated", "data": updated}))
+    # Broadcast update (without _id)
+    broadcast_data = {k: v for k, v in updated.items() if k != '_id'}
+    await manager.broadcast(json.dumps({"type": "territory_updated", "data": broadcast_data}))
     
     if isinstance(updated.get('updatedAt'), str):
         updated['updatedAt'] = datetime.fromisoformat(updated['updatedAt'])
