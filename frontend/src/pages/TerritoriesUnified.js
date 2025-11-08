@@ -142,9 +142,19 @@ const DraggablePlacePicker = ({ initialPosition, onLocationChange }) => {
   );
 };
 
+// Comment marker icon (purple)
+const commentIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34]
+});
+
 export const TerritoriesUnified = () => {
   const [territories, setTerritories] = useState([]);
   const [pins, setPins] = useState([]);
+  const [comments, setComments] = useState([]);
   const [mapCenter, setMapCenter] = useState(AHMEDABAD_CENTER);
   const [mapZoom, setMapZoom] = useState(12);
   
