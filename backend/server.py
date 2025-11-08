@@ -425,12 +425,45 @@ async def get_pincode_boundary(request: PincodeBoundaryRequest, user: User = Dep
 
 @api_router.post("/territories")
 async def create_territory(territory: TerritoryCreate, user: User = Depends(check_role([UserRole.ADMIN, UserRole.MANAGER, UserRole.PARTNER]))):
-    if not territory.boundary:
-        raise HTTPException(status_code=400, detail="Boundary coordinates required")
+    # If center is not provided, get it from pincode
+    center = territory.center
+    if not center:
+        # First check if we have fixed boundary data for Gujarat pincodes
+        if territory.pincode in GUJARAT_PINCODE_BOUNDARIES:
+            center = GUJARAT_PINCODE_BOUNDARIES[territory.pincode]["center"]
+        else:
+            # If not in local database, try external API
+            if not user.pincode_api_url:
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"Pincode {territory.pincode} not found in local database. Please configure Pincode API in Settings or provide center coordinates."
+                )
+            
+            try:
+                async with httpx.AsyncClient() as client:
+                    headers = {}
+                    if user.pincode_api_key:
+                        headers['Authorization'] = f'Bearer {user.pincode_api_key}'
+                    response = await client.get(
+                        user.pincode_api_url,
+                        params={'pincode': territory.pincode},
+                        headers=headers,
+                        timeout=10.0
+                    )
+                    response.raise_for_status()
+                    data = response.json()
+                    if 'center' in data:
+                        center = data['center']
+                    else:
+                        raise HTTPException(status_code=400, detail="Invalid response from Pincode API - no center coordinates")
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Pincode API error: {str(e)}")
+    
     ai_insights = calculate_ai_insights(territory.metrics)
     territory_doc = {
         "id": str(uuid.uuid4()),
         **territory.model_dump(),
+        "center": center,
         "aiInsights": ai_insights.model_dump(),
         "createdBy": user.id,
         "updatedAt": datetime.now(timezone.utc).isoformat()
