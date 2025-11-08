@@ -277,13 +277,13 @@ export const TerritoriesUnified = () => {
 
   const visiblePins = viewOnlySelected && selectedTerritory
     ? filteredPins.filter(pin => 
-        selectedTerritory.boundary && isPointInPolygon([pin.location.lat, pin.location.lng], selectedTerritory.boundary)
+        selectedTerritory.center && isPointInCircle([pin.location.lat, pin.location.lng], selectedTerritory.center, selectedTerritory.radius || 2500)
       )
     : filteredPins;
 
   const isPinInSelectedTerritory = (pin) => {
-    if (!selectedTerritory || !selectedTerritory.boundary) return false;
-    return isPointInPolygon([pin.location.lat, pin.location.lng], selectedTerritory.boundary);
+    if (!selectedTerritory || !selectedTerritory.center) return false;
+    return isPointInCircle([pin.location.lat, pin.location.lng], selectedTerritory.center, selectedTerritory.radius || 2500);
   };
 
   return (
