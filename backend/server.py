@@ -103,6 +103,12 @@ class AIInsights(BaseModel):
     confidenceScore: float = 0
     aiSuggestions: List[str] = []
 
+class TerritoryRating(BaseModel):
+    totalScore: float = 0
+    pinTypeScores: Dict[str, float] = {}
+    pinTypeCounts: Dict[str, int] = {}
+    topContributors: List[Dict[str, Any]] = []
+
 class Territory(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -115,6 +121,7 @@ class Territory(BaseModel):
     metrics: TerritoryMetrics
     restrictions: TerritoryRestrictions
     aiInsights: AIInsights
+    rating: Optional[TerritoryRating] = None
     liveAnalytics: Optional[Dict[str, Any]] = None
     createdBy: str
     updatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
