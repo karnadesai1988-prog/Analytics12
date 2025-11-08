@@ -480,10 +480,18 @@ async def create_territory(territory: TerritoryCreate, user: User = Depends(chec
             except Exception as e:
                 raise HTTPException(status_code=500, detail=f"Pincode API error: {str(e)}")
     
+    # Auto-generate zone if not provided
+    zone = territory.zone
+    if not zone:
+        # Generate zone name from pincode (first 3 digits)
+        pincode_prefix = territory.pincode[:3]
+        zone = f"Zone {pincode_prefix}"
+    
     ai_insights = calculate_ai_insights(territory.metrics)
     territory_doc = {
         "id": str(uuid.uuid4()),
         **territory.model_dump(),
+        "zone": zone,
         "center": center,
         "aiInsights": ai_insights.model_dump(),
         "createdBy": user.id,
