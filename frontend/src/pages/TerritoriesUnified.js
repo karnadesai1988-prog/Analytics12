@@ -554,7 +554,65 @@ export const TerritoriesUnified = () => {
                         )}
                       </div>
                     </Popup>
-                  </Circle>
+                    </Circle>
+                    
+                    {/* Rating Badge Marker at Center */}
+                    {totalScore > 0 && (
+                      <Marker
+                        position={[territory.center.lat, territory.center.lng]}
+                        icon={L.divIcon({
+                          className: 'territory-rating-badge',
+                          html: `
+                            <div style="
+                              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                              color: white;
+                              padding: 8px 12px;
+                              border-radius: 20px;
+                              font-weight: bold;
+                              font-size: 14px;
+                              box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                              border: 3px solid white;
+                              text-align: center;
+                              min-width: 80px;
+                            ">
+                              ⭐ ${totalScore}
+                            </div>
+                          `,
+                          iconSize: [100, 40],
+                          iconAnchor: [50, 20]
+                        })}
+                      >
+                        <Popup maxWidth={300}>
+                          <div className="text-sm space-y-2">
+                            <div className="border-b pb-2">
+                              <h3 className="font-bold text-lg text-purple-700">Territory Rating</h3>
+                              <div className="text-2xl font-bold text-purple-900 mt-1">⭐ {totalScore}</div>
+                            </div>
+                            
+                            {rating?.topContributors && rating.topContributors.length > 0 && (
+                              <div>
+                                <h4 className="font-semibold text-xs text-gray-700 mb-2">Top Contributors:</h4>
+                                <div className="space-y-1">
+                                  {rating.topContributors.map((contrib, idx) => (
+                                    <div key={idx} className="flex items-center justify-between text-xs bg-purple-50 p-2 rounded">
+                                      <div>
+                                        <span className="font-semibold">{contrib.type}</span>
+                                        <span className="text-gray-500 ml-1">({contrib.count} pins)</span>
+                                      </div>
+                                      <div className="text-right">
+                                        <div className="font-bold text-purple-700">{contrib.score}</div>
+                                        <div className="text-gray-600">{contrib.percentage}%</div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </Popup>
+                      </Marker>
+                    )}
+                  </React.Fragment>
                 );
               }
               return null;
