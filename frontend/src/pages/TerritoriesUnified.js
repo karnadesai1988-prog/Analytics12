@@ -590,7 +590,7 @@ export const TerritoriesUnified = () => {
           <DialogHeader>
             <DialogTitle>Create New Territory</DialogTitle>
             <DialogDescription>
-              Enter territory details. Boundary will be auto-generated from pincode.
+              Enter territory details. A 5km diameter circle will be created around the pincode center.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreateTerritory} className="space-y-4">
