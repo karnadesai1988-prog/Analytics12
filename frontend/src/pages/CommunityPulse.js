@@ -200,15 +200,15 @@ export const CommunityPulse = () => {
               <CardContent>
                 <form onSubmit={handleSubmitComment} className="space-y-3">
                   <div>
-                    <Label>Select Zone</Label>
-                    <Select value={selectedZone} onValueChange={setSelectedZone}>
+                    <Label>Select Territory</Label>
+                    <Select value={selectedTerritory} onValueChange={setSelectedTerritory}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Choose zone" />
+                        <SelectValue placeholder="Choose territory" />
                       </SelectTrigger>
                       <SelectContent>
-                        {ZONES.map(zone => (
-                          <SelectItem key={zone} value={zone}>
-                            {zone}
+                        {territories.map(territory => (
+                          <SelectItem key={territory.id} value={territory.id}>
+                            {territory.name} ({territory.zone})
                           </SelectItem>
                         ))}
                       </SelectContent>
