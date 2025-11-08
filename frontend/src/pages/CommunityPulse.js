@@ -39,10 +39,10 @@ export const CommunityPulse = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedZone) {
-      loadCommentsByZone();
+    if (selectedTerritory) {
+      loadCommentsByTerritory();
     }
-  }, [selectedZone]);
+  }, [selectedTerritory]);
 
   const loadData = async () => {
     try {
@@ -57,6 +57,11 @@ export const CommunityPulse = () => {
       setTerritories(territoriesRes.data);
       setComments(commentsRes.data);
       
+      // Set first territory as default
+      if (territoriesRes.data.length > 0) {
+        setSelectedTerritory(territoriesRes.data[0].id);
+      }
+      
       // Extract unique users from comments
       const users = commentsRes.data.map(c => ({
         id: c.userId,
@@ -70,20 +75,15 @@ export const CommunityPulse = () => {
     }
   };
 
-  const loadCommentsByZone = async () => {
+  const loadCommentsByTerritory = async () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(`${BACKEND_URL}/api/comments`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
+        params: { territory_id: selectedTerritory }
       });
       
-      // Filter comments by zone
-      const zoneComments = response.data.filter(comment => {
-        const territory = territories.find(t => t.id === comment.territoryId);
-        return territory && territory.zone === selectedZone;
-      });
-      
-      setComments(zoneComments);
+      setComments(response.data);
     } catch (error) {
       console.error('Failed to load comments:', error);
     }
