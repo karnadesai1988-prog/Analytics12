@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect, Query
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -21,28 +21,21 @@ import secrets
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Security
 security = HTTPBearer()
 JWT_SECRET = os.environ.get('JWT_SECRET', 'your-secret-key-change-in-production')
 JWT_ALGORITHM = 'HS256'
 
-# OpenAI client (optional - can be configured per request)
 openai_client = None
 if os.environ.get('OPENAI_API_KEY'):
     openai_client = AsyncOpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
-# Create the main app
 app = FastAPI(title="R Territory AI Engine")
-
-# Create router with /api prefix
 api_router = APIRouter(prefix="/api")
 
-# WebSocket manager for real-time sync
 class ConnectionManager:
     def __init__(self):
         self.active_connections: List[WebSocket] = []
@@ -117,8 +110,8 @@ class Territory(BaseModel):
     name: str
     city: str
     zone: str
-    center: Dict[str, float]  # {"lat": 28.6139, "lng": 77.2090}
-    radius: float = 3000  # 3km radius in meters
+    center: Dict[str, float]
+    radius: float = 5000  # 5km default
     metrics: TerritoryMetrics
     restrictions: TerritoryRestrictions
     aiInsights: AIInsights
@@ -130,7 +123,7 @@ class TerritoryCreate(BaseModel):
     city: str
     zone: str
     center: Dict[str, float]
-    radius: float = 3000
+    radius: float = 5000
     metrics: TerritoryMetrics = Field(default_factory=TerritoryMetrics)
     restrictions: TerritoryRestrictions = Field(default_factory=TerritoryRestrictions)
 
@@ -143,28 +136,88 @@ class TerritoryUpdate(BaseModel):
     metrics: Optional[TerritoryMetrics] = None
     restrictions: Optional[TerritoryRestrictions] = None
 
-# Event/Pin Models
-class EventPin(BaseModel):
+# Pin Models
+class Pin(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    territoryId: str
-    title: str
-    description: str
-    location: Dict[str, float]  # {"lat": x, "lng": y}
-    category: str  # "social", "infrastructure", "event", "issue"
-    mediaUrls: List[str] = []
-    socialShare: bool = True
+    location: Dict[str, float]
+    type: List[str]  # ["job", "supplier", "vendor", "shop"]
+    label: str
+    description: Optional[str] = None
+    address: Optional[str] = None
+    territoryId: Optional[str] = None
+    projectId: Optional[str] = None
+    eventId: Optional[str] = None
     createdBy: str
     userName: str
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-class EventPinCreate(BaseModel):
-    territoryId: str
+class PinCreate(BaseModel):
+    location: Dict[str, float]
+    type: List[str]
+    label: str
+    description: Optional[str] = None
+    address: Optional[str] = None
+    territoryId: Optional[str] = None
+    projectId: Optional[str] = None
+    eventId: Optional[str] = None
+
+class PinUpdate(BaseModel):
+    location: Optional[Dict[str, float]] = None
+    type: Optional[List[str]] = None
+    label: Optional[str] = None
+    description: Optional[str] = None
+    address: Optional[str] = None
+    territoryId: Optional[str] = None
+    projectId: Optional[str] = None
+    eventId: Optional[str] = None
+
+# Project Models
+class Project(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    location: Dict[str, float]
+    territoryId: Optional[str] = None
+    status: str = "active"  # active, completed, paused
+    startDate: Optional[datetime] = None
+    endDate: Optional[datetime] = None
+    createdBy: str
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ProjectCreate(BaseModel):
+    name: str
+    description: str
+    location: Dict[str, float]
+    territoryId: Optional[str] = None
+    status: str = "active"
+    startDate: Optional[datetime] = None
+    endDate: Optional[datetime] = None
+
+# Event Models
+class Event(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str
     description: str
     location: Dict[str, float]
+    territoryId: Optional[str] = None
+    projectId: Optional[str] = None
+    eventDate: datetime
+    category: str  # "social", "infrastructure", "community"
+    createdBy: str
+    userName: str
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class EventCreate(BaseModel):
+    title: str
+    description: str
+    location: Dict[str, float]
+    territoryId: Optional[str] = None
+    projectId: Optional[str] = None
+    eventDate: datetime
     category: str
-    socialShare: bool = True
 
 class CommentCreate(BaseModel):
     territoryId: str
@@ -420,18 +473,16 @@ async def get_territories(current_user: Dict = Depends(get_current_user)):
         if isinstance(territory.get('updatedAt'), str):
             territory['updatedAt'] = datetime.fromisoformat(territory['updatedAt'])
         
-        # Backward compatibility: convert old polygon format to new circle format
         if 'coordinates' in territory and 'center' not in territory:
             coords = territory.get('coordinates', {}).get('coordinates', [[]])[0]
             if coords and len(coords) > 0:
-                # Calculate center from polygon
                 lats = [c[1] for c in coords]
                 lngs = [c[0] for c in coords]
                 territory['center'] = {
                     'lat': sum(lats) / len(lats),
                     'lng': sum(lngs) / len(lngs)
                 }
-                territory['radius'] = 3000
+                territory['radius'] = 5000
     
     return territories
 
@@ -511,58 +562,217 @@ async def delete_territory(
     
     return {"message": "Territory deleted successfully"}
 
-# ==================== EVENT PIN ROUTES ====================
+# ==================== PIN ROUTES ====================
 
-@api_router.post("/events", response_model=EventPin)
-async def create_event(
-    event_data: EventPinCreate,
+@api_router.post("/pins", response_model=Pin)
+async def create_pin(
+    pin_data: PinCreate,
     current_user: Dict = Depends(get_current_user)
 ):
     user = await db.users.find_one({"id": current_user['user_id']})
     
-    event = EventPin(
-        territoryId=event_data.territoryId,
+    pin = Pin(
+        location=pin_data.location,
+        type=pin_data.type,
+        label=pin_data.label,
+        description=pin_data.description,
+        address=pin_data.address,
+        territoryId=pin_data.territoryId,
+        projectId=pin_data.projectId,
+        eventId=pin_data.eventId,
+        createdBy=current_user['user_id'],
+        userName=user['name']
+    )
+    
+    doc = pin.model_dump()
+    doc['createdAt'] = doc['createdAt'].isoformat()
+    
+    await db.pins.insert_one(doc)
+    
+    await manager.broadcast(json.dumps({"type": "pin_created", "data": doc}))
+    
+    return pin
+
+@api_router.get("/pins", response_model=List[Pin])
+async def get_pins(
+    current_user: Dict = Depends(get_current_user),
+    territory_id: Optional[str] = Query(None)
+):
+    query = {}
+    if territory_id:
+        query['territoryId'] = territory_id
+    
+    pins = await db.pins.find(query, {"_id": 0}).to_list(1000)
+    
+    for pin in pins:
+        if isinstance(pin.get('createdAt'), str):
+            pin['createdAt'] = datetime.fromisoformat(pin['createdAt'])
+    
+    return pins
+
+@api_router.get("/pins/{pin_id}", response_model=Pin)
+async def get_pin(
+    pin_id: str,
+    current_user: Dict = Depends(get_current_user)
+):
+    pin = await db.pins.find_one({"id": pin_id}, {"_id": 0})
+    if not pin:
+        raise HTTPException(status_code=404, detail="Pin not found")
+    
+    if isinstance(pin.get('createdAt'), str):
+        pin['createdAt'] = datetime.fromisoformat(pin['createdAt'])
+    
+    return Pin(**pin)
+
+@api_router.put("/pins/{pin_id}", response_model=Pin)
+async def update_pin(
+    pin_id: str,
+    pin_data: PinUpdate,
+    current_user: Dict = Depends(get_current_user)
+):
+    existing = await db.pins.find_one({"id": pin_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Pin not found")
+    
+    if existing['createdBy'] != current_user['user_id'] and current_user['role'] not in [UserRole.ADMIN, UserRole.MANAGER]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    update_data = pin_data.model_dump(exclude_none=True)
+    
+    await db.pins.update_one(
+        {"id": pin_id},
+        {"$set": update_data}
+    )
+    
+    updated = await db.pins.find_one({"id": pin_id}, {"_id": 0})
+    
+    if isinstance(updated.get('createdAt'), str):
+        updated['createdAt'] = datetime.fromisoformat(updated['createdAt'])
+    
+    await manager.broadcast(json.dumps({"type": "pin_updated", "data": updated}))
+    
+    return Pin(**updated)
+
+@api_router.delete("/pins/{pin_id}")
+async def delete_pin(
+    pin_id: str,
+    current_user: Dict = Depends(get_current_user)
+):
+    existing = await db.pins.find_one({"id": pin_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Pin not found")
+    
+    if existing['createdBy'] != current_user['user_id'] and current_user['role'] != UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    
+    await db.pins.delete_one({"id": pin_id})
+    
+    await manager.broadcast(json.dumps({"type": "pin_deleted", "pinId": pin_id}))
+    
+    return {"message": "Pin deleted successfully"}
+
+# ==================== PROJECT ROUTES ====================
+
+@api_router.post("/projects", response_model=Project)
+async def create_project(
+    project_data: ProjectCreate,
+    current_user: Dict = Depends(get_current_user)
+):
+    project = Project(
+        name=project_data.name,
+        description=project_data.description,
+        location=project_data.location,
+        territoryId=project_data.territoryId,
+        status=project_data.status,
+        startDate=project_data.startDate,
+        endDate=project_data.endDate,
+        createdBy=current_user['user_id']
+    )
+    
+    doc = project.model_dump()
+    doc['createdAt'] = doc['createdAt'].isoformat()
+    if doc.get('startDate'):
+        doc['startDate'] = doc['startDate'].isoformat()
+    if doc.get('endDate'):
+        doc['endDate'] = doc['endDate'].isoformat()
+    
+    await db.projects.insert_one(doc)
+    
+    await manager.broadcast(json.dumps({"type": "project_created", "data": {"id": project.id, "name": project.name}}))
+    
+    return project
+
+@api_router.get("/projects", response_model=List[Project])
+async def get_projects(
+    current_user: Dict = Depends(get_current_user),
+    territory_id: Optional[str] = Query(None)
+):
+    query = {}
+    if territory_id:
+        query['territoryId'] = territory_id
+    
+    projects = await db.projects.find(query, {"_id": 0}).to_list(1000)
+    
+    for project in projects:
+        if isinstance(project.get('createdAt'), str):
+            project['createdAt'] = datetime.fromisoformat(project['createdAt'])
+        if isinstance(project.get('startDate'), str):
+            project['startDate'] = datetime.fromisoformat(project['startDate'])
+        if isinstance(project.get('endDate'), str):
+            project['endDate'] = datetime.fromisoformat(project['endDate'])
+    
+    return projects
+
+# ==================== EVENT ROUTES ====================
+
+@api_router.post("/events", response_model=Event)
+async def create_event(
+    event_data: EventCreate,
+    current_user: Dict = Depends(get_current_user)
+):
+    user = await db.users.find_one({"id": current_user['user_id']})
+    
+    event = Event(
         title=event_data.title,
         description=event_data.description,
         location=event_data.location,
+        territoryId=event_data.territoryId,
+        projectId=event_data.projectId,
+        eventDate=event_data.eventDate,
         category=event_data.category,
-        socialShare=event_data.socialShare,
         createdBy=current_user['user_id'],
         userName=user['name']
     )
     
     doc = event.model_dump()
     doc['createdAt'] = doc['createdAt'].isoformat()
+    doc['eventDate'] = doc['eventDate'].isoformat()
     
     await db.events.insert_one(doc)
     
-    await manager.broadcast(json.dumps({"type": "event_created", "data": doc}))
+    await manager.broadcast(json.dumps({"type": "event_created", "data": {"id": event.id, "title": event.title}}))
     
     return event
 
-@api_router.get("/events/{territory_id}", response_model=List[EventPin])
+@api_router.get("/events", response_model=List[Event])
 async def get_events(
-    territory_id: str,
-    current_user: Dict = Depends(get_current_user)
+    current_user: Dict = Depends(get_current_user),
+    territory_id: Optional[str] = Query(None),
+    project_id: Optional[str] = Query(None)
 ):
-    events = await db.events.find(
-        {"territoryId": territory_id},
-        {"_id": 0}
-    ).sort("createdAt", -1).to_list(100)
+    query = {}
+    if territory_id:
+        query['territoryId'] = territory_id
+    if project_id:
+        query['projectId'] = project_id
+    
+    events = await db.events.find(query, {"_id": 0}).sort("eventDate", -1).to_list(1000)
     
     for event in events:
         if isinstance(event.get('createdAt'), str):
             event['createdAt'] = datetime.fromisoformat(event['createdAt'])
-    
-    return events
-
-@api_router.get("/events", response_model=List[EventPin])
-async def get_all_events(current_user: Dict = Depends(get_current_user)):
-    events = await db.events.find({}, {"_id": 0}).sort("createdAt", -1).to_list(1000)
-    
-    for event in events:
-        if isinstance(event.get('createdAt'), str):
-            event['createdAt'] = datetime.fromisoformat(event['createdAt'])
+        if isinstance(event.get('eventDate'), str):
+            event['eventDate'] = datetime.fromisoformat(event['eventDate'])
     
     return events
 
@@ -690,7 +900,6 @@ async def submit_data(
 
 @api_router.post("/data-gathering/public")
 async def submit_data_public(form_data: dict):
-    """Public endpoint for shared link data submission"""
     share_token = form_data.get('shareToken')
     if not share_token:
         raise HTTPException(status_code=400, detail="Share token required")
@@ -753,6 +962,21 @@ async def get_metrics_history(
     
     return history
 
+# ==================== GEOCODING (REVERSE GEOCODE) ====================
+
+@api_router.get("/geocode/reverse")
+async def reverse_geocode(
+    lat: float = Query(...),
+    lng: float = Query(...),
+    current_user: Dict = Depends(get_current_user)
+):
+    """Simple reverse geocoding - returns approximate address"""
+    return {
+        "address": f"Location: {lat:.4f}, {lng:.4f}",
+        "lat": lat,
+        "lng": lng
+    }
+
 # ==================== WEBSOCKET ====================
 
 @app.websocket("/ws")
@@ -769,7 +993,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
 @api_router.get("/")
 async def root():
-    return {"message": "R Territory AI Predictive Insights Engine API", "version": "2.0"}
+    return {"message": "R Territory AI Predictive Insights Engine API", "version": "2.5"}
 
 @api_router.get("/health")
 async def health_check():
