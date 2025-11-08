@@ -29,7 +29,7 @@ const AppContent = () => {
           <Route path="/dashboard" element={<PrivateRoute><DashboardUnified /></PrivateRoute>} />
           <Route path="/territories" element={<PrivateRoute><TerritoriesUnified /></PrivateRoute>} />
           <Route path="/data-gathering" element={<PrivateRoute><DataGathering /></PrivateRoute>} />
-          <Route path="/comments" element={<PrivateRoute><Comments /></PrivateRoute>} />
+          <Route path="/comments" element={<PrivateRoute><CommunityPulse /></PrivateRoute>} />
           <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
