@@ -10,6 +10,7 @@ import { TerritoriesNew } from './pages/TerritoriesNew';
 import { DataGathering } from './pages/DataGathering';
 import { Analytics } from './pages/Analytics';
 import { Comments } from './pages/Comments';
+import { Settings } from './pages/Settings';
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
