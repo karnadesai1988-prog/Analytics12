@@ -195,12 +195,14 @@ export const TerritoriesUnified = () => {
     try {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
-      const [territoriesRes, pinsRes] = await Promise.all([
+      const [territoriesRes, pinsRes, commentsRes] = await Promise.all([
         axios.get(`${BACKEND_URL}/api/territories`, { headers }),
         axios.get(`${BACKEND_URL}/api/pins`, { headers }),
+        axios.get(`${BACKEND_URL}/api/comments`, { headers }),
       ]);
       setTerritories(territoriesRes.data);
       setPins(pinsRes.data);
+      setComments(commentsRes.data);
     } catch (error) {
       toast.error('Failed to load data');
     }
