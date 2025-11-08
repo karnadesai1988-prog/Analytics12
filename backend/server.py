@@ -481,7 +481,7 @@ async def get_territories(user: User = Depends(get_current_user)):
     result = []
     for t in territories:
         # Skip territories missing required fields (legacy data)
-        if 'pincode' not in t or 'center' not in t or 'boundary' not in t:
+        if 'pincode' not in t or 'center' not in t:
             continue
         result.append(Territory(**t))
     return result
