@@ -111,8 +111,7 @@ class Territory(BaseModel):
     zone: str
     pincode: str
     center: Dict[str, float]
-    radius: float = 5000
-    boundary: List[List[float]]
+    radius: float = 2500  # 2.5km radius = 5km diameter
     metrics: TerritoryMetrics
     restrictions: TerritoryRestrictions
     aiInsights: AIInsights
