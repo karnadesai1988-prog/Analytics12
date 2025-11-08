@@ -184,31 +184,12 @@ export const TerritoriesUnified = () => {
     try {
       const token = localStorage.getItem('token');
       
-      // Fetch boundary from user's configured API
-      const boundaryResponse = await axios.post(
-        `${BACKEND_URL}/api/pincode/boundary`,
-        { pincode: territoryForm.pincode },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
-      const { boundary, center } = boundaryResponse.data;
-      
-      if (!boundary || boundary.length === 0) {
-        toast.error('No boundary data found for this pincode');
-        return;
-      }
-
-      // Create territory with fetched boundary
+      // Create territory with pincode - backend will handle center resolution
       await axios.post(
         `${BACKEND_URL}/api/territories`,
         {
           ...territoryForm,
-          center: center || {
-            lat: boundary.reduce((sum, p) => sum + p[0], 0) / boundary.length,
-            lng: boundary.reduce((sum, p) => sum + p[1], 0) / boundary.length
-          },
-          radius: 5000,
-          boundary: boundary,
+          radius: 2500, // 2.5km radius = 5km diameter
           metrics: {
             investments: 0,
             buildings: 0,
@@ -224,16 +205,12 @@ export const TerritoriesUnified = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      toast.success(`Territory created for pincode ${territoryForm.pincode}!`);
+      toast.success(`Territory created with 5km diameter circle for pincode ${territoryForm.pincode}!`);
       setShowTerritoryDialog(false);
       setTerritoryForm({ name: '', city: 'Ahmedabad', zone: '', pincode: '' });
       loadData();
     } catch (error) {
-      if (error.response?.status === 400) {
-        toast.error(error.response?.data?.detail || 'Pincode API not configured. Please configure in Settings.');
-      } else {
-        toast.error(error.response?.data?.detail || 'Failed to create territory');
-      }
+      toast.error(error.response?.data?.detail || 'Failed to create territory');
     } finally {
       setLoading(false);
     }
