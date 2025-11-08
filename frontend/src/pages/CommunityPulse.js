@@ -141,23 +141,6 @@ export const CommunityPulse = () => {
     }
   };
 
-  // Get comment location based on zone (approximate center of zone)
-  const getZoneCenter = (zone) => {
-    const zoneCenters = {
-      'Central Zone': [23.0350, 72.5850],
-      'West Zone': [23.0113, 72.5860],
-      'East Zone': [23.0400, 72.6200],
-      'North Zone': [23.0650, 72.5700],
-      'South Zone': [22.9800, 72.5700],
-      'Satellite Zone': [23.0200, 72.5000],
-      'Bodakdev Zone': [23.0390, 72.5100],
-      'Vastrapur Zone': [23.0300, 72.5250],
-      'Maninagar Zone': [23.0100, 72.6000],
-      'Navrangpura Zone': [23.0380, 72.5600]
-    };
-    return zoneCenters[zone] || AHMEDABAD_CENTER;
-  };
-
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       {/* Header */}
