@@ -504,13 +504,27 @@ export const TerritoriesUnified = () => {
                             <p className="text-xs text-blue-600 font-semibold">
                               🔵 5km diameter coverage
                             </p>
-                            {territory.rating && (
-                              <div className="flex items-center gap-1 bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
-                                <span className="text-xs font-bold">⭐ {territory.rating.toFixed(1)}</span>
+                            {territory.rating && territory.rating.totalScore > 0 && (
+                              <div className="flex items-center gap-1 bg-purple-100 text-purple-800 px-2 py-0.5 rounded">
+                                <span className="text-xs font-bold">⭐ {territory.rating.totalScore}</span>
                               </div>
                             )}
                           </div>
                         </div>
+                        
+                        {territory.rating && territory.rating.totalScore > 0 && (
+                          <div className="border-b pb-2">
+                            <h4 className="font-semibold text-xs text-purple-600 mb-1">Rating Breakdown</h4>
+                            <div className="text-xs space-y-1">
+                              {territory.rating.topContributors?.slice(0, 3).map((contrib, idx) => (
+                                <div key={idx} className="flex justify-between">
+                                  <span>{contrib.type} ({contrib.count})</span>
+                                  <span className="font-semibold">{contrib.score} pts ({contrib.percentage}%)</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                         
                         <div className="space-y-1">
                           <h4 className="font-semibold text-xs text-orange-600">AI Insights</h4>
