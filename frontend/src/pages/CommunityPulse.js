@@ -188,9 +188,9 @@ export const CommunityPulse = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar - Comment Form & List */}
-        <div className="w-96 bg-white border-r overflow-y-auto">
+      <div className="flex-1 overflow-hidden">
+        {/* Full Width - Comment Form & List */}
+        <div className="max-w-4xl mx-auto p-6 overflow-y-auto h-full">
           <div className="p-4 space-y-4">
             {/* Post Comment Form */}
             <Card>
