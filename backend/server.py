@@ -513,7 +513,9 @@ async def update_pin(pin_id: str, pin_update: PinUpdate, user: User = Depends(ch
     update_data = {k: v for k, v in pin_update.model_dump(exclude_unset=True).items() if v is not None}
     await db.pins.update_one({"id": pin_id}, {"$set": update_data})
     updated = await db.pins.find_one({"id": pin_id})
-    await manager.broadcast(json.dumps({"type": "pin_updated", "data": updated}))
+    # Remove MongoDB ObjectId before broadcasting
+    broadcast_data = {k: v for k, v in updated.items() if k != '_id'}
+    await manager.broadcast(json.dumps({"type": "pin_updated", "data": broadcast_data}))
     return Pin(**updated)
 
 @api_router.delete("/pins/{pin_id}")
