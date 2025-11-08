@@ -478,20 +478,23 @@ export const TerritoriesUnified = () => {
             {visibleTerritories.map(territory => {
               if (territory.center) {
                 const radius = territory.radius || 2500; // Default 2.5km radius
+                const rating = territory.rating;
+                const totalScore = rating?.totalScore || 0;
+                
                 return (
-                  <Circle
-                    key={territory.id}
-                    center={[territory.center.lat, territory.center.lng]}
-                    radius={radius}
-                    pathOptions={{
-                      color: selectedTerritory?.id === territory.id ? '#f97316' : '#3b82f6',
-                      weight: selectedTerritory?.id === territory.id ? 3 : 2,
-                      fillOpacity: selectedTerritory?.id === territory.id ? 0.2 : 0.1
-                    }}
-                    eventHandlers={{
-                      click: () => handleTerritoryClick(territory)
-                    }}
-                  >
+                  <React.Fragment key={territory.id}>
+                    <Circle
+                      center={[territory.center.lat, territory.center.lng]}
+                      radius={radius}
+                      pathOptions={{
+                        color: selectedTerritory?.id === territory.id ? '#f97316' : '#3b82f6',
+                        weight: selectedTerritory?.id === territory.id ? 3 : 2,
+                        fillOpacity: selectedTerritory?.id === territory.id ? 0.2 : 0.1
+                      }}
+                      eventHandlers={{
+                        click: () => handleTerritoryClick(territory)
+                      }}
+                    >
                     <Popup maxWidth={300}>
                       <div className="text-sm space-y-2">
                         <div className="border-b pb-2">
