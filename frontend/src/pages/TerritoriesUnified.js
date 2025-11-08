@@ -87,31 +87,55 @@ const MapUpdater = ({ center, zoom }) => {
   return null;
 };
 
-const LocationPicker = ({ onLocationSelect }) => {
-  const [marker, setMarker] = useState(null);
-  const map = useMap();
+// Draggable Place Picker Component
+const DraggablePlacePicker = ({ initialPosition, onLocationChange }) => {
+  const [position, setPosition] = useState(initialPosition);
+  const markerRef = React.useRef(null);
   
-  useEffect(() => {
-    const handleClick = (e) => {
-      const { lat, lng } = e.latlng;
-      setMarker({ lat, lng });
-      onLocationSelect({ lat, lng });
-    };
-    map.on('click', handleClick);
-    return () => map.off('click', handleClick);
-  }, [map, onLocationSelect]);
+  const eventHandlers = React.useMemo(
+    () => ({
+      dragend() {
+        const marker = markerRef.current;
+        if (marker != null) {
+          const newPos = marker.getLatLng();
+          const location = { lat: newPos.lat, lng: newPos.lng };
+          setPosition(location);
+          onLocationChange(location);
+        }
+      },
+    }),
+    [onLocationChange],
+  );
 
-  return marker ? (
-    <Marker position={[marker.lat, marker.lng]}>
+  const placePickerIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    iconSize: [35, 57],
+    iconAnchor: [17, 57],
+    popupAnchor: [1, -46],
+  });
+
+  return (
+    <Marker
+      draggable={true}
+      eventHandlers={eventHandlers}
+      position={[position.lat, position.lng]}
+      ref={markerRef}
+      icon={placePickerIcon}
+    >
       <Popup>
         <div className="text-sm">
-          <strong>Selected Location</strong><br/>
-          Lat: {marker.lat.toFixed(6)}<br/>
-          Lng: {marker.lng.toFixed(6)}
+          <strong>📍 Place Picker</strong><br/>
+          <span className="text-xs text-gray-600">Drag me to select location</span><br/>
+          <div className="mt-2 p-2 bg-blue-50 rounded">
+            <strong>Current Position:</strong><br/>
+            Lat: {position.lat.toFixed(6)}<br/>
+            Lng: {position.lng.toFixed(6)}
+          </div>
         </div>
       </Popup>
     </Marker>
-  ) : null;
+  );
 };
 
 export const TerritoriesUnified = () => {
