@@ -17,6 +17,7 @@ import numpy as np
 from openai import AsyncOpenAI
 import json
 import secrets
+from collections import defaultdict
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -64,6 +65,9 @@ class UserRole:
     MANAGER = "manager"
     VIEWER = "viewer"
     COMMUNITY_HEAD = "community_head"
+    MONITOR = "monitor"  # View only
+    PARTNER = "partner"  # Comment access
+    CHANNEL_PARTNER = "channel_partner"  # Pin and data submission
 
 class UserRegister(BaseModel):
     email: EmailStr
@@ -116,6 +120,7 @@ class Territory(BaseModel):
     metrics: TerritoryMetrics
     restrictions: TerritoryRestrictions
     aiInsights: AIInsights
+    liveAnalytics: Optional[Dict[str, Any]] = None
     createdBy: str
     updatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -321,6 +326,103 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     token = credentials.credentials
     return verify_token(token)
 
+def check_permission(user_role: str, required_roles: List[str]):
+    if user_role not in required_roles:
+        raise HTTPException(status_code=403, detail=f"Access denied. Required roles: {', '.join(required_roles)}")
+
+async def analyze_gathered_data(territory_id: str) -> Dict[str, Any]:
+    """Analyze all gathered data for a territory and generate live analytics"""
+    try:
+        gathered_data = await db.data_gathering.find({"territoryId": territory_id}, {"_id": 0}).to_list(1000)
+        
+        if not gathered_data:
+            return {
+                "totalSubmissions": 0,
+                "avgPropertyValue": 0,
+                "avgRentPrice": 0,
+                "avgOccupancyRate": 0,
+                "avgMaintenanceCost": 0,
+                "tenantDistribution": {},
+                "submissionTrend": "No data",
+                "dataQuality": "N/A"
+            }
+        
+        property_values = []
+        rent_prices = []
+        occupancy_rates = []
+        maintenance_costs = []
+        tenant_types = defaultdict(int)
+        
+        for entry in gathered_data:
+            data = entry.get('data', {})
+            
+            if data.get('propertyValue'):
+                try:
+                    property_values.append(float(data['propertyValue']))
+                except:
+                    pass
+            
+            if data.get('rentPrice'):
+                try:
+                    rent_prices.append(float(data['rentPrice']))
+                except:
+                    pass
+            
+            if data.get('occupancyRate'):
+                try:
+                    occupancy_rates.append(float(data['occupancyRate']))
+                except:
+                    pass
+            
+            if data.get('maintenanceCost'):
+                try:
+                    maintenance_costs.append(float(data['maintenanceCost']))
+                except:
+                    pass
+            
+            if data.get('tenantType'):
+                tenant_types[data['tenantType']] += 1
+        
+        analytics = {
+            "totalSubmissions": len(gathered_data),
+            "avgPropertyValue": round(sum(property_values) / len(property_values), 2) if property_values else 0,
+            "avgRentPrice": round(sum(rent_prices) / len(rent_prices), 2) if rent_prices else 0,
+            "avgOccupancyRate": round(sum(occupancy_rates) / len(occupancy_rates), 2) if occupancy_rates else 0,
+            "avgMaintenanceCost": round(sum(maintenance_costs) / len(maintenance_costs), 2) if maintenance_costs else 0,
+            "tenantDistribution": dict(tenant_types),
+            "submissionTrend": "Increasing" if len(gathered_data) > 10 else "Growing",
+            "dataQuality": "High" if len(gathered_data) > 20 else "Medium" if len(gathered_data) > 5 else "Low",
+            "lastUpdated": datetime.now(timezone.utc).isoformat()
+        }
+        
+        return analytics
+    except Exception as e:
+        logging.error(f"Error analyzing data: {e}")
+        return {"error": str(e)}
+
+async def update_territory_analytics(territory_id: str):
+    """Update territory with live analytics based on gathered data"""
+    try:
+        analytics = await analyze_gathered_data(territory_id)
+        
+        await db.territories.update_one(
+            {"id": territory_id},
+            {"$set": {"liveAnalytics": analytics}}
+        )
+        
+        territory = await db.territories.find_one({"id": territory_id}, {"_id": 0})
+        
+        await manager.broadcast(json.dumps({
+            "type": "analytics_updated",
+            "territoryId": territory_id,
+            "analytics": analytics
+        }))
+        
+        return analytics
+    except Exception as e:
+        logging.error(f"Error updating analytics: {e}")
+        return None
+
 def predict_appreciation(metrics: TerritoryMetrics) -> AIInsights:
     try:
         investment_factor = min(np.log10(metrics.investments + 1) / 2, 1.0)
@@ -389,7 +491,6 @@ async def generate_pin_ai_insights(pin_data: dict, api_key: str = None) -> Dict:
             max_tokens=300
         )
         
-        import json
         return json.loads(response.choices[0].message.content)
     except Exception as e:
         logging.error(f"AI insights error: {e}")
@@ -480,12 +581,14 @@ async def configure_api_key(config: APIKeyConfig, current_user: Dict = Depends(g
 
 @api_router.post("/territories", response_model=Territory)
 async def create_territory(territory_data: TerritoryCreate, current_user: Dict = Depends(get_current_user)):
+    check_permission(current_user['role'], [UserRole.ADMIN, UserRole.MANAGER, UserRole.COMMUNITY_HEAD])
+    
     ai_insights = predict_appreciation(territory_data.metrics)
     territory = Territory(
         name=territory_data.name, city=territory_data.city, zone=territory_data.zone,
         center=territory_data.center, radius=territory_data.radius,
         metrics=territory_data.metrics, restrictions=territory_data.restrictions,
-        aiInsights=ai_insights, createdBy=current_user['user_id']
+        aiInsights=ai_insights, liveAnalytics=None, createdBy=current_user['user_id']
     )
     doc = territory.model_dump()
     doc['updatedAt'] = doc['updatedAt'].isoformat()
@@ -526,8 +629,7 @@ async def get_territory(territory_id: str, current_user: Dict = Depends(get_curr
 
 @api_router.put("/territories/{territory_id}", response_model=Territory)
 async def update_territory(territory_id: str, territory_data: TerritoryUpdate, current_user: Dict = Depends(get_current_user)):
-    if current_user['role'] not in [UserRole.ADMIN, UserRole.MANAGER, UserRole.COMMUNITY_HEAD]:
-        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    check_permission(current_user['role'], [UserRole.ADMIN, UserRole.MANAGER, UserRole.COMMUNITY_HEAD])
     
     existing = await db.territories.find_one({"id": territory_id})
     if not existing:
@@ -558,18 +660,19 @@ async def update_territory(territory_id: str, territory_data: TerritoryUpdate, c
 
 @api_router.delete("/territories/{territory_id}")
 async def delete_territory(territory_id: str, current_user: Dict = Depends(get_current_user)):
-    if current_user['role'] != UserRole.ADMIN:
-        raise HTTPException(status_code=403, detail="Only admins can delete territories")
+    check_permission(current_user['role'], [UserRole.ADMIN])
     result = await db.territories.delete_one({"id": territory_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Territory not found")
     await manager.broadcast(json.dumps({"type": "territory_deleted", "territoryId": territory_id}))
     return {"message": "Territory deleted successfully"}
 
-# ==================== PIN ROUTES ====================
+# ==================== PIN ROUTES (Channel Partners Access) ====================
 
 @api_router.post("/pins", response_model=Pin)
 async def create_pin(pin_data: PinCreate, current_user: Dict = Depends(get_current_user)):
+    check_permission(current_user['role'], [UserRole.ADMIN, UserRole.MANAGER, UserRole.CHANNEL_PARTNER])
+    
     user = await db.users.find_one({"id": current_user['user_id']})
     
     ai_insights = None
@@ -643,6 +746,8 @@ async def delete_pin(pin_id: str, current_user: Dict = Depends(get_current_user)
 
 @api_router.post("/projects", response_model=Project)
 async def create_project(project_data: ProjectCreate, current_user: Dict = Depends(get_current_user)):
+    check_permission(current_user['role'], [UserRole.ADMIN, UserRole.MANAGER])
+    
     ai_recommendations = []
     if project_data.generateAIRecommendations:
         user = await db.users.find_one({"id": current_user['user_id']})
@@ -696,6 +801,8 @@ async def get_projects(current_user: Dict = Depends(get_current_user), territory
 
 @api_router.post("/events", response_model=Event)
 async def create_event(event_data: EventCreate, current_user: Dict = Depends(get_current_user)):
+    check_permission(current_user['role'], [UserRole.ADMIN, UserRole.MANAGER])
+    
     user = await db.users.find_one({"id": current_user['user_id']})
     
     ai_predictions = None
@@ -743,38 +850,6 @@ async def get_events(current_user: Dict = Depends(get_current_user), territory_i
             event['eventDate'] = datetime.fromisoformat(event['eventDate'])
     return events
 
-# ==================== AI ANALYSIS ENDPOINT ====================
-
-@api_router.post("/ai/analyze")
-async def ai_analyze(request: AIAnalysisRequest, current_user: Dict = Depends(get_current_user)):
-    user = await db.users.find_one({"id": current_user['user_id']})
-    api_key = user.get('openai_api_key') or os.environ.get('OPENAI_API_KEY')
-    
-    if not api_key:
-        raise HTTPException(status_code=400, detail="OpenAI API key required")
-    
-    try:
-        client = AsyncOpenAI(api_key=api_key)
-        
-        if request.entityType == "territory":
-            territory = await db.territories.find_one({"id": request.entityId})
-            prompt = f"Analyze this territory in Ahmedabad: {territory['name']}. Metrics: {territory['metrics']}. Provide strategic insights."
-        elif request.entityType == "pin":
-            pin = await db.pins.find_one({"id": request.entityId})
-            prompt = f"Analyze this location pin in Ahmedabad: {pin['label']} ({pin['type']}). Provide business insights."
-        else:
-            raise HTTPException(status_code=400, detail="Invalid entity type")
-        
-        response = await client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=300
-        )
-        
-        return {"analysis": response.choices[0].message.content}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"AI analysis failed: {str(e)}")
-
 # ==================== SHARE LINK ROUTES ====================
 
 @api_router.post("/share-links")
@@ -799,10 +874,12 @@ async def validate_share_link(token: str):
         territory['updatedAt'] = datetime.fromisoformat(territory['updatedAt'])
     return {"territory": Territory(**territory), "token": token}
 
-# ==================== COMMENT ROUTES ====================
+# ==================== COMMENT ROUTES (Partner Access) ====================
 
 @api_router.post("/comments", response_model=Comment)
 async def create_comment(comment_data: CommentCreate, current_user: Dict = Depends(get_current_user)):
+    check_permission(current_user['role'], [UserRole.ADMIN, UserRole.MANAGER, UserRole.PARTNER, UserRole.COMMUNITY_HEAD])
+    
     if comment_data.useAI:
         api_key = comment_data.apiKey
         if not api_key:
@@ -837,10 +914,12 @@ async def get_comments(territory_id: str, current_user: Dict = Depends(get_curre
             comment['createdAt'] = datetime.fromisoformat(comment['createdAt'])
     return comments
 
-# ==================== DATA GATHERING ROUTES ====================
+# ==================== DATA GATHERING ROUTES (Channel Partners Access) ====================
 
 @api_router.post("/data-gathering", response_model=DataGathering)
 async def submit_data(form_data: DataGatheringForm, current_user: Dict = Depends(get_current_user)):
+    check_permission(current_user['role'], [UserRole.ADMIN, UserRole.MANAGER, UserRole.CHANNEL_PARTNER])
+    
     data_entry = DataGathering(
         territoryId=form_data.territoryId, data=form_data.data,
         submittedBy=current_user['user_id'], shareToken=form_data.shareToken
@@ -848,7 +927,12 @@ async def submit_data(form_data: DataGatheringForm, current_user: Dict = Depends
     doc = data_entry.model_dump()
     doc['timestamp'] = doc['timestamp'].isoformat()
     await db.data_gathering.insert_one(doc)
-    await manager.broadcast(json.dumps({"type": "data_submitted", "territoryId": form_data.territoryId}))
+    
+    # Update live analytics
+    analytics = await update_territory_analytics(form_data.territoryId)
+    
+    await manager.broadcast(json.dumps({"type": "data_submitted", "territoryId": form_data.territoryId, "analytics": analytics}))
+    
     return data_entry
 
 @api_router.post("/data-gathering/public")
@@ -869,7 +953,12 @@ async def submit_data_public(form_data: dict):
     doc = data_entry.model_dump()
     doc['timestamp'] = doc['timestamp'].isoformat()
     await db.data_gathering.insert_one(doc)
-    await manager.broadcast(json.dumps({"type": "data_submitted", "territoryId": link['territoryId']}))
+    
+    # Update live analytics
+    analytics = await update_territory_analytics(link['territoryId'])
+    
+    await manager.broadcast(json.dumps({"type": "data_submitted", "territoryId": link['territoryId'], "analytics": analytics}))
+    
     return {"message": "Data submitted successfully", "id": data_entry.id}
 
 @api_router.get("/data-gathering/{territory_id}", response_model=List[DataGathering])
@@ -880,6 +969,21 @@ async def get_data_gathering(territory_id: str, current_user: Dict = Depends(get
             entry['timestamp'] = datetime.fromisoformat(entry['timestamp'])
     return data
 
+# ==================== ANALYTICS ROUTES ====================
+
+@api_router.get("/analytics/{territory_id}")
+async def get_territory_analytics(territory_id: str, current_user: Dict = Depends(get_current_user)):
+    """Get live analytics for a territory"""
+    analytics = await analyze_gathered_data(territory_id)
+    return analytics
+
+@api_router.post("/analytics/refresh/{territory_id}")
+async def refresh_analytics(territory_id: str, current_user: Dict = Depends(get_current_user)):
+    """Manually refresh analytics for a territory"""
+    check_permission(current_user['role'], [UserRole.ADMIN, UserRole.MANAGER])
+    analytics = await update_territory_analytics(territory_id)
+    return {"message": "Analytics refreshed successfully", "analytics": analytics}
+
 # ==================== METRICS HISTORY ROUTES ====================
 
 @api_router.get("/metrics-history/{territory_id}", response_model=List[MetricsHistory])
@@ -889,6 +993,38 @@ async def get_metrics_history(territory_id: str, current_user: Dict = Depends(ge
         if isinstance(entry.get('timestamp'), str):
             entry['timestamp'] = datetime.fromisoformat(entry['timestamp'])
     return history
+
+# ==================== AI ANALYSIS ENDPOINT ====================
+
+@api_router.post("/ai/analyze")
+async def ai_analyze(request: AIAnalysisRequest, current_user: Dict = Depends(get_current_user)):
+    user = await db.users.find_one({"id": current_user['user_id']})
+    api_key = user.get('openai_api_key') or os.environ.get('OPENAI_API_KEY')
+    
+    if not api_key:
+        raise HTTPException(status_code=400, detail="OpenAI API key required")
+    
+    try:
+        client = AsyncOpenAI(api_key=api_key)
+        
+        if request.entityType == "territory":
+            territory = await db.territories.find_one({"id": request.entityId})
+            prompt = f"Analyze this territory in Ahmedabad: {territory['name']}. Metrics: {territory['metrics']}. Provide strategic insights."
+        elif request.entityType == "pin":
+            pin = await db.pins.find_one({"id": request.entityId})
+            prompt = f"Analyze this location pin in Ahmedabad: {pin['label']} ({pin['type']}). Provide business insights."
+        else:
+            raise HTTPException(status_code=400, detail="Invalid entity type")
+        
+        response = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=300
+        )
+        
+        return {"analysis": response.choices[0].message.content}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI analysis failed: {str(e)}")
 
 # ==================== WEBSOCKET ====================
 
@@ -906,7 +1042,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
 @api_router.get("/")
 async def root():
-    return {"message": "R Territory AI Engine - Ahmedabad Edition", "version": "3.0", "city": "Ahmedabad"}
+    return {"message": "R Territory AI Engine - Ahmedabad Edition", "version": "4.0", "city": "Ahmedabad", "features": "Live Analytics + RBAC"}
 
 @api_router.get("/health")
 async def health_check():
