@@ -201,10 +201,16 @@ export const TerritoriesUnified = () => {
   };
 
   const handleShowPinDialog = () => {
-    // Reset to map center when opening dialog
+    // Reset form and enable place picker
     setPinForm({
-      ...pinForm,
-      location: { lat: mapCenter[0], lng: mapCenter[1] }
+      location: { lat: mapCenter[0], lng: mapCenter[1] },
+      type: [],
+      label: '',
+      description: '',
+      hasGeofence: false,
+      geofenceRadius: 1000,
+      territoryId: '',
+      generateAIInsights: false
     });
     setShowPinDialog(true);
     setIsPickingLocation(true);
