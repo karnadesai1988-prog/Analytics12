@@ -4,24 +4,12 @@ import { useAuth } from '../contexts/AuthContext';
 import { useWebSocket } from '../contexts/WebSocketContext';
 import { Button } from './ui/button';
 import { cn } from '../lib/utils';
-import {
-  MapPin,
-  LayoutDashboard,
-  FileText,
-  MessageSquare,
-  TrendingUp,
-  LogOut,
-  Wifi,
-  WifiOff,
-  Settings
-} from 'lucide-react';
+import { MapPin, LayoutDashboard, FileText, MessageSquare, LogOut, Wifi, WifiOff, Settings } from 'lucide-react';
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Map Management', href: '/map-management', icon: MapPin },
-  { name: 'Territories', href: '/territories', icon: MapPin },
+  { name: 'Dashboard & Analytics', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Territories & Map', href: '/territories', icon: MapPin },
   { name: 'Data Gathering', href: '/data-gathering', icon: FileText },
-  { name: 'Analytics', href: '/analytics', icon: TrendingUp },
   { name: 'Comments', href: '/comments', icon: MessageSquare },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
@@ -45,19 +33,11 @@ export const Sidebar = () => {
           {navigation.map((item) => {
             const isActive = location.pathname === item.href;
             return (
-              <Link
-                key={item.name}
-                to={item.href}
-                data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}
-                className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-                  isActive
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                )}
-              >
-                <item.icon className="w-5 h-5" />
-                {item.name}
+              <Link key={item.name} to={item.href} data-testid={`nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                className={cn('flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                  isActive ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                )}>
+                <item.icon className="w-5 h-5" />{item.name}
               </Link>
             );
           })}
@@ -66,33 +46,10 @@ export const Sidebar = () => {
 
       <div className="border-t border-border p-4 space-y-3">
         <div className="flex items-center gap-2 px-3 py-2 bg-accent/50 rounded-lg">
-          {connected ? (
-            <>
-              <Wifi className="w-4 h-4 text-green-600" />
-              <span className="text-xs font-medium">Synced</span>
-            </>
-          ) : (
-            <>
-              <WifiOff className="w-4 h-4 text-destructive" />
-              <span className="text-xs font-medium">Offline</span>
-            </>
-          )}
+          {connected ? (<><Wifi className="w-4 h-4 text-green-600" /><span className="text-xs font-medium">Synced</span></>) : (<><WifiOff className="w-4 h-4 text-destructive" /><span className="text-xs font-medium">Offline</span></>)}
         </div>
-
-        <div className="px-3 py-2 bg-accent/50 rounded-lg">
-          <p className="text-xs font-medium">{user?.name}</p>
-          <p className="text-xs text-muted-foreground">{user?.role}</p>
-        </div>
-
-        <Button
-          onClick={logout}
-          variant="outline"
-          className="w-full justify-start"
-          data-testid="logout-button"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Sign Out
-        </Button>
+        <div className="px-3 py-2 bg-accent/50 rounded-lg"><p className="text-xs font-medium">{user?.name}</p><p className="text-xs text-muted-foreground capitalize">{user?.role?.replace('_', ' ')}</p></div>
+        <Button onClick={logout} variant="outline" className="w-full justify-start" data-testid="logout-button"><LogOut className="w-4 h-4 mr-2" />Sign Out</Button>
       </div>
     </div>
   );
