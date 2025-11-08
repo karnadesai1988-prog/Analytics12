@@ -492,9 +492,16 @@ export const TerritoriesUnified = () => {
                         <div className="border-b pb-2">
                           <h3 className="font-bold text-base">{territory.name}</h3>
                           <p className="text-xs text-gray-600">Zone: {territory.zone} | Pincode: {territory.pincode}</p>
-                          <p className="text-xs text-blue-600 font-semibold mt-1">
-                            🔵 5km diameter coverage area
-                          </p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <p className="text-xs text-blue-600 font-semibold">
+                              🔵 5km diameter coverage
+                            </p>
+                            {territory.rating && (
+                              <div className="flex items-center gap-1 bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
+                                <span className="text-xs font-bold">⭐ {territory.rating.toFixed(1)}</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                         
                         <div className="space-y-1">
