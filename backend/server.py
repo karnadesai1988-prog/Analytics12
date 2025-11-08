@@ -443,7 +443,9 @@ async def update_territory(territory_id: str, territory_update: TerritoryUpdate,
         update_data['aiInsights'] = calculate_ai_insights(TerritoryMetrics(**update_data['metrics'])).model_dump()
     await db.territories.update_one({"id": territory_id}, {"$set": update_data})
     updated = await db.territories.find_one({"id": territory_id})
-    await manager.broadcast(json.dumps({"type": "territory_updated", "data": updated}))
+    # Remove MongoDB ObjectId before broadcasting
+    broadcast_data = {k: v for k, v in updated.items() if k != '_id'}
+    await manager.broadcast(json.dumps({"type": "territory_updated", "data": broadcast_data}))
     return Territory(**updated)
 
 @api_router.delete("/territories/{territory_id}")
