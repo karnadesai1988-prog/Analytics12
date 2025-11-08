@@ -122,7 +122,7 @@ class Territory(BaseModel):
 class TerritoryCreate(BaseModel):
     name: str
     city: str
-    zone: str
+    zone: Optional[str] = None
     pincode: str
     center: Optional[Dict[str, float]] = None
     radius: float = 2500  # 2.5km radius = 5km diameter
