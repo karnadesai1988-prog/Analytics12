@@ -136,7 +136,6 @@ class TerritoryUpdate(BaseModel):
     pincode: Optional[str] = None
     center: Optional[Dict[str, float]] = None
     radius: Optional[float] = None
-    boundary: Optional[List[List[float]]] = None
     metrics: Optional[TerritoryMetrics] = None
     restrictions: Optional[TerritoryRestrictions] = None
 
