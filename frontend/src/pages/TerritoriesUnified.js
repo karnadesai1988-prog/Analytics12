@@ -707,20 +707,20 @@ export const TerritoriesUnified = () => {
           </DialogHeader>
           <form onSubmit={handleCreatePin} className="space-y-4">
             <div>
-              <Label>Location</Label>
-              <div className="flex gap-2">
-                <Input
-                  value={`${pinForm.location.lat.toFixed(6)}, ${pinForm.location.lng.toFixed(6)}`}
-                  readOnly
-                  className="flex-1"
-                />
-                <Button
-                  type="button"
-                  variant={isPickingLocation ? 'default' : 'outline'}
-                  onClick={() => setIsPickingLocation(!isPickingLocation)}
-                >
-                  {isPickingLocation ? 'Picking...' : 'Pick'}
-                </Button>
+              <Label>Location (Drag marker on map)</Label>
+              <div className="space-y-2">
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="text-sm font-medium text-blue-900">
+                    📍 Current Position:
+                  </div>
+                  <div className="text-xs text-blue-700 mt-1 font-mono">
+                    Lat: {pinForm.location.lat.toFixed(6)}<br/>
+                    Lng: {pinForm.location.lng.toFixed(6)}
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">
+                  💡 Drag the red marker on the map to change location
+                </p>
               </div>
             </div>
 
