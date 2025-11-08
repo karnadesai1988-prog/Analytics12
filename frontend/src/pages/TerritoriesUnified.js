@@ -468,13 +468,12 @@ export const TerritoriesUnified = () => {
             />
             <MapUpdater center={mapCenter} zoom={mapZoom} />
             
-            {/* Draggable Place Picker for Pin Creation */}
-            {isPickingLocation && showPinDialog && (
-              <DraggablePlacePicker
-                initialPosition={pinForm.location}
-                onLocationChange={handleLocationPicked}
-              />
-            )}
+            {/* Always Visible Draggable Place Picker */}
+            <DraggablePlacePicker
+              initialPosition={pinForm.location}
+              onLocationChange={handleLocationPicked}
+              onMarkerClick={handlePlacePickerClick}
+            />
             
             {/* Territories as Circles */}
             {visibleTerritories.map(territory => {
