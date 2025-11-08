@@ -602,6 +602,21 @@ async def get_territories(user: User = Depends(get_current_user)):
         # Skip territories missing required fields (legacy data)
         if 'pincode' not in t or 'center' not in t:
             continue
+        
+        # Calculate rating on-the-fly if not present or outdated
+        if 'rating' not in t or not t.get('rating'):
+            rating = await calculate_territory_rating(
+                t['id'],
+                t['center'],
+                t.get('radius', 2500)
+            )
+            t['rating'] = rating.model_dump()
+            # Update in database
+            await db.territories.update_one(
+                {"id": t['id']},
+                {"$set": {"rating": rating.model_dump()}}
+            )
+        
         result.append(Territory(**t))
     return result
 
