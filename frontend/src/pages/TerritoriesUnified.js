@@ -704,16 +704,6 @@ export const TerritoriesUnified = () => {
             </div>
             
             <div>
-              <Label>Zone</Label>
-              <Input
-                required
-                value={territoryForm.zone}
-                onChange={(e) => setTerritoryForm({ ...territoryForm, zone: e.target.value })}
-                placeholder="e.g., West Zone"
-              />
-            </div>
-            
-            <div>
               <Label>Pincode (6 digits)</Label>
               <Input
                 required
