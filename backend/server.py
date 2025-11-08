@@ -631,6 +631,32 @@ async def update_territory(territory_id: str, territory_update: TerritoryUpdate,
     await manager.broadcast(json.dumps({"type": "territory_updated", "data": broadcast_data}))
     return Territory(**updated)
 
+@api_router.post("/territories/{territory_id}/calculate-rating")
+async def calculate_territory_rating_endpoint(territory_id: str, user: User = Depends(get_current_user)):
+    territory = await db.territories.find_one({"id": territory_id})
+    if not territory:
+        raise HTTPException(status_code=404, detail="Territory not found")
+    
+    if not territory.get('center'):
+        raise HTTPException(status_code=400, detail="Territory has no center coordinates")
+    
+    rating = await calculate_territory_rating(
+        territory_id,
+        territory['center'],
+        territory.get('radius', 2500)
+    )
+    
+    # Update territory with rating
+    await db.territories.update_one(
+        {"id": territory_id},
+        {"$set": {"rating": rating.model_dump(), "updatedAt": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    updated = await db.territories.find_one({"id": territory_id})
+    await manager.broadcast(json.dumps({"type": "territory_updated", "data": updated}))
+    
+    return {"rating": rating, "message": "Rating calculated successfully"}
+
 @api_router.delete("/territories/{territory_id}")
 async def delete_territory(territory_id: str, user: User = Depends(check_role([UserRole.ADMIN]))):
     result = await db.territories.delete_one({"id": territory_id})
