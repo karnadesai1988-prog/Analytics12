@@ -757,10 +757,9 @@ export const TerritoriesUnified = () => {
       <Dialog open={showPinDialog} onOpenChange={(open) => {
         setShowPinDialog(open);
         if (!open) {
-          setIsPickingLocation(false);
-          // Reset form when closing
+          // Reset form when closing (keep location)
           setPinForm({
-            location: { lat: AHMEDABAD_CENTER[0], lng: AHMEDABAD_CENTER[1] },
+            ...pinForm,
             type: [],
             label: '',
             description: '',
