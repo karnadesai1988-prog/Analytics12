@@ -612,6 +612,8 @@ async def create_comment(comment: CommentCreate, user: User = Depends(get_curren
         "userId": user.id,
         "userName": user.name,
         "text": comment.text,
+        "zone": comment.zone,
+        "photo": comment.photo,
         "validationStatus": "approved" if is_valid else "rejected",
         "validationReason": reason,
         "sentiment": sentiment,
