@@ -356,15 +356,6 @@ export const TerritoriesUnified = () => {
             </Button>
             
             <Button
-              onClick={handleShowPinDialog}
-              variant="outline"
-              size="sm"
-            >
-              <MapPin className="w-4 h-4 mr-1" />
-              Add Pin
-            </Button>
-            
-            <Button
               onClick={() => setShowFilterDialog(true)}
               variant="outline"
               size="sm"
@@ -372,6 +363,11 @@ export const TerritoriesUnified = () => {
               <Filter className="w-4 h-4 mr-1" />
               Filter ({activeFilters.length})
             </Button>
+            
+            <div className="text-xs text-gray-500 flex items-center gap-1">
+              <span className="inline-block w-3 h-3 bg-red-500 rounded-full"></span>
+              <span>Drag red marker & click to add pin</span>
+            </div>
           </div>
         </div>
       </div>
