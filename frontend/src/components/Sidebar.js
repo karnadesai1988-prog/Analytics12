@@ -47,10 +47,10 @@ export const Sidebar = () => {
                 className={cn(
                   'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 group',
                   isActive 
-                    ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white transform scale-105' 
-                    : 'text-gray-700 hover:bg-white/60 hover:text-orange-600'
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white transform scale-105' 
+                    : 'text-gray-700 hover:bg-white/60 hover:text-blue-600'
                 )}
-                style={isActive ? {boxShadow: '0 4px 12px rgba(255, 107, 0, 0.3)'} : {}}
+                style={isActive ? {boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'} : {}}
               >
                 <item.icon className={cn(
                   "w-5 h-5 transition-all duration-300",
