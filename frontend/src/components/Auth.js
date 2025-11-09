@@ -30,9 +30,9 @@ export const Auth = () => {
     <div className="min-h-screen flex items-center justify-center p-4" style={{background: 'linear-gradient(135deg, #FFFFFF 0%, #F4F4F4 100%)'}}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-orange-200/30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-orange-100/40 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-orange-50/30 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-20 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-50/30 rounded-full blur-3xl" />
       </div>
 
       <Card className="w-full max-w-md glass-panel-light border shadow-2xl relative z-10" style={{borderColor: '#E0E0E0', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.12)'}}>
