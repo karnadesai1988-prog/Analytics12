@@ -1024,6 +1024,100 @@ export const TerritoriesUnified = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Create Post Dialog */}
+      <Dialog open={showPostDialog} onOpenChange={setShowPostDialog}>
+        <DialogContent className="max-w-md bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">Create Post</DialogTitle>
+            <DialogDescription>
+              Share your thoughts at this location
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            if (!postForm.text.trim() || !postForm.communityId) {
+              toast.error('Please enter text and select a community');
+              return;
+            }
+            try {
+              const token = localStorage.getItem('token');
+              await axios.post(`${BACKEND_URL}/api/posts`, {
+                text: postForm.text,
+                communityId: postForm.communityId,
+                location: pinForm.location,
+                photo: postForm.photoPreview
+              }, { headers: { Authorization: `Bearer ${token}` }});
+              toast.success('Post created successfully!');
+              setPostForm({ text: '', communityId: '', photo: null, photoPreview: null });
+              setShowPostDialog(false);
+              loadData();
+            } catch (error) {
+              toast.error('Failed to create post');
+            }
+          }} className="space-y-4">
+            <div>
+              <Label>Select Community</Label>
+              <Select value={postForm.communityId} onValueChange={(val) => setPostForm({...postForm, communityId: val})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose community" />
+                </SelectTrigger>
+                <SelectContent>
+                  {communities.map(community => (
+                    <SelectItem key={community.id} value={community.id}>
+                      {community.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label>Your Thoughts</Label>
+              <Textarea
+                value={postForm.text}
+                onChange={(e) => setPostForm({...postForm, text: e.target.value})}
+                placeholder="Share what's on your mind..."
+                rows={4}
+                className="resize-none"
+              />
+            </div>
+
+            <div>
+              <Label>Attach Photo (Optional)</Label>
+              {!postForm.photoPreview ? (
+                <label className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-orange-300 rounded-lg cursor-pointer hover:bg-orange-50">
+                  <Upload className="w-4 h-4 text-orange-600" />
+                  <span className="text-sm text-orange-600">Upload Photo</span>
+                  <input type="file" accept="image/*" onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setPostForm({...postForm, photo: file, photoPreview: reader.result});
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }} className="hidden" />
+                </label>
+              ) : (
+                <div className="relative">
+                  <img src={postForm.photoPreview} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
+                  <button type="button" onClick={() => setPostForm({...postForm, photo: null, photoPreview: null})} 
+                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-orange-600">
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Create Post
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       {/* Filter Dialog */}
       <Dialog open={showFilterDialog} onOpenChange={setShowFilterDialog}>
         <DialogContent className="max-w-md">
