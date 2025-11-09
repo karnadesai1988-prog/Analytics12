@@ -817,6 +817,62 @@ export const TerritoriesUnified = () => {
               );
             })}
             
+            {/* Post Markers */}
+            {posts.map(post => {
+              // Check if post should be visible based on viewOnlySelected
+              if (viewOnlySelected && selectedTerritory && selectedTerritory.center) {
+                const isInTerritory = isPointInCircle(
+                  [post.location.lat, post.location.lng],
+                  selectedTerritory.center,
+                  selectedTerritory.radius || 2500
+                );
+                if (!isInTerritory) return null;
+              }
+              
+              return (
+                <Marker
+                  key={`post-${post.id}`}
+                  position={[post.location.lat, post.location.lng]}
+                  icon={postMarkerIcon}
+                >
+                  <Popup maxWidth={300}>
+                    <div className="text-sm space-y-2">
+                      <div className="flex items-center gap-2 border-b pb-2">
+                        <div className="w-8 h-8 bg-violet-100 rounded-full flex items-center justify-center">
+                          <MessageSquare className="w-4 h-4 text-violet-600" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-semibold text-violet-600">Community Post</div>
+                          <div className="text-xs text-gray-500">{post.userName}</div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <p className="text-gray-700">{post.text}</p>
+                      </div>
+                      
+                      {post.photo && (
+                        <img
+                          src={post.photo}
+                          alt="Post"
+                          className="w-full h-40 object-cover rounded"
+                        />
+                      )}
+                      
+                      <div className="text-xs">
+                        <span className="text-gray-600">Location: </span>
+                        <span className="font-mono">{post.location.lat.toFixed(4)}, {post.location.lng.toFixed(4)}</span>
+                      </div>
+                      
+                      <div className="text-xs text-gray-400 pt-2 border-t">
+                        Posted on {new Date(post.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
+            
             {/* Comment Markers */}
             {comments.map(comment => {
               const territory = territories.find(t => t.id === comment.territoryId);
