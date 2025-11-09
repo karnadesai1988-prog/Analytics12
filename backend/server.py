@@ -992,7 +992,9 @@ async def create_post(post: PostCreate, user: User = Depends(get_current_user)):
         "createdAt": datetime.now(timezone.utc).isoformat()
     }
     await db.posts.insert_one(post_doc)
-    await manager.broadcast(json.dumps({"type": "post_created", "data": post_doc}))
+    # Remove MongoDB ObjectId before broadcasting
+    broadcast_data = {k: v for k, v in post_doc.items() if k != '_id'}
+    await manager.broadcast(json.dumps({"type": "post_created", "data": broadcast_data}))
     return Post(**post_doc)
 
 @api_router.get("/posts", response_model=List[Post])
