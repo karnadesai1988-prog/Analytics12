@@ -331,6 +331,66 @@ frontend:
         agent: "testing"
         comment: "✅ TESTED: Enhanced hover details working perfectly. Territory popups show: territory name/zone/pincode, AI Insights (appreciation %, confidence, demand), Key Metrics (investments, buildings, population, livability, crime rate, govt infra), AI Suggestions. Pin popups show: label, type badges, description, location coordinates, geofence indicator, created by info, 'Inside selected territory' badge when applicable."
 
+  - task: "Community page with community cards and join functionality"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/Community.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Completely rebuilt Community page with: community cards grid, join community, expanded community view with posts and active members, create community dialog with photo upload"
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Community page displays community cards (SHINE community visible), shows member count, join/view buttons, create community button in header. Expanded view shows posts and community members sidebar."
+
+  - task: "Territory Profile Page with 7 tabs"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoryProfile.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented comprehensive Territory Profile Page with 7 tabs: Overview (stats, insights, metrics), Professionals, Projects (Societies), Opportunities, Trendings/Pulses/News, Governance, Events. Includes quick stats sidebar, mini map, rating display"
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Territory Profile page loads correctly showing Satellite Area with all 7 tabs, quick stats (0 professionals, 0 projects, 0 opportunities, 3 posts), territory insights with AI rating and quality metrics, mini map showing location"
+
+  - task: "Territory selection and View Profile navigation"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added View Profile button that appears when a territory is selected. Clicking it navigates to /territory/:id route showing full Territory Profile page"
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Selecting Satellite Area territory shows View Profile button at bottom of territory card. Clicking navigates to Territory Profile page successfully."
+
+  - task: "Heat map toggle functionality"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Heat Map toggle button added to header. When toggled, button changes to 'Show Map' with orange background"
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Heat Map button toggles correctly. When active, button shows 'Show Map' with orange background. 'Only Show Selected' toggle appears in sidebar."
+
 metadata:
   created_by: "main_agent"
   version: "2.0"
