@@ -757,10 +757,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Community CRUD endpoints"
-    - "Post CRUD endpoints"
-    - "Territory Profile endpoint"
-    - "Professionals, Projects, Opportunities, Events endpoints"
+    - "Metrics submission endpoint (POST /api/metrics)"
+    - "Dashboard analytics endpoint (GET /api/analytics/dashboard)"
+    - "News scraping endpoint (GET /api/news/scraped)"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
