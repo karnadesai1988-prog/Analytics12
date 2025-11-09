@@ -213,6 +213,7 @@ export const TerritoriesUnified = () => {
   const [pins, setPins] = useState([]);
   const [posts, setPosts] = useState([]);
   const [events, setEvents] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [comments, setComments] = useState([]);
   const [mapCenter, setMapCenter] = useState(AHMEDABAD_CENTER);
   const [mapZoom, setMapZoom] = useState(12);
