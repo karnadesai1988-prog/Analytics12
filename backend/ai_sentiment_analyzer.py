@@ -436,8 +436,8 @@ async def analyze_territory_intelligence(
     # Analyze engagement
     engagement_metrics = analyze_engagement(posts, events, communities)
     
-    # Scrape news for crime/investment/jobs (use RID if provided)
-    news_metrics = scrape_gujarat_news_for_rid(rid, pages=2)
+    # Scrape news for comprehensive metrics
+    news_metrics = analyze_news_metrics(pages=2)
     
     # Compile all data
     territory_intelligence = {
