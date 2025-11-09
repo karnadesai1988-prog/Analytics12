@@ -97,7 +97,21 @@ export const DataSubmission = () => {
         notes: ''
       });
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to submit metrics');
+      // Handle validation errors from FastAPI
+      if (error.response?.data?.detail) {
+        const detail = error.response.data.detail;
+        if (Array.isArray(detail)) {
+          // Pydantic validation errors
+          const errorMsg = detail.map(err => `${err.loc.join('.')}: ${err.msg}`).join(', ');
+          toast.error(`Validation error: ${errorMsg}`);
+        } else if (typeof detail === 'string') {
+          toast.error(detail);
+        } else {
+          toast.error('Failed to submit metrics');
+        }
+      } else {
+        toast.error('Failed to submit metrics');
+      }
     } finally {
       setLoading(false);
     }
