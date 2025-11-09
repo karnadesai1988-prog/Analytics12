@@ -5,7 +5,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Bright Glassmorphism Design System */
+/* Bright Glassmorphism Design System - Blue Theme */
 :root {
   --color-bg-primary: #FFFFFF;
   --color-bg-secondary: #F4F4F4;
@@ -19,10 +19,10 @@
   --color-text-secondary: #4F4F4F;
   --color-text-muted: #8C8C8C;
   --color-icon-neutral: #9E9E9E;
-  --color-orange-primary: #FF6B00;
-  --color-orange-secondary: #FF7A00;
-  --color-orange-dark: #FF5A00;
-  --color-orange-glow: rgba(255, 107, 0, 0.35);
+  --color-blue-primary: #2563EB;
+  --color-blue-secondary: #3B82F6;
+  --color-blue-dark: #1D4ED8;
+  --color-blue-glow: rgba(37, 99, 235, 0.35);
   --color-success: #2ECC71;
   --color-error: #FF3B3B;
 }
