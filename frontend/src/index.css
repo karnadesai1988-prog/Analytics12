@@ -62,32 +62,38 @@ code {
 
 /* Orange Gradient Button */
 .btn-orange-gradient {
-  background: linear-gradient(135deg, #FF6B00, #FF8500);
+  background: linear-gradient(135deg, #FF7A00, #FF5A00);
   color: white;
-  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
   border: none;
   transition: all 0.3s ease;
 }
 
 .btn-orange-gradient:hover {
-  box-shadow: 0 6px 25px rgba(255, 107, 0, 0.5);
-  transform: translateY(-2px);
-  filter: brightness(1.1);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.45);
+  transform: translateY(-2px) scale(1.03);
+  filter: brightness(1.05);
+}
+
+.btn-orange-gradient:active {
+  transform: translateY(0) scale(1);
+  box-shadow: 0 2px 8px rgba(255, 107, 0, 0.4);
 }
 
 /* Glass Button */
 .btn-glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: var(--color-text-primary);
+  border: 1px solid rgba(255, 107, 0, 0.3);
+  color: var(--color-orange-primary);
   transition: all 0.3s ease;
 }
 
 .btn-glass:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.6);
   border-color: var(--color-orange-primary);
-  box-shadow: 0 0 20px rgba(255, 107, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(255, 107, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 /* Input Fields */
