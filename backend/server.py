@@ -1222,10 +1222,13 @@ async def get_scraped_news(user: User = Depends(get_current_user), pages: int = 
     return news_data
 
 @api_router.get("/analytics/dashboard")
-async def get_dashboard_analytics(user: User = Depends(get_current_user)):
+async def get_dashboard_analytics(user: User = Depends(get_current_user), territory_id: Optional[str] = Query(None)):
     """Get dashboard analytics with calculated metrics from submissions"""
     territories = await db.territories.find().to_list(length=None)
-    all_metrics = await db.metrics_submissions.find().to_list(length=None)
+    
+    # Filter metrics by territory if specified
+    metrics_query = {"territoryId": territory_id} if territory_id else {}
+    all_metrics = await db.metrics_submissions.find(metrics_query).to_list(length=None)
     
     # Calculate aggregated metrics from submissions
     if all_metrics:
