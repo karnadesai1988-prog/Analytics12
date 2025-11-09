@@ -524,10 +524,11 @@ export const TerritoriesUnified = () => {
             />
             <MapUpdater center={mapCenter} zoom={mapZoom} />
             
-            {/* Plus Button for Adding Pins/Posts */}
+            {/* Draggable Plus Button for Adding Pins/Posts */}
             {!showHeatMap && (
-              <PlusButton
-                position={pinForm.location}
+              <DraggablePlusButton
+                initialPosition={pinForm.location}
+                onLocationChange={handleLocationPicked}
                 onPlusClick={handlePlusClick}
               />
             )}
