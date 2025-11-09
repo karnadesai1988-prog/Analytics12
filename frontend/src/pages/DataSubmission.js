@@ -185,7 +185,7 @@ export const DataSubmission = () => {
                       onChange={(e) => setFormData({...formData, [metric.name]: e.target.value})}
                       className="w-full h-2 rounded-lg appearance-none cursor-pointer"
                       style={{
-                        background: `linear-gradient(to right, #FF6B00 0%, #FF6B00 ${formData[metric.name] * 10}%, #E0E0E0 ${formData[metric.name] * 10}%, #E0E0E0 100%)`
+                        background: `linear-gradient(to right, #2563EB 0%, #2563EB ${formData[metric.name] * 10}%, #E0E0E0 ${formData[metric.name] * 10}%, #E0E0E0 100%)`
                       }}
                     />
                     <div className="flex justify-between text-xs mt-1" style={{color: '#8C8C8C'}}>
