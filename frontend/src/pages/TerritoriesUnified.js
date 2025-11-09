@@ -1688,6 +1688,129 @@ export const TerritoriesUnified = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Create Project Dialog */}
+      <Dialog open={showProjectDialog} onOpenChange={setShowProjectDialog}>
+        <DialogContent className="max-w-md bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">Create Project</DialogTitle>
+            <DialogDescription>
+              Add a new real estate project
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            if (!projectForm.name.trim() || !projectForm.developerName || !projectForm.territoryId) {
+              toast.error('Please fill all required fields');
+              return;
+            }
+            try {
+              const token = localStorage.getItem('token');
+              await axios.post(`${BACKEND_URL}/api/projects`, projectForm, {
+                headers: { Authorization: `Bearer ${token}` }
+              });
+              toast.success('Project created successfully!');
+              setProjectForm({
+                name: '',
+                status: 'Under Construction',
+                developerName: '',
+                priceRange: '',
+                configuration: '',
+                location: { lat: AHMEDABAD_CENTER[0], lng: AHMEDABAD_CENTER[1] },
+                territoryId: '',
+                brochureUrl: ''
+              });
+              setShowProjectDialog(false);
+              loadData();
+            } catch (error) {
+              toast.error('Failed to create project');
+            }
+          }} className="space-y-4">
+            <div>
+              <Label>Project Name *</Label>
+              <Input
+                value={projectForm.name}
+                onChange={(e) => setProjectForm({...projectForm, name: e.target.value})}
+                placeholder="Enter project name"
+                required
+              />
+            </div>
+            
+            <div>
+              <Label>Developer Name *</Label>
+              <Input
+                value={projectForm.developerName}
+                onChange={(e) => setProjectForm({...projectForm, developerName: e.target.value})}
+                placeholder="Developer/builder name"
+                required
+              />
+            </div>
+
+            <div>
+              <Label>Status</Label>
+              <Select value={projectForm.status} onValueChange={(val) => setProjectForm({...projectForm, status: val})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Under Construction">Under Construction</SelectItem>
+                  <SelectItem value="Ready">Ready</SelectItem>
+                  <SelectItem value="Possession Soon">Possession Soon</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label>Price Range</Label>
+              <Input
+                value={projectForm.priceRange}
+                onChange={(e) => setProjectForm({...projectForm, priceRange: e.target.value})}
+                placeholder="e.g., 50L - 1Cr"
+              />
+            </div>
+
+            <div>
+              <Label>Configuration</Label>
+              <Input
+                value={projectForm.configuration}
+                onChange={(e) => setProjectForm({...projectForm, configuration: e.target.value})}
+                placeholder="e.g., 2BHK, 3BHK"
+              />
+            </div>
+
+            <div>
+              <Label>Territory *</Label>
+              <Select value={projectForm.territoryId} onValueChange={(val) => setProjectForm({...projectForm, territoryId: val})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select territory" />
+                </SelectTrigger>
+                <SelectContent>
+                  {territories.map(territory => (
+                    <SelectItem key={territory.id} value={territory.id}>
+                      {territory.name} ({territory.zone})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label>Brochure URL</Label>
+              <Input
+                value={projectForm.brochureUrl}
+                onChange={(e) => setProjectForm({...projectForm, brochureUrl: e.target.value})}
+                placeholder="https://..."
+                type="url"
+              />
+            </div>
+
+            <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-orange-600">
+              <Building2 className="w-4 h-4 mr-2" />
+              Create Project
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       {/* Filter Dialog */}
       <Dialog open={showFilterDialog} onOpenChange={setShowFilterDialog}>
         <DialogContent className="max-w-md">
