@@ -168,8 +168,8 @@ code {
   color: var(--color-text-secondary);
 }
 
-.text-orange {
-  color: var(--color-orange-primary);
+.text-blue {
+  color: var(--color-blue-primary);
 }
 
 /* Card Styling */
