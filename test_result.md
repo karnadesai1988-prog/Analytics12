@@ -114,6 +114,10 @@ user_problem_statement: |
   - Role-based access control (Admin, Partner, Viewer)
   - No emergentintegrations dependencies
   - Responsive design for mobile/tablet/laptop
+  - Territory Profile Page with 7 tabs (Overview, Professionals, Projects, Opportunities, Trendings, Governance, Events)
+  - Community management with community cards, join functionality, posts, and member display
+  - Heat map toggle functionality on territories map
+  - Navigation from map to Territory Profile page
 
 backend:
   - task: "User authentication (signup/login)"
