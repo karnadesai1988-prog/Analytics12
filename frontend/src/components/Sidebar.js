@@ -54,7 +54,7 @@ export const Sidebar = () => {
               >
                 <item.icon className={cn(
                   "w-5 h-5 transition-all duration-300",
-                  isActive ? "text-white" : "text-gray-500 group-hover:text-orange-500"
+                  isActive ? "text-white" : "text-gray-500 group-hover:text-blue-500"
                 )} />
                 <span>{item.name}</span>
                 {isActive && (
