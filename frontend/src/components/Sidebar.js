@@ -9,7 +9,8 @@ import { MapPin, LayoutDashboard, FileText, MessageSquare, LogOut, Wifi, WifiOff
 const navigation = [
   { name: 'Territories & Map', href: '/territories', icon: MapPin },
   { name: 'Dashboard & Analytics', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Feedback & Suggestions', href: '/data-gathering', icon: FileText },
+  { name: 'Data Submission', href: '/data-submission', icon: FileText },
+  { name: 'News', href: '/news', icon: FileText },
   { name: 'Community', href: '/comments', icon: MessageSquare },
 ];
 
