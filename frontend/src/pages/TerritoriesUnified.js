@@ -9,7 +9,7 @@ import { Checkbox } from '../components/ui/checkbox';
 import { Switch } from '../components/ui/switch';
 import { Badge } from '../components/ui/badge';
 import { toast } from 'sonner';
-import { MapPin, Plus, Filter, Eye, Loader2 } from 'lucide-react';
+import { MapPin, Plus, Filter, Eye, Loader2, MessageSquare, Upload, X } from 'lucide-react';
 import axios from 'axios';
 import L from 'leaflet';
 import '../pages/MapManagement.css';
