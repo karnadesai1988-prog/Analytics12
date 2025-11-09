@@ -107,3 +107,17 @@
 .border-orange-500 {
   border-color: #ff8c42;
 }
+
+.territory-tooltip {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 2px solid #8b5cf6 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3) !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  max-width: 200px !important;
+}
+
+.territory-tooltip::before {
+  border-top-color: #8b5cf6 !important;
+}
