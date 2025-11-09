@@ -252,7 +252,7 @@ export const DataSubmission = () => {
               {/* Tenant Type */}
               <div>
                 <Label className="flex items-center gap-2 mb-2" style={{color: '#1A1A1A'}}>
-                  <Users className="w-4 h-4 text-orange-500" />
+                  <Users className="w-4 h-4 text-blue-500" />
                   Tenant Type
                 </Label>
                 <select
