@@ -226,11 +226,22 @@ def analyze_engagement(posts: List[Dict], events: List[Dict],
     
     recent_cutoff = datetime.now(timezone.utc) - timedelta(days=30)
     
+    def safe_parse_date(date_val):
+        """Safely parse date string or datetime object"""
+        if isinstance(date_val, datetime):
+            return date_val
+        if isinstance(date_val, str):
+            try:
+                return datetime.fromisoformat(date_val.replace('Z', '+00:00'))
+            except:
+                return datetime(2020, 1, 1, tzinfo=timezone.utc)
+        return datetime(2020, 1, 1, tzinfo=timezone.utc)
+    
     recent_posts = [p for p in posts 
-                    if datetime.fromisoformat(p.get('createdAt', '2020-01-01T00:00:00+00:00').replace('Z', '+00:00')) > recent_cutoff]
+                    if safe_parse_date(p.get('createdAt')) > recent_cutoff]
     
     recent_events = [e for e in events
-                     if datetime.fromisoformat(e.get('createdAt', '2020-01-01T00:00:00+00:00').replace('Z', '+00:00')) > recent_cutoff]
+                     if safe_parse_date(e.get('createdAt')) > recent_cutoff]
     
     total_members = sum(len(c.get('members', [])) for c in communities)
     
