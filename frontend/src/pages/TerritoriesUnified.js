@@ -345,6 +345,7 @@ export const TerritoriesUnified = () => {
               onClick={() => setShowTerritoryDialog(true)}
               variant="default"
               size="sm"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
             >
               <Plus className="w-4 h-4 mr-1" />
               Create Territory
@@ -359,9 +360,19 @@ export const TerritoriesUnified = () => {
               Filter ({activeFilters.length})
             </Button>
             
-            <div className="text-xs text-gray-500 flex items-center gap-1">
-              <span className="inline-block w-3 h-3 bg-red-500 rounded-full"></span>
-              <span>Drag red marker & click to add pin</span>
+            <Button
+              onClick={() => setShowHeatMap(!showHeatMap)}
+              variant={showHeatMap ? "default" : "outline"}
+              size="sm"
+              className={showHeatMap ? "bg-gradient-to-r from-orange-500 to-orange-600" : ""}
+            >
+              <Eye className="w-4 h-4 mr-1" />
+              {showHeatMap ? 'Show Map' : 'Heat Map'}
+            </Button>
+            
+            <div className="text-xs text-gray-500 flex items-center gap-1 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
+              <Plus className="w-3 h-3 text-orange-600" />
+              <span>Click <span className="font-semibold text-orange-600">+</span> to add pin/post</span>
             </div>
           </div>
         </div>
