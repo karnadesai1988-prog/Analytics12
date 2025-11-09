@@ -48,6 +48,9 @@ export const Sidebar = () => {
           {connected ? (<><Wifi className="w-4 h-4 text-green-600" /><span className="text-xs font-medium">Synced</span></>) : (<><WifiOff className="w-4 h-4 text-destructive" /><span className="text-xs font-medium">Offline</span></>)}
         </div>
         <div className="px-3 py-2 bg-accent/50 rounded-lg"><p className="text-xs font-medium">{user?.name}</p><p className="text-xs text-muted-foreground capitalize">{user?.role?.replace('_', ' ')}</p></div>
+        <Button onClick={() => window.location.href = '/settings'} variant="outline" className="w-full justify-start">
+          <Settings className="w-4 h-4 mr-2" />Settings
+        </Button>
         <Button onClick={logout} variant="outline" className="w-full justify-start" data-testid="logout-button"><LogOut className="w-4 h-4 mr-2" />Sign Out</Button>
       </div>
     </div>
