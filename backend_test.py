@@ -744,6 +744,33 @@ class BackendTester:
             else:
                 self.log_result("Territory ID Retrieval", False, "Could not get first territory ID for specific tests")
         
+        print("\n" + "=" * 80)
+        print("📊 DATA SUBMISSION & ANALYTICS TESTS")
+        print("=" * 80)
+        
+        # Test 15: New Data Submission and Analytics Endpoints
+        if territory_id:
+            # Get first territory ID from territories list for testing
+            success, territories_data, status = await self.make_request("GET", "/territories", token=self.admin_token)
+            if success and isinstance(territories_data, list) and len(territories_data) > 0:
+                first_territory_id = territories_data[0]["id"]
+                print(f"Using territory ID for metrics: {first_territory_id}")
+                
+                # Test metrics submission
+                metrics_id = await self.test_metrics_submission(self.admin_token, first_territory_id)
+                
+                # Test metrics retrieval (all and filtered)
+                await self.test_metrics_retrieval(self.admin_token)
+                await self.test_metrics_retrieval(self.admin_token, first_territory_id)
+                
+                # Test dashboard analytics
+                await self.test_dashboard_analytics(self.admin_token)
+                
+                # Test news scraping
+                await self.test_news_scraping(self.admin_token, pages=2)
+            else:
+                self.log_result("Territory ID for Metrics", False, "Could not get territory ID for metrics tests")
+        
         # Summary
         print("\n" + "=" * 80)
         print("📊 COMPREHENSIVE TEST SUMMARY")
