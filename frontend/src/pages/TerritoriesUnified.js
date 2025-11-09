@@ -911,7 +911,7 @@ export const TerritoriesUnified = () => {
               </div>
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleCreatePin} className="space-y-4">
+          <form onSubmit={handleSubmitPin} className="space-y-4">
             <div>
               <Label className="text-sm font-semibold">📍 Selected Location</Label>
               <div className="mt-2 p-3 bg-blue-50 border-2 border-blue-200 rounded-lg">
