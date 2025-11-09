@@ -499,6 +499,75 @@ frontend:
         agent: "main"
         comment: "✅ VERIFIED: Post markers are visible on map as violet/purple pins. Multiple post markers showing on Ahmedabad map. Posts load with territories and pins. Popup shows post text, photo, location coordinates, and creation date."
 
+  - task: "Community markers visible on map"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added community markers (gold) at territory center. Shows community name, description, photo, member count, and open/closed status. Respects viewOnlySelected filter."
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Community markers visible as gold pins on map at territory centers. Shows SHINE community with proper details in popup."
+
+  - task: "Event markers visible on map"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added event markers (yellow) at territory center with offset. Shows event title, date, location, organizer, status (upcoming/past), and RSVP count. Respects viewOnlySelected filter."
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Event markers visible as yellow pins on map. Positioned near territory center with slight offset to avoid overlap with community markers."
+
+  - task: "Action dialog with 4 options (2x2 grid)"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated action dialog from 3 options to 4 options in 2x2 grid: Create Pin, Create Post, Create Event, Create Project. Each with icon and description."
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Action dialog shows 4 options in neat 2x2 grid layout when clicking Place Picker."
+
+  - task: "Create Project dialog and functionality"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added Create Project dialog with fields: name, developer name, status (dropdown), price range, configuration, territory (dropdown), brochure URL. Pre-selects territory if one is selected. Submits to POST /api/projects."
+
+  - task: "Pre-select territory in event/project creation"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Event and Project dialogs now pre-select territory based on selectedTerritory when opening from Place Picker. Makes it easier to create items in specific territories."
+
 metadata:
   created_by: "main_agent"
   version: "2.0"
