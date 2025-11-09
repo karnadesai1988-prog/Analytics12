@@ -8,6 +8,8 @@ from collections import Counter
 from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Any, Optional
 import json
+import requests
+from bs4 import BeautifulSoup
 from news_scraper import analyze_news_metrics
 
 # ==========================================
