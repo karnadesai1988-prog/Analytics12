@@ -933,6 +933,112 @@ export const TerritoriesUnified = () => {
               );
             })}
             
+            {/* Community Markers */}
+            {communities.map(community => {
+              const territory = territories.find(t => t.id === community.territoryId);
+              if (!territory || !territory.center) return null;
+              
+              // Check if should be visible based on viewOnlySelected
+              if (viewOnlySelected && selectedTerritory) {
+                if (community.territoryId !== selectedTerritory.id) return null;
+              }
+              
+              return (
+                <Marker
+                  key={`community-${community.id}`}
+                  position={[territory.center.lat, territory.center.lng]}
+                  icon={communityMarkerIcon}
+                >
+                  <Popup maxWidth={300}>
+                    <div className="text-sm space-y-2">
+                      <div className="flex items-center gap-2 border-b pb-2">
+                        <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                          <Users className="w-4 h-4 text-yellow-600" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-semibold text-yellow-600">Community</div>
+                          <div className="text-xs text-gray-500">{community.name}</div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <p className="text-gray-700">{community.description || 'No description'}</p>
+                      </div>
+                      
+                      {community.photo && (
+                        <img
+                          src={community.photo}
+                          alt="Community"
+                          className="w-full h-32 object-cover rounded"
+                        />
+                      )}
+                      
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-gray-600">Members: {community.members?.length || 0}</span>
+                        <span className={`px-2 py-1 rounded ${community.canJoin ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}>
+                          {community.canJoin ? 'Open' : 'Closed'}
+                        </span>
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
+            
+            {/* Event Markers */}
+            {events.map(event => {
+              const territory = territories.find(t => t.id === event.territoryId);
+              if (!territory || !territory.center) return null;
+              
+              // Check if should be visible based on viewOnlySelected
+              if (viewOnlySelected && selectedTerritory) {
+                if (event.territoryId !== selectedTerritory.id) return null;
+              }
+              
+              return (
+                <Marker
+                  key={`event-${event.id}`}
+                  position={[territory.center.lat + 0.002, territory.center.lng + 0.002]}
+                  icon={eventMarkerIcon}
+                >
+                  <Popup maxWidth={300}>
+                    <div className="text-sm space-y-2">
+                      <div className="flex items-center gap-2 border-b pb-2">
+                        <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                          <Calendar className="w-4 h-4 text-yellow-600" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-semibold text-yellow-600">Event</div>
+                          <div className="text-xs text-gray-500">{event.title}</div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-xs">
+                          <Calendar className="w-3 h-3" />
+                          <span>{new Date(event.date).toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs">
+                          <MapPin className="w-3 h-3" />
+                          <span>{event.location}</span>
+                        </div>
+                        <div className="text-xs text-gray-600">
+                          Organizer: {event.organizer}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-xs pt-2 border-t">
+                        <span className={`px-2 py-1 rounded ${event.status === 'upcoming' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}>
+                          {event.status === 'upcoming' ? 'Upcoming' : 'Past'}
+                        </span>
+                        <span className="text-gray-600">RSVPs: {event.rsvpList?.length || 0}</span>
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
+            
             {/* Comment Markers */}
             {comments.map(comment => {
               const territory = territories.find(t => t.id === comment.territoryId);
