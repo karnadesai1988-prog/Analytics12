@@ -93,12 +93,12 @@ export const DashboardNew = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium mb-1" style={{color: '#8C8C8C'}}>Overall Livability Index</p>
-              <h2 className="text-6xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+              <h2 className="text-6xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
                 {metrics.livability_index || 0}<span className="text-2xl">/10</span>
               </h2>
               <p className="text-sm mt-2" style={{color: '#4F4F4F'}}>Calculated from job opportunities, safety, quality of life metrics</p>
             </div>
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
               <TrendingUp className="w-16 h-16 text-white" />
             </div>
           </div>
