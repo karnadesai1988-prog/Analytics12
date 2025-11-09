@@ -674,7 +674,14 @@ export const TerritoriesUnified = () => {
                     >
                     <Tooltip permanent direction="center" className="territory-tooltip">
                       <div className="text-xs font-semibold">
-                        {territory.name}
+                        <div className="flex items-center gap-2">
+                          <span>{territory.name}</span>
+                          {totalScore > 0 && (
+                            <span className="bg-purple-600 text-white px-2 py-0.5 rounded-full text-xs font-bold">
+                              ⭐ {totalScore}
+                            </span>
+                          )}
+                        </div>
                         {territory.aiInsights?.aiSuggestions && territory.aiInsights.aiSuggestions.length > 0 && (
                           <div className="text-xs mt-1 text-purple-700">
                             💡 {territory.aiInsights.aiSuggestions[0].substring(0, 50)}...
