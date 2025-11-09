@@ -73,7 +73,7 @@ export const Auth = () => {
 
             <div className="space-y-2">
               <Label className="flex items-center gap-2" style={{color: '#4F4F4F'}}>
-                <Mail className="w-4 h-4 text-orange-500" />
+                <Mail className="w-4 h-4 text-blue-500" />
                 Email Address
               </Label>
               <Input
