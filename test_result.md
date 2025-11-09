@@ -630,39 +630,48 @@ frontend:
 
   - task: "Metrics submission endpoint (POST /api/metrics)"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "POST /api/metrics endpoint for submitting territory metrics (job_likelihood, crime_rate, security, livelihood, air_quality_index, food_hygiene, property data). Stores in metrics_submissions collection and broadcasts via WebSocket."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Metrics submission endpoint working perfectly. Successfully submits territory metrics with all required fields (job_likelihood, crime_rate, security, livelihood, air_quality_index, food_hygiene) and optional property data (property_value, rent_average, occupancy_rate, maintenance_cost, tenant_type, notes). Returns success message with submission ID. Data properly stored in metrics_submissions collection."
 
   - task: "Dashboard analytics endpoint (GET /api/analytics/dashboard)"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "GET /api/analytics/dashboard endpoint calculates aggregated metrics from submissions: avg job likelihood, crime rate, security, livelihood, air quality, food hygiene. Also calculates property metrics and news-based external metrics. Returns livability index."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Dashboard analytics endpoint working excellently. Returns comprehensive analytics with all required sections: metrics object (job_likelihood, crime_rate, security, livelihood, air_quality_index, food_hygiene, livability_index), property object (avg_property_value, avg_rent, avg_occupancy), news_metrics object (crime_score, investment_score, job_score, infrastructure_score), totalMetricsSubmissions count, and totalTerritories count. Livability index calculation working correctly."
 
   - task: "News scraping endpoint (GET /api/news/scraped)"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "GET /api/news/scraped endpoint scrapes Gujarat Samachar news and analyzes metrics. Returns crime_rate_score, investment_activity_score, job_market_score, property_market_score, infrastructure_score, livability_index, mention counts, and article list with tags."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: News scraping endpoint working perfectly. Successfully scrapes and analyzes news data with all required fields: crime_rate_score, investment_activity_score, job_market_score, property_market_score, infrastructure_score, livability_index (all scores 0-10 range), mention counts (crime_mentions, investment_mentions, job_mentions, property_mentions, infrastructure_mentions), articles array with title and tags, and articles_analyzed count. Pages parameter working correctly."
 
 frontend:
   - task: "Blue theme implementation"
