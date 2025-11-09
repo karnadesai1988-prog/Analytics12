@@ -5,19 +5,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark Glassmorphism Design System */
+/* Bright Glassmorphism Design System */
 :root {
-  --color-bg-primary: #0A0A0A;
-  --color-bg-secondary: #1A1A1A;
-  --color-glass: rgba(255, 255, 255, 0.08);
-  --color-glass-hover: rgba(255, 255, 255, 0.12);
-  --color-border-glass: rgba(255, 255, 255, 0.2);
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #B3B3B3;
-  --color-text-card: #E0E0E0;
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F4F4F4;
+  --color-bg-highlight: #FAFAFA;
+  --color-glass: rgba(255, 255, 255, 0.65);
+  --color-glass-hover: rgba(255, 255, 255, 0.85);
+  --color-border-glass: rgba(255, 255, 255, 0.8);
+  --color-border-light: #E0E0E0;
+  --color-divider: #E5E5E5;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #4F4F4F;
+  --color-text-muted: #8C8C8C;
+  --color-icon-neutral: #9E9E9E;
   --color-orange-primary: #FF6B00;
-  --color-orange-secondary: #FF8500;
-  --color-orange-glow: rgba(255, 107, 0, 0.3);
+  --color-orange-secondary: #FF7A00;
+  --color-orange-dark: #FF5A00;
+  --color-orange-glow: rgba(255, 107, 0, 0.35);
   --color-success: #2ECC71;
   --color-error: #FF3B3B;
 }
@@ -27,7 +32,7 @@ body {
   font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #F4F4F4 100%);
   color: var(--color-text-primary);
   min-height: 100vh;
 }
