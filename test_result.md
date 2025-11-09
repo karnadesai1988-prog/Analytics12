@@ -446,10 +446,14 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Community CRUD endpoints"
+    - "Post CRUD endpoints"
+    - "Territory Profile endpoint"
+    - "Professionals, Projects, Opportunities, Events endpoints"
   stuck_tasks: []
   test_all: false
-  test_priority: "completed"
+  test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
