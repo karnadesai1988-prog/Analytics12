@@ -10,8 +10,7 @@ const navigation = [
   { name: 'Territories & Map', href: '/territories', icon: MapPin },
   { name: 'Dashboard & Analytics', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Feedback & Suggestions', href: '/data-gathering', icon: FileText },
-  { name: 'Community Pulse', href: '/comments', icon: MessageSquare },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Community', href: '/comments', icon: MessageSquare },
 ];
 
 export const Sidebar = () => {
