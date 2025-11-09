@@ -172,8 +172,8 @@ export const Community = () => {
       <div className="bg-white border-b shadow-sm px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2 bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
-              <MessageSquare className="w-8 h-8 text-orange-500" />
+            <h1 className="text-3xl font-bold flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
+              <MessageSquare className="w-8 h-8 text-blue-500" />
               Community
             </h1>
             <p className="text-sm text-gray-500 mt-1">
@@ -182,7 +182,7 @@ export const Community = () => {
           </div>
           <Button 
             onClick={() => setShowCreateDialog(true)}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
           >
             <Plus className="w-4 h-4 mr-2" />
             Create Community
@@ -206,7 +206,7 @@ export const Community = () => {
                 <p className="text-gray-500 mb-4">No communities yet</p>
                 <Button 
                   onClick={() => setShowCreateDialog(true)}
-                  className="bg-gradient-to-r from-orange-500 to-orange-600"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Create First Community
@@ -262,7 +262,7 @@ export const Community = () => {
                         {community.canJoin && (
                           <Button 
                             onClick={() => handleJoinCommunity(community.id)}
-                            className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600"
+                            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600"
                           >
                             <Plus className="w-4 h-4 mr-2" />
                             Join
@@ -306,7 +306,7 @@ export const Community = () => {
                 <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <MessageCircle className="w-5 h-5 text-orange-500" />
+                      <MessageCircle className="w-5 h-5 text-blue-500" />
                       Community Posts ({posts.length})
                     </CardTitle>
                   </CardHeader>
@@ -320,11 +320,11 @@ export const Community = () => {
                     ) : (
                       <div className="space-y-4">
                         {posts.map((post) => (
-                          <Card key={post.id} className="border-orange-100">
+                          <Card key={post.id} className="border-blue-100">
                             <CardContent className="p-4">
                               <div className="flex items-start gap-3">
                                 <Avatar>
-                                  <AvatarFallback className="bg-orange-100 text-orange-600">
+                                  <AvatarFallback className="bg-blue-100 text-blue-600">
                                     {post.userName.split(' ').map(n => n[0]).join('')}
                                   </AvatarFallback>
                                 </Avatar>
@@ -380,7 +380,7 @@ export const Community = () => {
                 <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
                   <CardHeader>
                     <CardTitle className="text-sm flex items-center gap-2">
-                      <Users className="w-4 h-4 text-orange-500" />
+                      <Users className="w-4 h-4 text-blue-500" />
                       Active Members ({communityMembers.length})
                     </CardTitle>
                   </CardHeader>
@@ -391,7 +391,7 @@ export const Community = () => {
                       <div className="flex flex-wrap gap-2">
                         {communityMembers.slice(0, 10).map((memberId, idx) => (
                           <Avatar key={idx} className="w-8 h-8">
-                            <AvatarFallback className="text-xs bg-orange-100 text-orange-600">
+                            <AvatarFallback className="text-xs bg-blue-100 text-blue-600">
                               U{idx + 1}
                             </AvatarFallback>
                           </Avatar>
@@ -413,7 +413,7 @@ export const Community = () => {
                   <CardContent className="space-y-2">
                     <Button 
                       onClick={() => window.location.href = '/territories'}
-                      className="w-full bg-gradient-to-r from-orange-500 to-orange-600"
+                      className="w-full bg-gradient-to-r from-blue-500 to-blue-600"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Create Post on Map
@@ -535,7 +535,7 @@ export const Community = () => {
               <Button 
                 type="submit" 
                 disabled={loading}
-                className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600"
+                className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600"
               >
                 {loading ? 'Creating...' : 'Create Community'}
               </Button>
