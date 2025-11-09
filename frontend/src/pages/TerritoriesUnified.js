@@ -202,6 +202,7 @@ export const TerritoriesUnified = () => {
   const [showCommunityDialog, setShowCommunityDialog] = useState(false);
   const [showPinDialog, setShowPinDialog] = useState(false);
   const [showPostDialog, setShowPostDialog] = useState(false);
+  const [showEventDialog, setShowEventDialog] = useState(false);
   const [showActionDialog, setShowActionDialog] = useState(false);
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showHeatMap, setShowHeatMap] = useState(false);
