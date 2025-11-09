@@ -32,69 +32,7 @@ NEGATIVE_KEYWORDS = [
 
 # News scraping is now handled by news_scraper.py module
 
-def scrape_gujarat_news_for_rid(rid: str, pages: int = 2) -> Dict[str, Any]:
-    """
-    Scrape news data for a specific RID (region/territory)
-    Returns crime rate, investment activity, and job market metrics
-    """
-    crime_count = 0
-    investment_count = 0
-    job_count = 0
-    total_articles = 0
-    
-    try:
-        for page in range(1, pages + 1):
-            url = f"https://english.gujaratsamachar.com/city/all/{page}"
-            headers = {"User-Agent": "Mozilla/5.0"}
-            
-            response = requests.get(url, headers=headers, timeout=5)
-            if response.status_code != 200:
-                continue
-                
-            soup = BeautifulSoup(response.text, "html.parser")
-            articles = soup.find_all("a", class_="theme-link list-news-title")
-            
-            for article in articles[:10]:  # Limit per page
-                title = article.get("title", "").lower()
-                total_articles += 1
-                
-                # Count keywords
-                if any(kw in title for kw in CRIME_KEYWORDS):
-                    crime_count += 1
-                if any(kw in title for kw in INVESTMENT_KEYWORDS):
-                    investment_count += 1
-                if any(kw in title for kw in JOB_KEYWORDS):
-                    job_count += 1
-                    
-    except Exception as e:
-        print(f"News scraping error: {e}")
-    
-    # Convert to 0-10 rating (inverse for crime, direct for others)
-    if total_articles > 0:
-        crime_ratio = crime_count / total_articles
-        investment_ratio = investment_count / total_articles
-        job_ratio = job_count / total_articles
-        
-        # Crime: Lower is better (inverse rating)
-        crime_rating = max(0, 10 - (crime_ratio * 50))
-        
-        # Investment & Jobs: Higher is better
-        investment_rating = min(10, investment_ratio * 40)
-        job_rating = min(10, job_ratio * 40)
-    else:
-        crime_rating = 5.0
-        investment_rating = 5.0
-        job_rating = 5.0
-    
-    return {
-        "crime_rate_score": round(crime_rating, 1),
-        "investment_activity_score": round(investment_rating, 1),
-        "job_market_score": round(job_rating, 1),
-        "articles_analyzed": total_articles,
-        "crime_mentions": crime_count,
-        "investment_mentions": investment_count,
-        "job_mentions": job_count
-    }
+# News scraping function removed - now handled by news_scraper.py module
 
 # ==========================================
 # SENTIMENT ANALYSIS
