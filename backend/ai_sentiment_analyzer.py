@@ -461,11 +461,16 @@ async def analyze_territory_intelligence(
         "crime_rate_score": news_metrics['crime_rate_score'],
         "investment_activity_score": news_metrics['investment_activity_score'],
         "job_market_score": news_metrics['job_market_score'],
+        "property_market_score": news_metrics['property_market_score'],
+        "infrastructure_score": news_metrics['infrastructure_score'],
+        "livability_index": news_metrics['livability_index'],
         "news_analysis": {
             "articles_analyzed": news_metrics['articles_analyzed'],
             "crime_mentions": news_metrics['crime_mentions'],
             "investment_mentions": news_metrics['investment_mentions'],
-            "job_mentions": news_metrics['job_mentions']
+            "job_mentions": news_metrics['job_mentions'],
+            "property_mentions": news_metrics['property_mentions'],
+            "infrastructure_mentions": news_metrics['infrastructure_mentions']
         }
     }
     
