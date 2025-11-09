@@ -944,33 +944,48 @@ export const TerritoriesUnified = () => {
               Choose an action to perform at the selected location
             </DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="grid grid-cols-3 gap-3 mt-4">
             <button
               onClick={handleCreatePin}
-              className="group p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
+              className="group p-4 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
             >
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <MapPin className="w-8 h-8 text-white" />
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <MapPin className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-center">
-                  <h3 className="font-bold text-gray-800">Create Pin</h3>
-                  <p className="text-xs text-gray-500 mt-1">Add a location marker</p>
+                  <h3 className="font-bold text-sm text-gray-800">Create Pin</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">Location marker</p>
                 </div>
               </div>
             </button>
             
             <button
               onClick={handleCreatePost}
-              className="group p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
+              className="group p-4 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
             >
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <MessageSquare className="w-8 h-8 text-white" />
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <MessageSquare className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-center">
-                  <h3 className="font-bold text-gray-800">Create Post</h3>
-                  <p className="text-xs text-gray-500 mt-1">Share your thoughts</p>
+                  <h3 className="font-bold text-sm text-gray-800">Create Post</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">Share thoughts</p>
+                </div>
+              </div>
+            </button>
+            
+            <button
+              onClick={handleCreateEvent}
+              className="group p-4 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
+            >
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Calendar className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-bold text-sm text-gray-800">Create Event</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">Schedule event</p>
                 </div>
               </div>
             </button>
