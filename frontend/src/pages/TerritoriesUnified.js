@@ -872,6 +872,143 @@ export const TerritoriesUnified = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Create Community Dialog */}
+      <Dialog open={showCommunityDialog} onOpenChange={setShowCommunityDialog}>
+        <DialogContent className="max-w-md bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+              Create Community
+            </DialogTitle>
+            <DialogDescription>
+              Build a community around a territory
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            if (!communityForm.name.trim() || !communityForm.territoryId) {
+              toast.error('Please enter community name and select territory');
+              return;
+            }
+            setLoading(true);
+            try {
+              const token = localStorage.getItem('token');
+              await axios.post(`${BACKEND_URL}/api/communities`, {
+                name: communityForm.name,
+                description: communityForm.description,
+                territoryId: communityForm.territoryId,
+                photo: communityForm.photoPreview,
+                canJoin: communityForm.canJoin
+              }, { headers: { Authorization: `Bearer ${token}` }});
+              toast.success('Community created successfully!');
+              setCommunityForm({ name: '', description: '', territoryId: '', photo: null, photoPreview: null, canJoin: true });
+              setShowCommunityDialog(false);
+              loadData();
+            } catch (error) {
+              toast.error('Failed to create community');
+            } finally {
+              setLoading(false);
+            }
+          }} className="space-y-4">
+            <div>
+              <Label>Community Name *</Label>
+              <Input
+                required
+                value={communityForm.name}
+                onChange={(e) => setCommunityForm({...communityForm, name: e.target.value})}
+                placeholder="e.g., Satellite Residents"
+                className="border-orange-200 focus:border-orange-400"
+              />
+            </div>
+            
+            <div>
+              <Label>Select Territory *</Label>
+              <Select value={communityForm.territoryId} onValueChange={(val) => setCommunityForm({...communityForm, territoryId: val})}>
+                <SelectTrigger className="border-orange-200 focus:border-orange-400">
+                  <SelectValue placeholder="Choose territory" />
+                </SelectTrigger>
+                <SelectContent>
+                  {territories.map(territory => (
+                    <SelectItem key={territory.id} value={territory.id}>
+                      {territory.name} - {territory.pincode}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label>Description (Optional)</Label>
+              <Textarea
+                value={communityForm.description}
+                onChange={(e) => setCommunityForm({...communityForm, description: e.target.value})}
+                placeholder="What's your community about?"
+                rows={3}
+                className="resize-none border-orange-200 focus:border-orange-400"
+              />
+            </div>
+
+            <div>
+              <Label>Community Photo (Optional)</Label>
+              {!communityForm.photoPreview ? (
+                <label className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-orange-300 rounded-lg cursor-pointer hover:bg-orange-50">
+                  <Upload className="w-4 h-4 text-orange-600" />
+                  <span className="text-sm text-orange-600">Upload Photo</span>
+                  <input type="file" accept="image/*" onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setCommunityForm({...communityForm, photo: file, photoPreview: reader.result});
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }} className="hidden" />
+                </label>
+              ) : (
+                <div className="relative">
+                  <img src={communityForm.photoPreview} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
+                  <button type="button" onClick={() => setCommunityForm({...communityForm, photo: null, photoPreview: null})} 
+                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="canJoin"
+                checked={communityForm.canJoin}
+                onCheckedChange={(checked) => setCommunityForm({...communityForm, canJoin: checked})}
+              />
+              <Label htmlFor="canJoin" className="cursor-pointer">
+                Allow others to join this community
+              </Label>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <Button type="submit" disabled={loading} className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600">
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  'Create Community'
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowCommunityDialog(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       {/* Create Territory Dialog */}
       <Dialog open={showTerritoryDialog} onOpenChange={setShowTerritoryDialog}>
         <DialogContent className="max-w-md">
