@@ -308,6 +308,11 @@ export const TerritoriesUnified = () => {
     setShowPostDialog(true);
   };
 
+  const handleCreateEvent = () => {
+    setShowActionDialog(false);
+    setShowEventDialog(true);
+  };
+
   const handleCreateTerritory = async (e) => {
     e.preventDefault();
     
