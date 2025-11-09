@@ -271,6 +271,17 @@ export const TerritoriesUnified = () => {
     organizer: ''
   });
 
+  const [projectForm, setProjectForm] = useState({
+    name: '',
+    status: 'Under Construction',
+    developerName: '',
+    priceRange: '',
+    configuration: '',
+    location: { lat: AHMEDABAD_CENTER[0], lng: AHMEDABAD_CENTER[1] },
+    territoryId: '',
+    brochureUrl: ''
+  });
+
   const [communities, setCommunities] = useState([]);
 
   const [loading, setLoading] = useState(false);
