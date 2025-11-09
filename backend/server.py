@@ -327,6 +327,27 @@ class DataGathering(BaseModel):
     shareToken: Optional[str] = None
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class MetricsSubmission(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    territoryId: str
+    # Core Metrics (0-10 scale)
+    job_likelihood: float  # Job availability and opportunities
+    crime_rate: float  # Safety and crime (lower = better)
+    security: float  # Overall security feeling
+    livelihood: float  # Living standard and income levels
+    air_quality_index: float  # Air quality (higher = better)
+    food_hygiene: float  # Food safety and hygiene standards
+    # Additional data
+    property_value: Optional[float] = None  # Average property value in lakhs
+    rent_average: Optional[float] = None  # Average monthly rent
+    occupancy_rate: Optional[float] = None  # Percentage of occupied units
+    maintenance_cost: Optional[float] = None  # Average monthly maintenance
+    tenant_type: Optional[str] = None  # Family, Students, Working Professionals, etc.
+    notes: Optional[str] = None
+    submittedBy: str
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 class ShareLink(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
