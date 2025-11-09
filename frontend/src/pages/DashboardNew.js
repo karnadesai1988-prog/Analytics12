@@ -99,17 +99,40 @@ export const DashboardNew = () => {
         <div>
           <h1 className="text-3xl font-bold" style={{color: '#1A1A1A'}}>Dashboard & Analytics</h1>
           <p className="text-sm mt-1" style={{color: '#4F4F4F'}}>
-            Real-time metrics from {dashboardData?.totalMetricsSubmissions || 0} submissions across {dashboardData?.totalTerritories || 0} territories
+            {selectedTerritory === 'all' 
+              ? `Real-time metrics from ${dashboardData?.totalMetricsSubmissions || 0} submissions across ${dashboardData?.totalTerritories || 0} territories`
+              : `Metrics for ${territories.find(t => t.id === selectedTerritory)?.name || 'selected territory'}`
+            }
           </p>
         </div>
-        <Button
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="btn-glass"
-        >
-          <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-3">
+          <select
+            value={selectedTerritory}
+            onChange={(e) => setSelectedTerritory(e.target.value)}
+            className="px-4 py-2 rounded-xl border-2 transition-all"
+            style={{
+              background: 'rgba(255, 255, 255, 0.9)',
+              borderColor: '#E0E0E0',
+              color: '#1A1A1A',
+              fontSize: '14px'
+            }}
+          >
+            <option value="all">All Territories (Overview)</option>
+            {territories.map(territory => (
+              <option key={territory.id} value={territory.id}>
+                {territory.name} - {territory.zone}
+              </option>
+            ))}
+          </select>
+          <Button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="btn-glass"
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       {/* Livability Index - Hero Card */}
