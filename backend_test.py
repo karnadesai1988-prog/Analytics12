@@ -491,7 +491,8 @@ class BackendTester:
             "occupancy_rate": 85.0,  # percentage
             "maintenance_cost": 3500, # per month
             "tenant_type": "Working Professionals",
-            "notes": "High-quality residential area with good connectivity and amenities"
+            "notes": "High-quality residential area with good connectivity and amenities",
+            "submittedBy": "admin@test.com"  # Required by model, though endpoint overwrites it
         }
         
         success, data, status = await self.make_request("POST", "/metrics", metrics_data, token)
