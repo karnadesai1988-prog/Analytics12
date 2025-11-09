@@ -41,7 +41,7 @@ export const News = () => {
     return (
       <div className="flex items-center justify-center min-h-screen" style={{background: 'linear-gradient(135deg, #FFFFFF 0%, #F4F4F4 100%)'}}>
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p style={{color: '#4F4F4F'}}>Loading news...</p>
         </div>
       </div>
