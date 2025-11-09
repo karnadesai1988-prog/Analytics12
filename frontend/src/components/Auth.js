@@ -57,7 +57,7 @@ export const Auth = () => {
             {!isLogin && (
               <div className="space-y-2">
                 <Label className="flex items-center gap-2" style={{color: '#4F4F4F'}}>
-                  <User className="w-4 h-4 text-orange-500" />
+                  <User className="w-4 h-4 text-blue-500" />
                   Full Name
                 </Label>
                 <Input
