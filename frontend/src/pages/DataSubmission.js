@@ -289,7 +289,7 @@ export const DataSubmission = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full btn-orange-gradient py-6 text-lg font-semibold rounded-xl"
+                className="w-full btn-blue-gradient py-6 text-lg font-semibold rounded-xl"
               >
                 {loading ? (
                   <div className="flex items-center gap-2">
