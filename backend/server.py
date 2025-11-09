@@ -1192,19 +1192,107 @@ async def get_events(user: User = Depends(get_current_user), territory_id: Optio
     events = await db.events.find(query).to_list(length=None)
     return [Event(**e) for e in events]
 
+# ==========================================
+# METRICS SUBMISSION ENDPOINTS
+# ==========================================
+@api_router.post("/metrics")
+async def submit_metrics(metrics: MetricsSubmission, user: User = Depends(get_current_user)):
+    """Submit territory metrics data"""
+    metrics_doc = metrics.dict()
+    metrics_doc["submittedBy"] = user.email
+    await db.metrics_submissions.insert_one(metrics_doc)
+    await manager.broadcast(json.dumps({"type": "metrics_submitted", "territoryId": metrics.territoryId}))
+    return {"message": "Metrics submitted successfully", "id": metrics.id}
+
+@api_router.get("/metrics")
+async def get_metrics(user: User = Depends(get_current_user), territory_id: Optional[str] = Query(None)):
+    """Get all metrics submissions"""
+    query = {}
+    if territory_id:
+        query["territoryId"] = territory_id
+    metrics = await db.metrics_submissions.find(query).to_list(length=None)
+    return metrics
+
+@api_router.get("/news/scraped")
+async def get_scraped_news(user: User = Depends(get_current_user), pages: int = Query(2, le=5)):
+    """Get scraped news data"""
+    from news_scraper import analyze_news_metrics
+    news_data = analyze_news_metrics(pages=pages)
+    return news_data
+
 @api_router.get("/analytics/dashboard")
 async def get_dashboard_analytics(user: User = Depends(get_current_user)):
+    """Get dashboard analytics with calculated metrics from submissions"""
     territories = await db.territories.find().to_list(length=None)
-    total_investments = sum(t.get('metrics', {}).get('investments', 0) for t in territories)
-    avg_appreciation = sum(t.get('aiInsights', {}).get('appreciationPercent', 0) for t in territories) / len(territories) if territories else 0
-    total_buildings = sum(t.get('metrics', {}).get('buildings', 0) for t in territories)
-    avg_livability = sum(t.get('metrics', {}).get('livabilityIndex', 0) for t in territories) / len(territories) if territories else 0
+    all_metrics = await db.metrics_submissions.find().to_list(length=None)
+    
+    # Calculate aggregated metrics from submissions
+    if all_metrics:
+        avg_job_likelihood = sum(m.get('job_likelihood', 0) for m in all_metrics) / len(all_metrics)
+        avg_crime_rate = sum(m.get('crime_rate', 0) for m in all_metrics) / len(all_metrics)
+        avg_security = sum(m.get('security', 0) for m in all_metrics) / len(all_metrics)
+        avg_livelihood = sum(m.get('livelihood', 0) for m in all_metrics) / len(all_metrics)
+        avg_air_quality = sum(m.get('air_quality_index', 0) for m in all_metrics) / len(all_metrics)
+        avg_food_hygiene = sum(m.get('food_hygiene', 0) for m in all_metrics) / len(all_metrics)
+        
+        # Property metrics
+        property_values = [m.get('property_value', 0) for m in all_metrics if m.get('property_value')]
+        avg_property_value = sum(property_values) / len(property_values) if property_values else 0
+        
+        rent_values = [m.get('rent_average', 0) for m in all_metrics if m.get('rent_average')]
+        avg_rent = sum(rent_values) / len(rent_values) if rent_values else 0
+        
+        occupancy_values = [m.get('occupancy_rate', 0) for m in all_metrics if m.get('occupancy_rate')]
+        avg_occupancy = sum(occupancy_values) / len(occupancy_values) if occupancy_values else 0
+        
+        # Calculate overall livability index
+        livability_index = (
+            (avg_job_likelihood * 0.2) +
+            ((10 - avg_crime_rate) * 0.2) +  # Inverse crime rate
+            (avg_security * 0.15) +
+            (avg_livelihood * 0.2) +
+            (avg_air_quality * 0.15) +
+            (avg_food_hygiene * 0.1)
+        )
+    else:
+        avg_job_likelihood = 0
+        avg_crime_rate = 0
+        avg_security = 0
+        avg_livelihood = 0
+        avg_air_quality = 0
+        avg_food_hygiene = 0
+        avg_property_value = 0
+        avg_rent = 0
+        avg_occupancy = 0
+        livability_index = 0
+    
+    # Get news metrics
+    from news_scraper import analyze_news_metrics
+    news_metrics = analyze_news_metrics(pages=1)
+    
     return {
         "totalTerritories": len(territories),
-        "totalInvestments": round(total_investments, 2),
-        "avgAppreciation": round(avg_appreciation, 2),
-        "totalBuildings": total_buildings,
-        "avgLivability": round(avg_livability, 2)
+        "totalMetricsSubmissions": len(all_metrics),
+        "metrics": {
+            "job_likelihood": round(avg_job_likelihood, 1),
+            "crime_rate": round(avg_crime_rate, 1),
+            "security": round(avg_security, 1),
+            "livelihood": round(avg_livelihood, 1),
+            "air_quality_index": round(avg_air_quality, 1),
+            "food_hygiene": round(avg_food_hygiene, 1),
+            "livability_index": round(livability_index, 1)
+        },
+        "property": {
+            "avg_property_value": round(avg_property_value, 2),
+            "avg_rent": round(avg_rent, 2),
+            "avg_occupancy": round(avg_occupancy, 1)
+        },
+        "news_metrics": {
+            "crime_score": news_metrics['crime_rate_score'],
+            "investment_score": news_metrics['investment_activity_score'],
+            "job_score": news_metrics['job_market_score'],
+            "infrastructure_score": news_metrics['infrastructure_score']
+        }
     }
 
 @app.websocket("/ws")
