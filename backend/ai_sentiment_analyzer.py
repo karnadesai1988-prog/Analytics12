@@ -241,7 +241,7 @@ def analyze_engagement(posts: List[Dict], events: List[Dict],
                 if dt.tzinfo is None:
                     return dt.replace(tzinfo=timezone.utc)
                 return dt
-            except:
+            except (ValueError, TypeError):
                 return datetime(2020, 1, 1, tzinfo=timezone.utc)
         return datetime(2020, 1, 1, tzinfo=timezone.utc)
     
