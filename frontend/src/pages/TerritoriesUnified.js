@@ -187,6 +187,7 @@ export const TerritoriesUnified = () => {
   const [mapZoom, setMapZoom] = useState(12);
   
   const [showTerritoryDialog, setShowTerritoryDialog] = useState(false);
+  const [showCommunityDialog, setShowCommunityDialog] = useState(false);
   const [showPinDialog, setShowPinDialog] = useState(false);
   const [showPostDialog, setShowPostDialog] = useState(false);
   const [showActionDialog, setShowActionDialog] = useState(false);
