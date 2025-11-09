@@ -148,13 +148,20 @@ export const CommunityPulse = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-2">
-              <MessageSquare className="w-8 h-8 text-primary" />
-              Community Pulse
+              <MessageSquare className="w-8 h-8 text-orange-500" />
+              Community
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              Share feedback, report issues, and connect with your community
+              Connect with your community and share updates
             </p>
           </div>
+          <Button 
+            onClick={() => window.location.href = '/territories?action=create-community'}
+            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+          >
+            <MessageSquare className="w-4 h-4 mr-2" />
+            Create Community
+          </Button>
         </div>
       </div>
 
