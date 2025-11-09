@@ -201,9 +201,19 @@ export const TerritoriesUnified = () => {
     setPinForm({ ...pinForm, location });
   };
 
-  const handlePlacePickerClick = () => {
-    // Open pin dialog when place picker is clicked
+  const handlePlusClick = () => {
+    // Open action selection dialog
+    setShowActionDialog(true);
+  };
+
+  const handleCreatePin = () => {
+    setShowActionDialog(false);
     setShowPinDialog(true);
+  };
+
+  const handleCreatePost = () => {
+    setShowActionDialog(false);
+    setShowPostDialog(true);
   };
 
   const handleCreateTerritory = async (e) => {
