@@ -1067,7 +1067,7 @@ async def get_territory_ai_insights(territory_id: str, user: User = Depends(get_
     # Get RID (using pincode as RID)
     rid = territory.get('pincode', territory.get('id', 'unknown'))
     
-    # Perform AI analysis
+    # Perform AI analysis (uses demo mode by default)
     ai_insights = await analyze_territory_intelligence(
         territory_id=territory_id,
         rid=rid,
@@ -1078,6 +1078,15 @@ async def get_territory_ai_insights(territory_id: str, user: User = Depends(get_
         communities=communities,
         rating=rating
     )
+    
+    # If OpenAI API key configured, enhance with ChatGPT
+    system_config = await db.system_config.find_one({"key": "openai_api_key"})
+    if system_config and system_config.get("value"):
+        from ai_sentiment_analyzer import generate_chatgpt_insight
+        ai_insights["ai_insight"] = await generate_chatgpt_insight(ai_insights, system_config["value"])
+        ai_insights["ai_mode"] = "ChatGPT"
+    else:
+        ai_insights["ai_mode"] = "Demo"
     
     return ai_insights
 
