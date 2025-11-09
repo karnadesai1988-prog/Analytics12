@@ -1063,3 +1063,46 @@ agent_communication:
       • Territory association: 100% functional
       
       🚀 BOTH NEW ENDPOINTS ARE PRODUCTION READY AND FULLY TESTED!
+
+  - agent: "main"
+    message: |
+      🎨 THEME CHANGE & NEW FEATURES IMPLEMENTATION COMPLETED
+
+      ✅ PHASE 1: BLUE THEME IMPLEMENTATION
+      • Changed entire theme from Orange to Blue across all components
+      • Updated CSS variables in index.css: --color-blue-primary (#2563EB), --color-blue-secondary (#3B82F6), --color-blue-dark (#1D4ED8)
+      • Updated buttons: .btn-blue-gradient, .btn-glass with blue borders
+      • Updated badges, scrollbars, glow effects, pulse animations with blue colors
+      • Updated Auth.js: blue background blobs, blue logo, blue accents
+      • Updated Sidebar.js: blue logo, blue active state, blue hover effects
+      • Updated DataSubmission.js, DashboardNew.js, News.js with blue headers and accents
+      • Updated Community.js, TerritoryProfile.js, TerritoriesUnified.js with blue theme
+      • All orange references replaced with blue (orange-500 → blue-500, etc.)
+      
+      ✅ PHASE 2: NEW PAGES & ROUTING
+      • Added DataSubmission.js: Territory metrics form with 6 core metrics (job likelihood, crime rate, security, livelihood, air quality, food hygiene), property info fields, tenant type selection
+      • Added DashboardNew.js: Displays Overall Livability Index, Core Territory Metrics grid, Property & Real Estate metrics, News-Based External Metrics
+      • Added News.js: Displays scraped news data, calculated metrics (0-10 scale), analysis summary with mention counts, recent articles with tags
+      • Updated App.js: Added /data-submission and /news routes, fixed DashboardUnified → DashboardNew
+      • Updated Sidebar.js: Added "Data Submission" and "News" navigation links
+      
+      ✅ PHASE 3: BACKEND INTEGRATION
+      • Backend endpoints already implemented:
+        - POST /api/metrics: Submit territory metrics
+        - GET /api/analytics/dashboard: Get aggregated dashboard data
+        - GET /api/news/scraped: Get scraped news with analysis
+      • MetricsSubmission model exists in server.py
+      • Data flows: User submits metrics → Backend calculates aggregates → Dashboard displays
+      
+      ✅ PHASE 4: UI/UX VERIFICATION
+      • Login page: Blue theme with blue logo and button ✅
+      • Dashboard: Blue hero card, blue metrics ✅
+      • Data Submission: Blue sliders, working territory dropdown, no transparency issues ✅
+      • News page: Blue header, real scraped data (15 articles), metric scores ✅
+      • Dropdowns: Clean white background with black text, fully readable ✅
+      • Navigation: All links working, blue active states ✅
+      
+      🔬 READY FOR BACKEND TESTING:
+      • Need to test POST /api/metrics endpoint
+      • Need to test GET /api/analytics/dashboard endpoint
+      • Need to test GET /api/news/scraped endpoint (already verified working through UI)
