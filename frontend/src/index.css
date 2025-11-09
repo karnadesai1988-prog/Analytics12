@@ -1,68 +1,237 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 @import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 220 20% 97%;
-    --foreground: 220 15% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 10%;
-    --primary: 200 90% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 200 20% 92%;
-    --secondary-foreground: 220 15% 10%;
-    --muted: 220 20% 95%;
-    --muted-foreground: 220 10% 45%;
-    --accent: 200 90% 95%;
-    --accent-foreground: 200 90% 25%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 88%;
-    --input: 220 15% 88%;
-    --ring: 200 90% 50%;
-    --radius: 0.5rem;
-  }
+/* Dark Glassmorphism Design System */
+:root {
+  --color-bg-primary: #0A0A0A;
+  --color-bg-secondary: #1A1A1A;
+  --color-glass: rgba(255, 255, 255, 0.08);
+  --color-glass-hover: rgba(255, 255, 255, 0.12);
+  --color-border-glass: rgba(255, 255, 255, 0.2);
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #B3B3B3;
+  --color-text-card: #E0E0E0;
+  --color-orange-primary: #FF6B00;
+  --color-orange-secondary: #FF8500;
+  --color-orange-glow: rgba(255, 107, 0, 0.3);
+  --color-success: #2ECC71;
+  --color-error: #FF3B3B;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
-  }
+body {
+  margin: 0;
+  font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+  color: var(--color-text-primary);
+  min-height: 100vh;
 }
 
-.leaflet-container {
-  height: 100%;
-  width: 100%;
-  z-index: 0;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* Custom scrollbar */
+/* Glass Panel Base */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-panel-dark {
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Orange Gradient Button */
+.btn-orange-gradient {
+  background: linear-gradient(135deg, #FF6B00, #FF8500);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-orange-gradient:hover {
+  box-shadow: 0 6px 25px rgba(255, 107, 0, 0.5);
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* Glass Button */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-orange-primary);
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.2);
+}
+
+/* Input Fields */
+.input-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-text-primary);
+  border-radius: 8px;
+  padding: 10px 14px;
+  transition: all 0.3s ease;
+}
+
+.input-glass::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.input-glass:focus {
+  outline: none;
+  border-color: var(--color-orange-primary);
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-secondary;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground rounded-full;
+  background: linear-gradient(135deg, #FF6B00, #FF8500);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary;
+  background: linear-gradient(135deg, #FF8500, #FF9500);
+}
+
+/* Orange Glow Effect */
+.glow-orange {
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+}
+
+.glow-orange-strong {
+  box-shadow: 0 0 30px rgba(255, 107, 0, 0.8), 0 0 50px rgba(255, 107, 0, 0.4);
+}
+
+/* Hover Animations */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Text Colors */
+.text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-orange {
+  color: var(--color-orange-primary);
+}
+
+/* Card Styling */
+.card-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s ease;
+}
+
+.card-glass:hover {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Map Styling */
+.leaflet-container {
+  background: #0A0A0A !important;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+.leaflet-tile {
+  filter: brightness(0.6) contrast(1.2) !important;
+}
+
+/* Badge Styling */
+.badge-orange {
+  background: linear-gradient(135deg, #FF6B00, #FF8500);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+.badge-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: var(--color-text-primary);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse Animation */
+@keyframes pulse-orange {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(255, 107, 0, 0);
+  }
+}
+
+.pulse-orange {
+  animation: pulse-orange 2s infinite;
 }
