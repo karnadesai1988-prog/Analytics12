@@ -474,12 +474,13 @@ export const TerritoriesUnified = () => {
             />
             <MapUpdater center={mapCenter} zoom={mapZoom} />
             
-            {/* Always Visible Draggable Place Picker */}
-            <DraggablePlacePicker
-              initialPosition={pinForm.location}
-              onLocationChange={handleLocationPicked}
-              onMarkerClick={handlePlacePickerClick}
-            />
+            {/* Plus Button for Adding Pins/Posts */}
+            {!showHeatMap && (
+              <PlusButton
+                position={pinForm.location}
+                onPlusClick={handlePlusClick}
+              />
+            )}
             
             {/* Territories as Circles */}
             {visibleTerritories.map(territory => {
