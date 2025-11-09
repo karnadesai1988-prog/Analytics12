@@ -273,83 +273,115 @@ def analyze_engagement(posts: List[Dict], events: List[Dict],
     }
 
 # ==========================================
-# AI INSIGHT GENERATION
+# AI INSIGHT GENERATION (DEMO MODE)
 # ==========================================
-def generate_ai_insight(territory_data: Dict[str, Any]) -> str:
-    """Generate human-like AI insight based on data analysis"""
+def generate_demo_ai_insight(territory_data: Dict[str, Any]) -> str:
+    """Generate human-like AI insight based on data analysis (Demo Mode)"""
     
-    sentiment = territory_data.get('overall_sentiment', 'neutral')
+    sentiment = territory_data.get('overall_sentiment', 'Neutral')
     dominant_activity = territory_data.get('dominant_activity_type', 'None')
     engagement_score = territory_data.get('engagement_metrics', {}).get('engagement_score', 0)
     crime_score = territory_data.get('crime_rate_score', 5)
     investment_score = territory_data.get('investment_activity_score', 5)
     job_score = territory_data.get('job_market_score', 5)
+    property_score = territory_data.get('property_market_score', 5)
+    livability = territory_data.get('livability_index', 5)
     
-    # Build insight based on patterns
-    insights = []
+    # Build comprehensive insight
+    parts = []
     
-    # Sentiment-based insight
-    if sentiment == "positive":
-        insights.append("The territory demonstrates strong positive sentiment")
-    elif sentiment == "negative":
-        insights.append("The territory shows concerning negative sentiment patterns")
+    # Opening statement based on livability
+    if livability >= 7:
+        parts.append(f"This territory shows strong promise with a livability index of {livability}/10.")
+    elif livability >= 5:
+        parts.append(f"This territory demonstrates moderate appeal with a livability index of {livability}/10.")
     else:
-        insights.append("The territory maintains neutral community sentiment")
+        parts.append(f"This territory faces challenges with a livability index of {livability}/10.")
     
-    # Activity-based insight
-    if dominant_activity != "None":
-        insights.append(f"driven primarily by {dominant_activity.lower()} activity")
-    
-    # Engagement insight
-    if engagement_score >= 7:
-        insights.append("with highly active community participation")
-    elif engagement_score >= 4:
-        insights.append("with moderate community engagement")
+    # Sentiment analysis
+    if sentiment == "Positive":
+        parts.append(f"Community sentiment is {sentiment.lower()}, driven primarily by {dominant_activity.lower()} activity.")
     else:
-        insights.append("though community engagement remains low")
+        parts.append(f"Community sentiment remains {sentiment.lower()}.")
     
-    # Safety & Crime
+    # Safety assessment
     if crime_score >= 7:
-        insights.append(". The area shows excellent safety indicators")
+        parts.append(f"Safety metrics are excellent (score: {crime_score}/10), making it ideal for families and long-term investments.")
     elif crime_score >= 5:
-        insights.append(". Safety metrics are average")
+        parts.append(f"Safety indicators are average (score: {crime_score}/10).")
     else:
-        insights.append(". Safety concerns require attention")
+        parts.append(f"Safety concerns exist (score: {crime_score}/10) and require immediate attention.")
     
     # Economic indicators
-    if investment_score >= 6 and job_score >= 6:
-        insights.append(", with strong economic growth potential indicated by rising investment and employment opportunities")
-    elif investment_score >= 6:
-        insights.append(", with notable investment activity suggesting growth momentum")
-    elif job_score >= 6:
-        insights.append(", with healthy job market signals")
+    economic_factors = []
+    if investment_score >= 6:
+        economic_factors.append(f"strong investment activity ({investment_score}/10)")
+    if job_score >= 6:
+        economic_factors.append(f"robust job market ({job_score}/10)")
+    if property_score >= 6:
+        economic_factors.append(f"active property market ({property_score}/10)")
+    
+    if economic_factors:
+        parts.append(f"Economic indicators show {', '.join(economic_factors)}.")
     
     # Recommendations
     recommendations = []
-    if sentiment == "positive" and engagement_score >= 6:
-        recommendations.append("Consider expanding community programs and hosting promotional events")
-    elif sentiment == "negative":
-        recommendations.append("Focus on addressing community concerns and improving service quality")
-    
-    if investment_score >= 6:
-        recommendations.append("Explore real estate and infrastructure partnerships")
-    
-    if job_score >= 6:
-        recommendations.append("Promote local businesses and employment initiatives")
-    elif job_score < 4:
-        recommendations.append("Consider job fairs and skill development programs")
-    
+    if engagement_score >= 6:
+        recommendations.append("expand community programs")
+    if investment_score >= 6 and property_score >= 6:
+        recommendations.append("explore real estate partnerships")
+    if job_score < 5:
+        recommendations.append("organize employment drives")
     if crime_score < 5:
-        recommendations.append("Enhance safety measures and community watch programs")
+        recommendations.append("strengthen security measures")
     
-    # Combine into final insight
-    insight = ''.join(insights)
     if recommendations:
-        insight += ". " + ". ".join(recommendations) + "."
-    else:
-        insight += "."
+        parts.append(f"Recommended actions: {', '.join(recommendations)}.")
     
-    return insight
+    return " ".join(parts)
+
+async def generate_chatgpt_insight(territory_data: Dict[str, Any], api_key: Optional[str] = None) -> str:
+    """Generate AI insight using ChatGPT API (if API key provided)"""    
+    if not api_key:
+        return generate_demo_ai_insight(territory_data)
+    
+    try:
+        import httpx
+        
+        prompt = f"""Analyze this territory data and provide a concise professional insight (2-3 sentences):
+
+Sentiment: {territory_data.get('overall_sentiment')}
+Dominant Activity: {territory_data.get('dominant_activity_type')}
+Engagement Score: {territory_data.get('engagement_metrics', {}).get('engagement_score')}/10
+Crime Safety: {territory_data.get('crime_rate_score')}/10
+Investment Activity: {territory_data.get('investment_activity_score')}/10
+Job Market: {territory_data.get('job_market_score')}/10
+Property Market: {territory_data.get('property_market_score')}/10
+Livability Index: {territory_data.get('livability_index')}/10
+
+Provide actionable insights for stakeholders."""
+        
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://api.openai.com/v1/chat/completions",
+                headers={"Authorization": f"Bearer {api_key}"},
+                json={
+                    "model": "gpt-3.5-turbo",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "max_tokens": 200,
+                    "temperature": 0.7
+                },
+                timeout=30.0
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result['choices'][0]['message']['content'].strip()
+    except Exception as e:
+        print(f"ChatGPT API error: {e}")
+    
+    # Fallback to demo mode
+    return generate_demo_ai_insight(territory_data)
 
 # ==========================================
 # MAIN ANALYSIS FUNCTION
