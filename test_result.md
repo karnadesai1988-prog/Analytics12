@@ -216,6 +216,54 @@ backend:
         agent: "main"
         comment: "Comment validation with optional AI validation"
 
+  - task: "Community CRUD endpoints"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added /api/communities GET/POST, /api/communities/:id GET, /api/communities/:id/join POST endpoints for community management"
+
+  - task: "Post CRUD endpoints"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added /api/posts GET/POST endpoints for community posts with photo support"
+
+  - task: "Territory Profile endpoint"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added /api/territories/:id/profile endpoint returning territory data with stats"
+
+  - task: "Professionals, Projects, Opportunities, Events endpoints"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added /api/professionals, /api/projects, /api/opportunities, /api/events GET endpoints with territory filtering"
+
 frontend:
   - task: "Settings page with API configuration"
     implemented: true
