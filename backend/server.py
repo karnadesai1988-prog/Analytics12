@@ -1211,7 +1211,8 @@ async def get_metrics(user: User = Depends(get_current_user), territory_id: Opti
     if territory_id:
         query["territoryId"] = territory_id
     metrics = await db.metrics_submissions.find(query).to_list(length=None)
-    return metrics
+    # Remove MongoDB ObjectId before returning
+    return [{k: v for k, v in metric.items() if k != '_id'} for metric in metrics]
 
 @api_router.get("/news/scraped")
 async def get_scraped_news(user: User = Depends(get_current_user), pages: int = Query(2, le=5)):
