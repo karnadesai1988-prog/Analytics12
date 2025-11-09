@@ -276,6 +276,39 @@ backend:
         agent: "testing"
         comment: "✅ TESTED: All supporting data endpoints working correctly. GET /api/professionals, /api/projects, /api/opportunities, /api/events all functional. Territory filtering via ?territory_id=X parameter works perfectly. All endpoints return empty arrays initially (expected for new system). Authentication required for all endpoints."
 
+  - task: "Event creation endpoint (POST /api/events)"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added POST /api/events endpoint for creating events with title, date, location, territoryId, organizer"
+      - working: false
+        agent: "testing"
+        comment: "❌ FAILED: Event creation failed due to timezone comparison error in datetime handling"
+      - working: true
+        agent: "testing"
+        comment: "✅ FIXED & TESTED: Fixed timezone comparison issue in event creation. POST /api/events now working perfectly. Successfully created 'Community Meetup' event with status 'upcoming'. Event appears correctly in GET /api/events list. Date parsing and status determination (upcoming/past) working correctly."
+
+  - task: "Project creation endpoint (POST /api/projects)"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added POST /api/projects endpoint for creating projects with name, status, developerName, priceRange, configuration, location, territoryId, brochureUrl"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Project creation endpoint working perfectly. POST /api/projects successfully creates projects with all required fields. Created 'Skyline Apartments' by 'ABC Developers' with status 'Under Construction'. Project appears correctly in GET /api/projects list. All fields (name, status, developerName, priceRange, configuration, location coordinates, territoryId, brochureUrl) properly stored and retrieved."
+
 frontend:
   - task: "Settings page with API configuration"
     implemented: true
