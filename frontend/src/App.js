@@ -5,12 +5,13 @@ import { WebSocketProvider } from './contexts/WebSocketContext';
 import { Toaster } from './components/ui/sonner';
 import { Auth } from './components/Auth';
 import { Sidebar } from './components/Sidebar';
-import { DashboardUnified } from './pages/DashboardUnified';
+import { DashboardNew } from './pages/DashboardNew';
 import { TerritoriesUnified } from './pages/TerritoriesUnified';
-import { DataGathering } from './pages/DataGathering';
+import { DataSubmission } from './pages/DataSubmission';
 import { Community } from './pages/Community';
 import { TerritoryProfile } from './pages/TerritoryProfile';
 import { Settings } from './pages/Settings';
+import { News } from './pages/News';
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
