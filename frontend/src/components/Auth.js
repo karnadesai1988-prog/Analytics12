@@ -38,7 +38,7 @@ export const Auth = () => {
       <Card className="w-full max-w-md glass-panel-light border shadow-2xl relative z-10" style={{borderColor: '#E0E0E0', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.12)'}}>
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center">
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg float-animation" style={{boxShadow: '0 8px 24px rgba(255, 107, 0, 0.35)'}}>
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg float-animation" style={{boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)'}}>
               <Zap className="w-12 h-12 text-white" />
             </div>
           </div>
