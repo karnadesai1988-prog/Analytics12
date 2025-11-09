@@ -475,6 +475,142 @@ class BackendTester:
         else:
             self.log_result("Project List Verification", False, "Failed to retrieve projects for verification", data)
     
+    # NEW DATA SUBMISSION & ANALYTICS TESTS
+    async def test_metrics_submission(self, token: str, territory_id: str) -> Optional[str]:
+        """Test metrics submission endpoint (POST /api/metrics)"""
+        metrics_data = {
+            "territoryId": territory_id,
+            "job_likelihood": 7.5,
+            "crime_rate": 3.2,
+            "security": 8.1,
+            "livelihood": 7.8,
+            "air_quality_index": 6.5,
+            "food_hygiene": 8.3,
+            "property_value": 65.5,  # in lakhs
+            "rent_average": 25000,   # per month
+            "occupancy_rate": 85.0,  # percentage
+            "maintenance_cost": 3500, # per month
+            "tenant_type": "Working Professionals",
+            "notes": "High-quality residential area with good connectivity and amenities"
+        }
+        
+        success, data, status = await self.make_request("POST", "/metrics", metrics_data, token)
+        
+        if success and "id" in data:
+            self.log_result("Metrics Submission", True, 
+                          f"Successfully submitted metrics for territory {territory_id}")
+            return data["id"]
+        else:
+            self.log_result("Metrics Submission", False, "Failed to submit metrics", data)
+            return None
+    
+    async def test_metrics_retrieval(self, token: str, territory_id: str = None):
+        """Test metrics retrieval endpoint (GET /api/metrics)"""
+        endpoint = "/metrics"
+        if territory_id:
+            endpoint += f"?territory_id={territory_id}"
+        
+        success, data, status = await self.make_request("GET", endpoint, token=token)
+        
+        if success and isinstance(data, list):
+            filter_msg = f" (filtered by territory {territory_id})" if territory_id else ""
+            self.log_result("Metrics Retrieval", True, 
+                          f"Successfully retrieved {len(data)} metrics submissions{filter_msg}")
+            return data
+        else:
+            self.log_result("Metrics Retrieval", False, "Failed to retrieve metrics", data)
+            return []
+    
+    async def test_dashboard_analytics(self, token: str):
+        """Test dashboard analytics endpoint (GET /api/analytics/dashboard)"""
+        success, data, status = await self.make_request("GET", "/analytics/dashboard", token=token)
+        
+        if success and isinstance(data, dict):
+            # Check required fields
+            required_fields = ["metrics", "property", "news_metrics", "totalMetricsSubmissions", "totalTerritories"]
+            missing_fields = [field for field in required_fields if field not in data]
+            
+            if not missing_fields:
+                metrics = data["metrics"]
+                property_data = data["property"]
+                news_metrics = data["news_metrics"]
+                
+                # Verify metrics structure
+                expected_metrics = ["job_likelihood", "crime_rate", "security", "livelihood", 
+                                  "air_quality_index", "food_hygiene", "livability_index"]
+                metrics_ok = all(metric in metrics for metric in expected_metrics)
+                
+                # Verify property structure
+                expected_property = ["avg_property_value", "avg_rent", "avg_occupancy"]
+                property_ok = all(prop in property_data for prop in expected_property)
+                
+                # Verify news metrics structure
+                expected_news = ["crime_score", "investment_score", "job_score", "infrastructure_score"]
+                news_ok = all(news in news_metrics for news in expected_news)
+                
+                if metrics_ok and property_ok and news_ok:
+                    self.log_result("Dashboard Analytics", True, 
+                                  f"Successfully retrieved dashboard analytics - "
+                                  f"Territories: {data['totalTerritories']}, "
+                                  f"Submissions: {data['totalMetricsSubmissions']}, "
+                                  f"Livability Index: {metrics.get('livability_index', 0)}")
+                else:
+                    missing_structures = []
+                    if not metrics_ok: missing_structures.append("metrics")
+                    if not property_ok: missing_structures.append("property")
+                    if not news_ok: missing_structures.append("news_metrics")
+                    self.log_result("Dashboard Analytics", False, 
+                                  f"Missing expected structure in: {', '.join(missing_structures)}")
+            else:
+                self.log_result("Dashboard Analytics", False, 
+                              f"Missing required fields: {', '.join(missing_fields)}", data)
+        else:
+            self.log_result("Dashboard Analytics", False, "Failed to retrieve dashboard analytics", data)
+    
+    async def test_news_scraping(self, token: str, pages: int = 2):
+        """Test news scraping endpoint (GET /api/news/scraped)"""
+        success, data, status = await self.make_request("GET", f"/news/scraped?pages={pages}", token=token)
+        
+        if success and isinstance(data, dict):
+            # Check required fields
+            required_fields = ["crime_rate_score", "investment_activity_score", "job_market_score", 
+                             "property_market_score", "infrastructure_score", "livability_index",
+                             "crime_mentions", "investment_mentions", "job_mentions", 
+                             "property_mentions", "infrastructure_mentions", "articles", "articles_analyzed"]
+            
+            missing_fields = [field for field in required_fields if field not in data]
+            
+            if not missing_fields:
+                # Verify score ranges (should be 0-10)
+                scores = {
+                    "crime_rate_score": data["crime_rate_score"],
+                    "investment_activity_score": data["investment_activity_score"],
+                    "job_market_score": data["job_market_score"],
+                    "property_market_score": data["property_market_score"],
+                    "infrastructure_score": data["infrastructure_score"],
+                    "livability_index": data["livability_index"]
+                }
+                
+                invalid_scores = {k: v for k, v in scores.items() if not (0 <= v <= 10)}
+                
+                if not invalid_scores:
+                    articles = data.get("articles", [])
+                    articles_count = data.get("articles_analyzed", 0)
+                    
+                    self.log_result("News Scraping", True, 
+                                  f"Successfully scraped and analyzed news - "
+                                  f"Articles analyzed: {articles_count}, "
+                                  f"Articles returned: {len(articles)}, "
+                                  f"Livability Index: {data['livability_index']}")
+                else:
+                    self.log_result("News Scraping", False, 
+                                  f"Invalid score ranges (should be 0-10): {invalid_scores}")
+            else:
+                self.log_result("News Scraping", False, 
+                              f"Missing required fields: {', '.join(missing_fields)}", data)
+        else:
+            self.log_result("News Scraping", False, "Failed to retrieve scraped news", data)
+    
     async def run_all_tests(self):
         """Run complete test suite"""
         print("🚀 Starting R Territory AI Backend Tests - COMPREHENSIVE SUITE")
