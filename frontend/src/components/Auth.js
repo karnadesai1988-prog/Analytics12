@@ -88,7 +88,7 @@ export const Auth = () => {
 
             <div className="space-y-2">
               <Label className="flex items-center gap-2" style={{color: '#4F4F4F'}}>
-                <Lock className="w-4 h-4 text-orange-500" />
+                <Lock className="w-4 h-4 text-blue-500" />
                 Password
               </Label>
               <Input
