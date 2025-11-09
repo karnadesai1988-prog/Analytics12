@@ -343,7 +343,20 @@ export const TerritoriesUnified = () => {
 
   const handleCreateEvent = () => {
     setShowActionDialog(false);
+    // Pre-select territory and community based on selected territory
+    if (selectedTerritory) {
+      setEventForm({...eventForm, territoryId: selectedTerritory.id});
+    }
     setShowEventDialog(true);
+  };
+
+  const handleCreateProject = () => {
+    setShowActionDialog(false);
+    // Pre-select territory based on selected territory
+    if (selectedTerritory) {
+      setProjectForm({...projectForm, territoryId: selectedTerritory.id, location: pinForm.location});
+    }
+    setShowProjectDialog(true);
   };
 
   const handleCreateTerritory = async (e) => {
