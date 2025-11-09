@@ -1094,6 +1094,9 @@ async def create_event(event: EventCreate, user: User = Depends(get_current_user
     # Parse date string to datetime
     try:
         event_date = datetime.fromisoformat(event.date.replace('Z', '+00:00'))
+        # Ensure timezone awareness
+        if event_date.tzinfo is None:
+            event_date = event_date.replace(tzinfo=timezone.utc)
     except:
         event_date = datetime.now(timezone.utc)
     
