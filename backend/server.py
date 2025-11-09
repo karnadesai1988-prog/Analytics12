@@ -1061,6 +1061,32 @@ async def get_opportunities(user: User = Depends(get_current_user), territory_id
     opportunities = await db.opportunities.find(query).sort("createdAt", -1).to_list(length=None)
     return [Opportunity(**o) for o in opportunities]
 
+@api_router.post("/events")
+async def create_event(event: EventCreate, user: User = Depends(get_current_user)):
+    # Parse date string to datetime
+    try:
+        event_date = datetime.fromisoformat(event.date.replace('Z', '+00:00'))
+    except:
+        event_date = datetime.now(timezone.utc)
+    
+    # Determine status based on date
+    status = "upcoming" if event_date > datetime.now(timezone.utc) else "past"
+    
+    event_doc = {
+        "id": str(uuid.uuid4()),
+        "title": event.title,
+        "date": event_date,
+        "location": event.location,
+        "territoryId": event.territoryId,
+        "organizer": event.organizer,
+        "status": status,
+        "rsvpList": [],
+        "createdAt": datetime.now(timezone.utc)
+    }
+    await db.events.insert_one(event_doc)
+    await manager.broadcast(json.dumps({"type": "event_created", "data": {k: v.isoformat() if isinstance(v, datetime) else v for k, v in event_doc.items() if k != '_id'}}))
+    return Event(**event_doc)
+
 @api_router.get("/events")
 async def get_events(user: User = Depends(get_current_user), territory_id: Optional[str] = Query(None)):
     query = {}
