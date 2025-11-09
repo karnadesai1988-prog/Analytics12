@@ -1,14 +1,14 @@
 """
 AI Sentiment Analysis & Contextual Intelligence Module
-Self-contained without external dependencies
+Demo mode with optional OpenAI ChatGPT integration
 """
 import re
+import os
 from collections import Counter
 from datetime import datetime, timezone, timedelta
-from typing import Dict, List, Any
-import requests
-from bs4 import BeautifulSoup
+from typing import Dict, List, Any, Optional
 import json
+from news_scraper import analyze_news_metrics
 
 # ==========================================
 # SENTIMENT ANALYSIS KEYWORDS
