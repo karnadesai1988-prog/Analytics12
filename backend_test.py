@@ -11,7 +11,7 @@ import sys
 from typing import Dict, Any, Optional
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://territory-insights.preview.emergentagent.com/api"
+BACKEND_URL = "https://territory-insights-1.preview.emergentagent.com/api"
 
 class BackendTester:
     def __init__(self):
