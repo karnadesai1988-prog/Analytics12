@@ -125,18 +125,19 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.03);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #FF6B00, #FF8500);
+  background: linear-gradient(135deg, #FF7A00, #FF5A00);
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+  box-shadow: 0 2px 8px rgba(255, 107, 0, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #FF8500, #FF9500);
+  background: linear-gradient(135deg, #FF8500, #FF6B00);
+  box-shadow: 0 2px 12px rgba(255, 107, 0, 0.3);
 }
 
 /* Orange Glow Effect */
