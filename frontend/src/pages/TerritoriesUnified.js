@@ -222,6 +222,15 @@ export const TerritoriesUnified = () => {
     photoPreview: null
   });
 
+  const [communityForm, setCommunityForm] = useState({
+    name: '',
+    description: '',
+    territoryId: '',
+    photo: null,
+    photoPreview: null,
+    canJoin: true
+  });
+
   const [communities, setCommunities] = useState([]);
 
   const [loading, setLoading] = useState(false);
