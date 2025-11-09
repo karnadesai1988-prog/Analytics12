@@ -243,6 +243,164 @@ class BackendTester:
         else:
             self.log_result("AI Insights Calculation", False, "Could not verify AI insights - no territories found")
     
+    # NEW COMMUNITY MANAGEMENT TESTS
+    async def test_community_creation(self, token: str, territory_id: str = None) -> Optional[str]:
+        """Test community creation"""
+        community_data = {
+            "name": "Tech Innovators Hub",
+            "description": "A community for technology professionals and innovators in the area",
+            "territoryId": territory_id or "test-territory-id",
+            "photo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=",
+            "canJoin": True
+        }
+        
+        success, data, status = await self.make_request("POST", "/communities", community_data, token)
+        
+        if success and "id" in data:
+            self.log_result("Community Creation", True, f"Successfully created community: {data.get('name', 'Unknown')}")
+            return data["id"]
+        else:
+            self.log_result("Community Creation", False, "Failed to create community", data)
+            return None
+    
+    async def test_community_listing(self, token: str):
+        """Test community listing"""
+        success, data, status = await self.make_request("GET", "/communities", token=token)
+        
+        if success and isinstance(data, list):
+            self.log_result("Community Listing", True, f"Successfully retrieved {len(data)} communities")
+            return data
+        else:
+            self.log_result("Community Listing", False, "Failed to retrieve communities", data)
+            return []
+    
+    async def test_community_get_single(self, token: str, community_id: str):
+        """Test getting single community"""
+        success, data, status = await self.make_request("GET", f"/communities/{community_id}", token=token)
+        
+        if success and "id" in data:
+            self.log_result("Community Get Single", True, f"Successfully retrieved community: {data.get('name', 'Unknown')}")
+        else:
+            self.log_result("Community Get Single", False, "Failed to retrieve single community", data)
+    
+    async def test_community_join(self, token: str, community_id: str):
+        """Test joining a community"""
+        success, data, status = await self.make_request("POST", f"/communities/{community_id}/join", {}, token)
+        
+        if success:
+            self.log_result("Community Join", True, "Successfully joined community")
+        else:
+            self.log_result("Community Join", False, "Failed to join community", data)
+    
+    # NEW POSTS MANAGEMENT TESTS
+    async def test_post_creation(self, token: str, community_id: str) -> Optional[str]:
+        """Test post creation"""
+        post_data = {
+            "communityId": community_id,
+            "text": "Exciting new development project coming to our territory! Great opportunities for local businesses and residents. #TerritoryDevelopment #Community",
+            "location": {"lat": 23.0225, "lng": 72.5714},
+            "photo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+        }
+        
+        success, data, status = await self.make_request("POST", "/posts", post_data, token)
+        
+        if success and "id" in data:
+            self.log_result("Post Creation", True, f"Successfully created post in community")
+            return data["id"]
+        else:
+            self.log_result("Post Creation", False, "Failed to create post", data)
+            return None
+    
+    async def test_post_listing(self, token: str):
+        """Test post listing (all posts)"""
+        success, data, status = await self.make_request("GET", "/posts", token=token)
+        
+        if success and isinstance(data, list):
+            self.log_result("Post Listing (All)", True, f"Successfully retrieved {len(data)} posts")
+        else:
+            self.log_result("Post Listing (All)", False, "Failed to retrieve posts", data)
+    
+    async def test_post_listing_by_community(self, token: str, community_id: str):
+        """Test post listing filtered by community"""
+        success, data, status = await self.make_request("GET", f"/posts?community_id={community_id}", token=token)
+        
+        if success and isinstance(data, list):
+            self.log_result("Post Listing (By Community)", True, f"Successfully retrieved {len(data)} posts for community")
+        else:
+            self.log_result("Post Listing (By Community)", False, "Failed to retrieve posts by community", data)
+    
+    # NEW TERRITORY PROFILE TESTS
+    async def test_territory_profile(self, token: str, territory_id: str):
+        """Test territory profile endpoint"""
+        success, data, status = await self.make_request("GET", f"/territories/{territory_id}/profile", token=token)
+        
+        if success and "territory" in data and "stats" in data:
+            stats = data["stats"]
+            territory = data["territory"]
+            self.log_result("Territory Profile", True, 
+                          f"Successfully retrieved territory profile for {territory.get('name', 'Unknown')} - "
+                          f"Stats: {stats.get('professionals', 0)} professionals, {stats.get('projects', 0)} projects, "
+                          f"{stats.get('opportunities', 0)} opportunities, {stats.get('posts', 0)} posts")
+        else:
+            self.log_result("Territory Profile", False, "Failed to retrieve territory profile", data)
+    
+    # NEW SUPPORTING DATA ENDPOINTS TESTS
+    async def test_professionals_listing(self, token: str, territory_id: str = None):
+        """Test professionals listing"""
+        endpoint = "/professionals"
+        if territory_id:
+            endpoint += f"?territory_id={territory_id}"
+        
+        success, data, status = await self.make_request("GET", endpoint, token=token)
+        
+        if success and isinstance(data, list):
+            filter_msg = f" (filtered by territory {territory_id})" if territory_id else ""
+            self.log_result("Professionals Listing", True, f"Successfully retrieved {len(data)} professionals{filter_msg}")
+        else:
+            self.log_result("Professionals Listing", False, "Failed to retrieve professionals", data)
+    
+    async def test_projects_listing(self, token: str, territory_id: str = None):
+        """Test projects listing"""
+        endpoint = "/projects"
+        if territory_id:
+            endpoint += f"?territory_id={territory_id}"
+        
+        success, data, status = await self.make_request("GET", endpoint, token=token)
+        
+        if success and isinstance(data, list):
+            filter_msg = f" (filtered by territory {territory_id})" if territory_id else ""
+            self.log_result("Projects Listing", True, f"Successfully retrieved {len(data)} projects{filter_msg}")
+        else:
+            self.log_result("Projects Listing", False, "Failed to retrieve projects", data)
+    
+    async def test_opportunities_listing(self, token: str, territory_id: str = None):
+        """Test opportunities listing"""
+        endpoint = "/opportunities"
+        if territory_id:
+            endpoint += f"?territory_id={territory_id}"
+        
+        success, data, status = await self.make_request("GET", endpoint, token=token)
+        
+        if success and isinstance(data, list):
+            filter_msg = f" (filtered by territory {territory_id})" if territory_id else ""
+            self.log_result("Opportunities Listing", True, f"Successfully retrieved {len(data)} opportunities{filter_msg}")
+        else:
+            self.log_result("Opportunities Listing", False, "Failed to retrieve opportunities", data)
+    
+    async def test_events_listing(self, token: str, territory_id: str = None):
+        """Test events listing"""
+        endpoint = "/events"
+        if territory_id:
+            endpoint += f"?territory_id={territory_id}"
+        
+        success, data, status = await self.make_request("GET", endpoint, token=token)
+        
+        if success and isinstance(data, list):
+            filter_msg = f" (filtered by territory {territory_id})" if territory_id else ""
+            self.log_result("Events Listing", True, f"Successfully retrieved {len(data)} events{filter_msg}")
+        else:
+            self.log_result("Events Listing", False, "Failed to retrieve events", data)
+    
     async def run_all_tests(self):
         """Run complete test suite"""
         print("🚀 Starting R Territory AI Backend Tests")
