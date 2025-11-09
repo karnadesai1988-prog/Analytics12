@@ -1061,6 +1061,84 @@ export const TerritoriesUnified = () => {
               );
             })}
             
+            {/* Project Markers */}
+            {projects.map(project => {
+              // Check if should be visible based on viewOnlySelected
+              if (viewOnlySelected && selectedTerritory && selectedTerritory.center) {
+                const isInTerritory = isPointInCircle(
+                  [project.location.lat, project.location.lng],
+                  selectedTerritory.center,
+                  selectedTerritory.radius || 2500
+                );
+                if (!isInTerritory) return null;
+              }
+              
+              return (
+                <Marker
+                  key={`project-${project.id}`}
+                  position={[project.location.lat, project.location.lng]}
+                  icon={projectMarkerIcon}
+                >
+                  <Popup maxWidth={300}>
+                    <div className="text-sm space-y-2">
+                      <div className="flex items-center gap-2 border-b pb-2">
+                        <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                          <Building2 className="w-4 h-4 text-gray-600" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-semibold text-gray-700">Project</div>
+                          <div className="text-xs text-gray-500">{project.name}</div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <div className="text-xs">
+                          <span className="text-gray-600">Developer: </span>
+                          <span className="font-semibold">{project.developerName}</span>
+                        </div>
+                        <div className="text-xs">
+                          <span className="text-gray-600">Status: </span>
+                          <span className={`px-2 py-0.5 rounded ${
+                            project.status === 'Ready' ? 'bg-green-100 text-green-600' :
+                            project.status === 'Under Construction' ? 'bg-yellow-100 text-yellow-600' :
+                            'bg-blue-100 text-blue-600'
+                          }`}>
+                            {project.status}
+                          </span>
+                        </div>
+                        <div className="text-xs">
+                          <span className="text-gray-600">Price: </span>
+                          <span className="font-semibold">{project.priceRange || 'N/A'}</span>
+                        </div>
+                        <div className="text-xs">
+                          <span className="text-gray-600">Config: </span>
+                          <span className="font-semibold">{project.configuration || 'N/A'}</span>
+                        </div>
+                      </div>
+                      
+                      {project.brochureUrl && (
+                        <div className="pt-2 border-t">
+                          <a 
+                            href={project.brochureUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-600 hover:underline"
+                          >
+                            📄 View Brochure
+                          </a>
+                        </div>
+                      )}
+                      
+                      <div className="text-xs">
+                        <span className="text-gray-600">Location: </span>
+                        <span className="font-mono">{project.location.lat.toFixed(4)}, {project.location.lng.toFixed(4)}</span>
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
+            
             {/* Comment Markers */}
             {comments.map(comment => {
               const territory = territories.find(t => t.id === comment.territoryId);
