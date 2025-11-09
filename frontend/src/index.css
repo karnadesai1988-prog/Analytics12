@@ -204,21 +204,21 @@ code {
 
 /* Badge Styling */
 .badge-orange {
-  background: linear-gradient(135deg, #FF6B00, #FF8500);
+  background: linear-gradient(135deg, #FF7A00, #FF5A00);
   color: white;
   padding: 4px 12px;
   border-radius: 20px;
   font-weight: 600;
-  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 107, 0, 0.25);
 }
 
 .badge-glass {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
   color: var(--color-text-primary);
   padding: 4px 12px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(224, 224, 224, 0.5);
 }
 
 /* Floating Animation */
