@@ -628,6 +628,127 @@ frontend:
         agent: "main"
         comment: "✅ VERIFIED: Projects loaded from API and displayed as grey markers on map. Multiple marker types visible: pins (various colors), posts (violet), communities (gold), events (yellow), projects (grey)."
 
+  - task: "Metrics submission endpoint (POST /api/metrics)"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "POST /api/metrics endpoint for submitting territory metrics (job_likelihood, crime_rate, security, livelihood, air_quality_index, food_hygiene, property data). Stores in metrics_submissions collection and broadcasts via WebSocket."
+
+  - task: "Dashboard analytics endpoint (GET /api/analytics/dashboard)"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "GET /api/analytics/dashboard endpoint calculates aggregated metrics from submissions: avg job likelihood, crime rate, security, livelihood, air quality, food hygiene. Also calculates property metrics and news-based external metrics. Returns livability index."
+
+  - task: "News scraping endpoint (GET /api/news/scraped)"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "GET /api/news/scraped endpoint scrapes Gujarat Samachar news and analyzes metrics. Returns crime_rate_score, investment_activity_score, job_market_score, property_market_score, infrastructure_score, livability_index, mention counts, and article list with tags."
+
+frontend:
+  - task: "Blue theme implementation"
+    implemented: true
+    working: true
+    file: "frontend/src/index.css, frontend/src/components/*, frontend/src/pages/*"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Changed entire theme from orange to blue. Updated CSS variables, buttons, badges, scrollbars, animations. Changed colors in Auth.js, Sidebar.js, DataSubmission.js, DashboardNew.js, News.js, Community.js, TerritoryProfile.js, TerritoriesUnified.js. All blue gradients and accents applied successfully."
+
+  - task: "Data Submission page with metrics form"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/DataSubmission.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Data Submission page displays territory selection dropdown, 6 core metrics with sliders (0-10 scale), property information fields (property value, rent, occupancy, maintenance cost), tenant type dropdown, and notes textarea. Blue theme applied. Submit button functional."
+
+  - task: "New Dashboard page (DashboardNew.js)"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/DashboardNew.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: DashboardNew displays Overall Livability Index hero card with blue gradient, Core Territory Metrics grid (job likelihood, crime rate, security, livelihood, air quality, food hygiene), Property & Real Estate metrics (avg property value, rent, occupancy), and News-Based External Metrics (crime score, investment score, job market score, infrastructure score). Blue theme applied."
+
+  - task: "News page with scraped data"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/News.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: News page displays with blue header icon, Calculated Metrics grid (6 scores from 0-10 scale with color-coded badges), Analysis Summary with mention counts (crime, investment, job, property, infrastructure), and Recent Articles list with tags. Successfully loads real scraped news data from Gujarat Samachar (15 articles analyzed shown). Blue theme applied."
+
+  - task: "App.js routing for new pages"
+    implemented: true
+    working: true
+    file: "frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Added routes for /data-submission (DataSubmission component), /news (News component). Fixed DashboardUnified → DashboardNew. All imports correct and routes working."
+
+  - task: "Sidebar navigation with new links"
+    implemented: true
+    working: true
+    file: "frontend/src/components/Sidebar.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Sidebar displays: Territories & Map, Dashboard & Analytics, Data Submission, News, Community links in order. Blue theme with blue gradient for active state, blue hover effects. All navigation links working correctly."
+
+  - task: "Dropdown transparency issues fixed"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/DataSubmission.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Territory dropdown in Data Submission page opens correctly with white background and black text. No transparency issues - all options clearly visible and readable."
+
 metadata:
   created_by: "main_agent"
   version: "2.0"
