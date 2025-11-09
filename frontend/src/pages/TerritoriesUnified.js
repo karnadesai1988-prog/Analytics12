@@ -174,6 +174,15 @@ export const TerritoriesUnified = () => {
     generateAIInsights: false
   });
 
+  const [postForm, setPostForm] = useState({
+    text: '',
+    communityId: '',
+    photo: null,
+    photoPreview: null
+  });
+
+  const [communities, setCommunities] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
