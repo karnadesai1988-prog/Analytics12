@@ -400,8 +400,80 @@ class BackendTester:
         if success and isinstance(data, list):
             filter_msg = f" (filtered by territory {territory_id})" if territory_id else ""
             self.log_result("Events Listing", True, f"Successfully retrieved {len(data)} events{filter_msg}")
+            return data
         else:
             self.log_result("Events Listing", False, "Failed to retrieve events", data)
+            return []
+    
+    # NEW SPECIFIC TESTS FOR EVENTS AND PROJECTS CREATION
+    async def test_event_creation_specific(self, token: str, territory_id: str) -> Optional[str]:
+        """Test specific event creation as requested"""
+        event_data = {
+            "title": "Community Meetup",
+            "date": "2025-12-01T18:00:00",
+            "location": "Community Hall, Satellite Area",
+            "territoryId": territory_id,
+            "organizer": "Admin Team"
+        }
+        
+        success, data, status = await self.make_request("POST", "/events", event_data, token)
+        
+        if success and "id" in data:
+            # Verify status is "upcoming"
+            if data.get("status") == "upcoming":
+                self.log_result("Event Creation (Specific)", True, 
+                              f"Successfully created event '{data.get('title')}' with status '{data.get('status')}'")
+            else:
+                self.log_result("Event Creation (Specific)", False, 
+                              f"Event created but status is '{data.get('status')}' instead of 'upcoming'")
+            return data["id"]
+        else:
+            self.log_result("Event Creation (Specific)", False, "Failed to create specific event", data)
+            return None
+    
+    async def test_project_creation_specific(self, token: str, territory_id: str) -> Optional[str]:
+        """Test specific project creation as requested"""
+        project_data = {
+            "name": "Skyline Apartments",
+            "status": "Under Construction",
+            "developerName": "ABC Developers",
+            "priceRange": "50L - 80L",
+            "configuration": "2BHK, 3BHK",
+            "location": {"lat": 23.0225, "lng": 72.5714},
+            "territoryId": territory_id,
+            "brochureUrl": "https://example.com/brochure.pdf"
+        }
+        
+        success, data, status = await self.make_request("POST", "/projects", project_data, token)
+        
+        if success and "id" in data:
+            self.log_result("Project Creation (Specific)", True, 
+                          f"Successfully created project '{data.get('name')}' by {data.get('developerName')}")
+            return data["id"]
+        else:
+            self.log_result("Project Creation (Specific)", False, "Failed to create specific project", data)
+            return None
+    
+    async def test_event_appears_in_list(self, token: str, event_id: str):
+        """Verify created event appears in events list"""
+        events = await self.test_events_listing(token)
+        
+        if any(event.get("id") == event_id for event in events):
+            self.log_result("Event List Verification", True, "Created event appears in events list")
+        else:
+            self.log_result("Event List Verification", False, "Created event does not appear in events list")
+    
+    async def test_project_appears_in_list(self, token: str, project_id: str):
+        """Verify created project appears in projects list"""
+        success, data, status = await self.make_request("GET", "/projects", token=token)
+        
+        if success and isinstance(data, list):
+            if any(project.get("id") == project_id for project in data):
+                self.log_result("Project List Verification", True, "Created project appears in projects list")
+            else:
+                self.log_result("Project List Verification", False, "Created project does not appear in projects list")
+        else:
+            self.log_result("Project List Verification", False, "Failed to retrieve projects for verification", data)
     
     async def run_all_tests(self):
         """Run complete test suite"""
