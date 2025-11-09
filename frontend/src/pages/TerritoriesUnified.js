@@ -238,6 +238,14 @@ export const TerritoriesUnified = () => {
 
   useEffect(() => {
     loadData();
+    
+    // Check URL parameters for actions
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('action') === 'create-community') {
+      setShowCommunityDialog(true);
+      // Clean URL
+      window.history.replaceState({}, '', '/territories');
+    }
   }, []);
 
   const loadData = async () => {
