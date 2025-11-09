@@ -244,6 +244,56 @@ class Post(BaseModel):
     photo: Optional[str] = None
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class Professional(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    professionType: str  # Channel Partner, Developer, Broker, Architect, Lawyer, Vendor
+    territoryId: str
+    verified: bool = False
+    photo: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    userId: str
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class Project(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    status: str  # Under Construction, Ready, Possession Soon
+    developerName: str
+    priceRange: str
+    configuration: str
+    location: Dict[str, float]
+    territoryId: str
+    brochureUrl: Optional[str] = None
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class Opportunity(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    type: str  # Buyer, Rental, Land, JointDevelopment
+    territoryId: str
+    description: str
+    claimedBy: Optional[str] = None
+    createdBy: str
+    isNew: bool = True
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class Event(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    date: datetime
+    location: str
+    territoryId: str
+    organizer: str
+    status: str  # upcoming, past
+    rsvpList: List[str] = []
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 class DataGatheringForm(BaseModel):
     territoryId: str
     data: Dict[str, Any]
