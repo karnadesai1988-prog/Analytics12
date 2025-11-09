@@ -60,24 +60,24 @@ code {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-/* Orange Gradient Button */
-.btn-orange-gradient {
-  background: linear-gradient(135deg, #FF7A00, #FF5A00);
+/* Blue Gradient Button */
+.btn-blue-gradient {
+  background: linear-gradient(135deg, #3B82F6, #1D4ED8);
   color: white;
-  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
   border: none;
   transition: all 0.3s ease;
 }
 
-.btn-orange-gradient:hover {
-  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.45);
+.btn-blue-gradient:hover {
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
   transform: translateY(-2px) scale(1.03);
   filter: brightness(1.05);
 }
 
-.btn-orange-gradient:active {
+.btn-blue-gradient:active {
   transform: translateY(0) scale(1);
-  box-shadow: 0 2px 8px rgba(255, 107, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
 }
 
 /* Glass Button */
