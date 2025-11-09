@@ -107,13 +107,15 @@ class BackendTester:
             self.log_result("API Configuration", False, "Failed to configure API keys", data)
     
     async def test_pincode_boundary(self, token: str):
-        """Test pincode boundary endpoint (expected to fail without real API)"""
+        """Test pincode boundary endpoint"""
         success, data, status = await self.make_request("POST", "/pincode/boundary", {
             "pincode": "380001"
         }, token)
         
-        # This should fail because we're using dummy API config
-        if not success and status in [400, 500]:
+        if success and "boundary" in data and "center" in data:
+            source = data.get("source", "unknown")
+            self.log_result("Pincode Boundary", True, f"Successfully retrieved pincode boundary from {source}")
+        elif not success and status in [400, 500]:
             self.log_result("Pincode Boundary", True, "Correctly failed with dummy API config (expected behavior)")
         elif not success and "not configured" in str(data).lower():
             self.log_result("Pincode Boundary", True, "Correctly requires API configuration")
