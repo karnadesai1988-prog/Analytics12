@@ -31,7 +31,7 @@ const AppContent = () => {
           <Route path="/dashboard" element={<PrivateRoute><DashboardNew /></PrivateRoute>} />
           <Route path="/territories" element={<PrivateRoute><TerritoriesUnified /></PrivateRoute>} />
           <Route path="/territory/:territoryId" element={<PrivateRoute><TerritoryProfile /></PrivateRoute>} />
-          <Route path="/data-gathering" element={<PrivateRoute><DataGathering /></PrivateRoute>} />
+          <Route path="/data-gathering" element={<PrivateRoute><DataSubmission /></PrivateRoute>} />
           <Route path="/comments" element={<PrivateRoute><Community /></PrivateRoute>} />
           <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
