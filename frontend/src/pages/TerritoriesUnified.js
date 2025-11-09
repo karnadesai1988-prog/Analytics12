@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
@@ -11,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Textarea } from '../components/ui/textarea';
 import { Badge } from '../components/ui/badge';
 import { toast } from 'sonner';
-import { MapPin, Plus, Filter, Eye, Loader2, MessageSquare, Upload, X } from 'lucide-react';
+import { MapPin, Plus, Filter, Eye, Loader2, MessageSquare, Upload, X, Flame, User } from 'lucide-react';
 import axios from 'axios';
 import L from 'leaflet';
 import '../pages/MapManagement.css';
