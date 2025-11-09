@@ -28,7 +28,7 @@ const AppContent = () => {
       <Sidebar />
       <main className="flex-1 overflow-y-auto" style={{background: 'linear-gradient(135deg, #FFFFFF 0%, #F4F4F4 100%)'}}>
         <Routes>
-          <Route path="/dashboard" element={<PrivateRoute><DashboardUnified /></PrivateRoute>} />
+          <Route path="/dashboard" element={<PrivateRoute><DashboardNew /></PrivateRoute>} />
           <Route path="/territories" element={<PrivateRoute><TerritoriesUnified /></PrivateRoute>} />
           <Route path="/territory/:territoryId" element={<PrivateRoute><TerritoryProfile /></PrivateRoute>} />
           <Route path="/data-gathering" element={<PrivateRoute><DataGathering /></PrivateRoute>} />
