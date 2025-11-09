@@ -229,10 +229,16 @@ def analyze_engagement(posts: List[Dict], events: List[Dict],
     def safe_parse_date(date_val):
         """Safely parse date string or datetime object"""
         if isinstance(date_val, datetime):
+            # Ensure datetime is timezone-aware
+            if date_val.tzinfo is None:
+                return date_val.replace(tzinfo=timezone.utc)
             return date_val
         if isinstance(date_val, str):
             try:
-                return datetime.fromisoformat(date_val.replace('Z', '+00:00'))
+                dt = datetime.fromisoformat(date_val.replace('Z', '+00:00'))
+                if dt.tzinfo is None:
+                    return dt.replace(tzinfo=timezone.utc)
+                return dt
             except:
                 return datetime(2020, 1, 1, tzinfo=timezone.utc)
         return datetime(2020, 1, 1, tzinfo=timezone.utc)
