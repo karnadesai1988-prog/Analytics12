@@ -766,6 +766,51 @@ export const TerritoriesUnified = () => {
         </div>
       </div>
 
+      {/* Action Selection Dialog */}
+      <Dialog open={showActionDialog} onOpenChange={setShowActionDialog}>
+        <DialogContent className="max-w-md bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-orange-200">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+              What would you like to create?
+            </DialogTitle>
+            <DialogDescription>
+              Choose an action to perform at the selected location
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <button
+              onClick={handleCreatePin}
+              className="group p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
+            >
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <MapPin className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-bold text-gray-800">Create Pin</h3>
+                  <p className="text-xs text-gray-500 mt-1">Add a location marker</p>
+                </div>
+              </div>
+            </button>
+            
+            <button
+              onClick={handleCreatePost}
+              className="group p-6 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
+            >
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <MessageSquare className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-bold text-gray-800">Create Post</h3>
+                  <p className="text-xs text-gray-500 mt-1">Share your thoughts</p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Create Territory Dialog */}
       <Dialog open={showTerritoryDialog} onOpenChange={setShowTerritoryDialog}>
         <DialogContent className="max-w-md">
