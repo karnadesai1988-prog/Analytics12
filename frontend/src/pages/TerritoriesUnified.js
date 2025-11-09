@@ -672,6 +672,16 @@ export const TerritoriesUnified = () => {
                         click: () => handleTerritoryClick(territory)
                       }}
                     >
+                    <Tooltip permanent direction="center" className="territory-tooltip">
+                      <div className="text-xs font-semibold">
+                        {territory.name}
+                        {territory.aiInsights?.aiSuggestions && territory.aiInsights.aiSuggestions.length > 0 && (
+                          <div className="text-xs mt-1 text-purple-700">
+                            💡 {territory.aiInsights.aiSuggestions[0].substring(0, 50)}...
+                          </div>
+                        )}
+                      </div>
+                    </Tooltip>
                     <Popup maxWidth={300}>
                       <div className="text-sm space-y-2">
                         <div className="border-b pb-2">
