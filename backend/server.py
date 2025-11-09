@@ -1055,6 +1055,24 @@ async def get_professionals(user: User = Depends(get_current_user), territory_id
     professionals = await db.professionals.find(query).to_list(length=None)
     return [Professional(**p) for p in professionals]
 
+@api_router.post("/projects")
+async def create_project(project: ProjectCreate, user: User = Depends(get_current_user)):
+    project_doc = {
+        "id": str(uuid.uuid4()),
+        "name": project.name,
+        "status": project.status,
+        "developerName": project.developerName,
+        "priceRange": project.priceRange,
+        "configuration": project.configuration,
+        "location": project.location,
+        "territoryId": project.territoryId,
+        "brochureUrl": project.brochureUrl,
+        "createdAt": datetime.now(timezone.utc)
+    }
+    await db.projects.insert_one(project_doc)
+    await manager.broadcast(json.dumps({"type": "project_created", "data": {k: v.isoformat() if isinstance(v, datetime) else v for k, v in project_doc.items() if k != '_id'}}))
+    return Project(**project_doc)
+
 @api_router.get("/projects")
 async def get_projects(user: User = Depends(get_current_user), territory_id: Optional[str] = Query(None)):
     query = {}
