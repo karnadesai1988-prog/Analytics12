@@ -181,6 +181,7 @@ const commentIcon = new L.Icon({
 });
 
 export const TerritoriesUnified = () => {
+  const navigate = useNavigate();
   const [territories, setTerritories] = useState([]);
   const [pins, setPins] = useState([]);
   const [comments, setComments] = useState([]);
