@@ -166,7 +166,7 @@ export const News = () => {
             <Card key={index} className="glass-panel-light border hover-lift" style={{borderColor: '#E0E0E0'}}>
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
                     {index + 1}
                   </div>
                   <div className="flex-1">
