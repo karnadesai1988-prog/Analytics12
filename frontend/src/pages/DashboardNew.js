@@ -9,17 +9,42 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const DashboardNew = () => {
   const [dashboardData, setDashboardData] = useState(null);
+  const [territories, setTerritories] = useState([]);
+  const [selectedTerritory, setSelectedTerritory] = useState('all');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+    loadTerritories();
     loadDashboard();
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      loadDashboard();
+    }
+  }, [selectedTerritory]);
+
+  const loadTerritories = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BACKEND_URL}/api/territories`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setTerritories(response.data);
+    } catch (error) {
+      console.error('Failed to load territories');
+    }
+  };
 
   const loadDashboard = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${BACKEND_URL}/api/analytics/dashboard`, {
+      const url = selectedTerritory === 'all' 
+        ? `${BACKEND_URL}/api/analytics/dashboard`
+        : `${BACKEND_URL}/api/analytics/dashboard?territory_id=${selectedTerritory}`;
+      
+      const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDashboardData(response.data);
