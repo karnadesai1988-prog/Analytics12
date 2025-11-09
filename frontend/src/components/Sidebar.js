@@ -24,7 +24,7 @@ export const Sidebar = () => {
       {/* Header */}
       <div className="flex h-20 items-center justify-between px-6 border-b" style={{borderColor: '#E5E5E5'}}>
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg" style={{boxShadow: '0 4px 12px rgba(255, 107, 0, 0.3)'}}>
+          <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg" style={{boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'}}>
             <Zap className="w-6 h-6 text-white" />
           </div>
           <div>
