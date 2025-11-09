@@ -8,7 +8,7 @@ import asyncio
 import aiohttp
 import json
 
-BACKEND_URL = "https://ai-territory-map.preview.emergentagent.com/api"
+BACKEND_URL = "https://territory-insights.preview.emergentagent.com/api"
 
 async def comprehensive_test():
     """Run the exact test flow specified in the review request"""
