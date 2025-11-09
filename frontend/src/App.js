@@ -9,6 +9,7 @@ import { DashboardUnified } from './pages/DashboardUnified';
 import { TerritoriesUnified } from './pages/TerritoriesUnified';
 import { DataGathering } from './pages/DataGathering';
 import { CommunityPulse } from './pages/CommunityPulse';
+import { TerritoryProfile } from './pages/TerritoryProfile';
 import { Settings } from './pages/Settings';
 import './App.css';
 
