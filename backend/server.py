@@ -1003,6 +1003,63 @@ async def get_posts(user: User = Depends(get_current_user), community_id: Option
     posts = await db.posts.find(query).sort("createdAt", -1).to_list(length=None)
     return [Post(**p) for p in posts]
 
+@api_router.get("/territories/{territory_id}/profile")
+async def get_territory_profile(territory_id: str, user: User = Depends(get_current_user)):
+    """Get comprehensive territory profile with all stats"""
+    territory = await db.territories.find_one({"id": territory_id})
+    if not territory:
+        raise HTTPException(status_code=404, detail="Territory not found")
+    
+    # Get counts
+    professionals_count = await db.professionals.count_documents({"territoryId": territory_id})
+    projects_count = await db.projects.count_documents({"territoryId": territory_id})
+    opportunities_count = await db.opportunities.count_documents({"territoryId": territory_id})
+    posts_count = await db.posts.count_documents({"communityId": {"$in": [c["id"] for c in await db.communities.find({"territoryId": territory_id}).to_list(length=None)]}})
+    
+    return {
+        "territory": Territory(**territory),
+        "stats": {
+            "professionals": professionals_count,
+            "projects": projects_count,
+            "opportunities": opportunities_count,
+            "posts": posts_count
+        }
+    }
+
+@api_router.get("/professionals")
+async def get_professionals(user: User = Depends(get_current_user), territory_id: Optional[str] = Query(None), profession_type: Optional[str] = Query(None)):
+    query = {}
+    if territory_id:
+        query["territoryId"] = territory_id
+    if profession_type:
+        query["professionType"] = profession_type
+    professionals = await db.professionals.find(query).to_list(length=None)
+    return [Professional(**p) for p in professionals]
+
+@api_router.get("/projects")
+async def get_projects(user: User = Depends(get_current_user), territory_id: Optional[str] = Query(None)):
+    query = {}
+    if territory_id:
+        query["territoryId"] = territory_id
+    projects = await db.projects.find(query).to_list(length=None)
+    return [Project(**p) for p in projects]
+
+@api_router.get("/opportunities")
+async def get_opportunities(user: User = Depends(get_current_user), territory_id: Optional[str] = Query(None)):
+    query = {}
+    if territory_id:
+        query["territoryId"] = territory_id
+    opportunities = await db.opportunities.find(query).sort("createdAt", -1).to_list(length=None)
+    return [Opportunity(**o) for o in opportunities]
+
+@api_router.get("/events")
+async def get_events(user: User = Depends(get_current_user), territory_id: Optional[str] = Query(None)):
+    query = {}
+    if territory_id:
+        query["territoryId"] = territory_id
+    events = await db.events.find(query).to_list(length=None)
+    return [Event(**e) for e in events]
+
 @api_router.get("/analytics/dashboard")
 async def get_dashboard_analytics(user: User = Depends(get_current_user)):
     territories = await db.territories.find().to_list(length=None)
