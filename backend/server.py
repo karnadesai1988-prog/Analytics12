@@ -282,6 +282,13 @@ class Opportunity(BaseModel):
     isNew: bool = True
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class EventCreate(BaseModel):
+    title: str
+    date: str  # ISO format date string
+    location: str
+    territoryId: str
+    organizer: str
+
 class Event(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
