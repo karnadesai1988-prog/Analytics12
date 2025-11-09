@@ -244,6 +244,14 @@ export const TerritoriesUnified = () => {
     canJoin: true
   });
 
+  const [eventForm, setEventForm] = useState({
+    title: '',
+    date: '',
+    location: '',
+    territoryId: '',
+    organizer: ''
+  });
+
   const [communities, setCommunities] = useState([]);
 
   const [loading, setLoading] = useState(false);
