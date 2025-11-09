@@ -30,32 +30,7 @@ NEGATIVE_KEYWORDS = [
     'complaint', 'noise', 'pollution', 'traffic', 'garbage', 'old', 'damaged'
 ]
 
-# ==========================================
-# NEWS SCRAPING FOR CRIME ANALYSIS
-# ==========================================
-CRIME_KEYWORDS = [
-    "crime", "crimes", "criminal", "police", "arrest", "murder", "theft",
-    "robbery", "violence", "assault", "kidnap", "fraud", "scam"
-]
-
-INVESTMENT_KEYWORDS = [
-    "investment", "investor", "invest", "stocks", "market", "finance",
-    "banking", "opportunity", "business", "startup", "entrepreneur",
-    "development", "project", "infrastructure", "construction"
-]
-
-JOB_KEYWORDS = [
-    "job", "jobs", "hiring", "recruitment", "employment", "vacancy",
-    "career", "work", "salary", "position", "opening"
-]
-
-def extract_keywords_from_text(text: str, keyword_list: List[str]) -> List[str]:
-    """Extract matching keywords from text"""
-    if not text:
-        return []
-    text_lower = text.lower()
-    found = [kw for kw in keyword_list if kw in text_lower]
-    return list(set(found))
+# News scraping is now handled by news_scraper.py module
 
 def scrape_gujarat_news_for_rid(rid: str, pages: int = 2) -> Dict[str, Any]:
     """
