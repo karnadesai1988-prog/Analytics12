@@ -64,7 +64,7 @@ export const TerritoryProfile = () => {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading territory profile...</p>
         </div>
       </div>
@@ -86,11 +86,11 @@ export const TerritoryProfile = () => {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-blue-600 rounded-xl flex items-center justify-center">
                 <MapPin className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
                   {territory.name}
                 </h1>
                 <div className="flex items-center gap-3 mt-1">
@@ -114,7 +114,7 @@ export const TerritoryProfile = () => {
                 <Star className="w-4 h-4 mr-2" />
                 Follow
               </Button>
-              <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
+              <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700">
                 <MessageSquare className="w-4 h-4 mr-2" />
                 Join Community
               </Button>
@@ -128,47 +128,47 @@ export const TerritoryProfile = () => {
         <div className="grid grid-cols-12 gap-6">
           {/* Left Sidebar - Stats */}
           <div className="col-span-3 space-y-4">
-            <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
+            <Card className="bg-white/80 backdrop-blur-lg border-blue-200">
               <CardHeader>
                 <CardTitle className="text-sm text-gray-600">Quick Stats</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-blue-100 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-orange-600" />
+                    <Users className="w-4 h-4 text-blue-600" />
                     <span className="text-sm font-medium">Professionals</span>
                   </div>
-                  <Badge className="bg-orange-600">{stats.professionals || 0}</Badge>
+                  <Badge className="bg-blue-600">{stats.professionals || 0}</Badge>
                 </div>
                 
-                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-blue-100 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-orange-600" />
+                    <Building2 className="w-4 h-4 text-blue-600" />
                     <span className="text-sm font-medium">Projects</span>
                   </div>
-                  <Badge className="bg-orange-600">{stats.projects || 0}</Badge>
+                  <Badge className="bg-blue-600">{stats.projects || 0}</Badge>
                 </div>
                 
-                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-blue-100 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Lightbulb className="w-4 h-4 text-orange-600" />
+                    <Lightbulb className="w-4 h-4 text-blue-600" />
                     <span className="text-sm font-medium">Opportunities</span>
                   </div>
-                  <Badge className="bg-orange-600">{stats.opportunities || 0}</Badge>
+                  <Badge className="bg-blue-600">{stats.opportunities || 0}</Badge>
                 </div>
                 
-                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-blue-100 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-orange-600" />
+                    <TrendingUp className="w-4 h-4 text-blue-600" />
                     <span className="text-sm font-medium">Active Posts</span>
                   </div>
-                  <Badge className="bg-orange-600">{stats.posts || 0}</Badge>
+                  <Badge className="bg-blue-600">{stats.posts || 0}</Badge>
                 </div>
               </CardContent>
             </Card>
 
             {/* Mini Map */}
-            <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
+            <Card className="bg-white/80 backdrop-blur-lg border-blue-200">
               <CardHeader>
                 <CardTitle className="text-sm text-gray-600">Location</CardTitle>
               </CardHeader>
@@ -198,32 +198,32 @@ export const TerritoryProfile = () => {
           {/* Main Content Area - Tabs */}
           <div className="col-span-9">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid grid-cols-7 w-full bg-white/80 backdrop-blur-lg border border-orange-200">
-                <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white">
+              <TabsList className="grid grid-cols-7 w-full bg-white/80 backdrop-blur-lg border border-blue-200">
+                <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white">
                   <MapPin className="w-4 h-4 mr-2" />
                   Overview
                 </TabsTrigger>
-                <TabsTrigger value="professionals" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white">
+                <TabsTrigger value="professionals" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white">
                   <Users className="w-4 h-4 mr-2" />
                   Professionals
                 </TabsTrigger>
-                <TabsTrigger value="projects" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white">
+                <TabsTrigger value="projects" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white">
                   <Building2 className="w-4 h-4 mr-2" />
                   Projects
                 </TabsTrigger>
-                <TabsTrigger value="opportunities" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white">
+                <TabsTrigger value="opportunities" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white">
                   <Lightbulb className="w-4 h-4 mr-2" />
                   Opportunities
                 </TabsTrigger>
-                <TabsTrigger value="trendings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white">
+                <TabsTrigger value="trendings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white">
                   <TrendingUp className="w-4 h-4 mr-2" />
                   Trendings
                 </TabsTrigger>
-                <TabsTrigger value="governance" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white">
+                <TabsTrigger value="governance" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white">
                   <Shield className="w-4 h-4 mr-2" />
                   Governance
                 </TabsTrigger>
-                <TabsTrigger value="events" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white">
+                <TabsTrigger value="events" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white">
                   <Calendar className="w-4 h-4 mr-2" />
                   Events
                 </TabsTrigger>
@@ -232,48 +232,48 @@ export const TerritoryProfile = () => {
               {/* Overview Tab */}
               <TabsContent value="overview" className="mt-6 space-y-4">
                 <div className="grid grid-cols-4 gap-4">
-                  <Card className="bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-orange-200 hover:shadow-lg transition-shadow">
+                  <Card className="bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-blue-200 hover:shadow-lg transition-shadow">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-600">Active Projects</p>
-                          <h3 className="text-3xl font-bold text-orange-600 mt-1">{projects.length}</h3>
+                          <h3 className="text-3xl font-bold text-blue-600 mt-1">{projects.length}</h3>
                         </div>
                         <Building2 className="w-12 h-12 text-orange-400 opacity-50" />
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-orange-200 hover:shadow-lg transition-shadow">
+                  <Card className="bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-blue-200 hover:shadow-lg transition-shadow">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-600">Professionals</p>
-                          <h3 className="text-3xl font-bold text-orange-600 mt-1">{professionals.length}</h3>
+                          <h3 className="text-3xl font-bold text-blue-600 mt-1">{professionals.length}</h3>
                         </div>
                         <Users className="w-12 h-12 text-orange-400 opacity-50" />
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-orange-200 hover:shadow-lg transition-shadow">
+                  <Card className="bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-blue-200 hover:shadow-lg transition-shadow">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-600">Hot Leads</p>
-                          <h3 className="text-3xl font-bold text-orange-600 mt-1">{opportunities.length}</h3>
+                          <h3 className="text-3xl font-bold text-blue-600 mt-1">{opportunities.length}</h3>
                         </div>
                         <Lightbulb className="w-12 h-12 text-orange-400 opacity-50" />
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-orange-200 hover:shadow-lg transition-shadow">
+                  <Card className="bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-blue-200 hover:shadow-lg transition-shadow">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-gray-600">Local Pulses</p>
-                          <h3 className="text-3xl font-bold text-orange-600 mt-1">{posts.length}</h3>
+                          <h3 className="text-3xl font-bold text-blue-600 mt-1">{posts.length}</h3>
                         </div>
                         <TrendingUp className="w-12 h-12 text-orange-400 opacity-50" />
                       </div>
@@ -281,7 +281,7 @@ export const TerritoryProfile = () => {
                   </Card>
                 </div>
 
-                <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
+                <Card className="bg-white/80 backdrop-blur-lg border-blue-200">
                   <CardHeader>
                     <CardTitle>Territory Insights</CardTitle>
                   </CardHeader>
@@ -294,7 +294,7 @@ export const TerritoryProfile = () => {
                             {territory.rating.topContributors.map((contrib, idx) => (
                               <div key={idx} className="flex justify-between text-sm">
                                 <span>{contrib.type}</span>
-                                <span className="font-bold text-orange-600">{contrib.score}</span>
+                                <span className="font-bold text-blue-600">{contrib.score}</span>
                               </div>
                             ))}
                           </div>
@@ -306,15 +306,15 @@ export const TerritoryProfile = () => {
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
                             <span>Livability</span>
-                            <span className="font-bold text-orange-600">{territory.metrics?.livabilityIndex || 0}/10</span>
+                            <span className="font-bold text-blue-600">{territory.metrics?.livabilityIndex || 0}/10</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span>Infrastructure</span>
-                            <span className="font-bold text-orange-600">{territory.metrics?.govtInfra || 0}/10</span>
+                            <span className="font-bold text-blue-600">{territory.metrics?.govtInfra || 0}/10</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span>Safety</span>
-                            <span className="font-bold text-orange-600">{10 - (territory.metrics?.crimeRate || 0)}/10</span>
+                            <span className="font-bold text-blue-600">{10 - (territory.metrics?.crimeRate || 0)}/10</span>
                           </div>
                         </div>
                       </div>
@@ -324,15 +324,15 @@ export const TerritoryProfile = () => {
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
                             <span>Investments</span>
-                            <span className="font-bold text-orange-600">{territory.metrics?.investments || 0}/10</span>
+                            <span className="font-bold text-blue-600">{territory.metrics?.investments || 0}/10</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span>Buildings</span>
-                            <span className="font-bold text-orange-600">{territory.metrics?.buildings || 0}</span>
+                            <span className="font-bold text-blue-600">{territory.metrics?.buildings || 0}</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span>Population</span>
-                            <span className="font-bold text-orange-600">{territory.metrics?.populationDensity || 0}/10</span>
+                            <span className="font-bold text-blue-600">{territory.metrics?.populationDensity || 0}/10</span>
                           </div>
                         </div>
                       </div>
@@ -343,7 +343,7 @@ export const TerritoryProfile = () => {
 
               {/* Professionals Tab */}
               <TabsContent value="professionals" className="mt-6">
-                <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
+                <Card className="bg-white/80 backdrop-blur-lg border-blue-200">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>Registered Professionals</CardTitle>
                     <Button variant="outline" size="sm">
@@ -360,19 +360,19 @@ export const TerritoryProfile = () => {
                     ) : (
                       <div className="grid grid-cols-2 gap-4">
                         {professionals.map((prof) => (
-                          <Card key={prof.id} className="border-orange-100 hover:shadow-md transition-shadow">
+                          <Card key={prof.id} className="border-blue-100 hover:shadow-md transition-shadow">
                             <CardContent className="p-4">
                               <div className="flex items-start gap-3">
                                 <Avatar>
                                   <AvatarImage src={prof.photo} />
-                                  <AvatarFallback className="bg-orange-100 text-orange-600">
+                                  <AvatarFallback className="bg-blue-100 text-blue-600">
                                     {prof.name.split(' ').map(n => n[0]).join('')}
                                   </AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2">
                                     <h4 className="font-semibold">{prof.name}</h4>
-                                    {prof.verified && <Award className="w-4 h-4 text-orange-500" />}
+                                    {prof.verified && <Award className="w-4 h-4 text-blue-500" />}
                                   </div>
                                   <p className="text-sm text-gray-600">{prof.professionType}</p>
                                   <div className="flex gap-2 mt-3">
@@ -402,7 +402,7 @@ export const TerritoryProfile = () => {
 
               {/* Projects Tab */}
               <TabsContent value="projects" className="mt-6">
-                <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
+                <Card className="bg-white/80 backdrop-blur-lg border-blue-200">
                   <CardHeader>
                     <CardTitle>Societies & Projects</CardTitle>
                   </CardHeader>
@@ -415,7 +415,7 @@ export const TerritoryProfile = () => {
                     ) : (
                       <div className="space-y-4">
                         {projects.map((project) => (
-                          <Card key={project.id} className="border-orange-100 hover:shadow-md transition-shadow">
+                          <Card key={project.id} className="border-blue-100 hover:shadow-md transition-shadow">
                             <CardContent className="p-4">
                               <div className="flex justify-between items-start">
                                 <div>
@@ -424,14 +424,14 @@ export const TerritoryProfile = () => {
                                   <div className="flex gap-2 mt-2">
                                     <Badge className={
                                       project.status === 'Ready' ? 'bg-green-500' :
-                                      project.status === 'Under Construction' ? 'bg-orange-500' :
+                                      project.status === 'Under Construction' ? 'bg-blue-500' :
                                       'bg-blue-500'
                                     }>
                                       {project.status}
                                     </Badge>
                                     <Badge variant="outline">{project.configuration}</Badge>
                                   </div>
-                                  <p className="mt-2 font-semibold text-orange-600">{project.priceRange}</p>
+                                  <p className="mt-2 font-semibold text-blue-600">{project.priceRange}</p>
                                 </div>
                                 {project.brochureUrl && (
                                   <Button size="sm" variant="outline">
@@ -451,7 +451,7 @@ export const TerritoryProfile = () => {
 
               {/* Opportunities Tab */}
               <TabsContent value="opportunities" className="mt-6">
-                <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
+                <Card className="bg-white/80 backdrop-blur-lg border-blue-200">
                   <CardHeader>
                     <CardTitle>Live Opportunities</CardTitle>
                   </CardHeader>
@@ -464,7 +464,7 @@ export const TerritoryProfile = () => {
                     ) : (
                       <div className="space-y-3">
                         {opportunities.map((opp) => (
-                          <Card key={opp.id} className="border-orange-100 hover:shadow-md transition-shadow">
+                          <Card key={opp.id} className="border-blue-100 hover:shadow-md transition-shadow">
                             <CardContent className="p-4">
                               <div className="flex justify-between items-start">
                                 <div className="flex-1">
@@ -476,7 +476,7 @@ export const TerritoryProfile = () => {
                                   <p className="text-sm text-gray-600 mt-1">{opp.description}</p>
                                 </div>
                                 <div className="flex gap-2">
-                                  <Button size="sm" className="bg-gradient-to-r from-orange-500 to-orange-600">
+                                  <Button size="sm" className="bg-gradient-to-r from-blue-500 to-blue-600">
                                     Claim
                                   </Button>
                                   <Button size="sm" variant="outline">
@@ -495,7 +495,7 @@ export const TerritoryProfile = () => {
 
               {/* Trendings Tab */}
               <TabsContent value="trendings" className="mt-6">
-                <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
+                <Card className="bg-white/80 backdrop-blur-lg border-blue-200">
                   <CardHeader>
                     <CardTitle>Trendings / Pulses / News</CardTitle>
                   </CardHeader>
@@ -508,11 +508,11 @@ export const TerritoryProfile = () => {
                     ) : (
                       <div className="space-y-4">
                         {posts.map((post) => (
-                          <Card key={post.id} className="border-orange-100">
+                          <Card key={post.id} className="border-blue-100">
                             <CardContent className="p-4">
                               <div className="flex items-start gap-3">
                                 <Avatar>
-                                  <AvatarFallback className="bg-orange-100 text-orange-600">
+                                  <AvatarFallback className="bg-blue-100 text-blue-600">
                                     {post.userName.split(' ').map(n => n[0]).join('')}
                                   </AvatarFallback>
                                 </Avatar>
@@ -550,7 +550,7 @@ export const TerritoryProfile = () => {
 
               {/* Governance Tab */}
               <TabsContent value="governance" className="mt-6">
-                <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
+                <Card className="bg-white/80 backdrop-blur-lg border-blue-200">
                   <CardHeader>
                     <CardTitle>Territory Governance</CardTitle>
                   </CardHeader>
@@ -558,7 +558,7 @@ export const TerritoryProfile = () => {
                     <div className="text-center py-12 text-gray-500">
                       <Shield className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                       <p>Governance panel coming soon</p>
-                      <Button className="mt-4 bg-gradient-to-r from-orange-500 to-orange-600">
+                      <Button className="mt-4 bg-gradient-to-r from-blue-500 to-blue-600">
                         Join Governance
                       </Button>
                     </div>
@@ -568,7 +568,7 @@ export const TerritoryProfile = () => {
 
               {/* Events Tab */}
               <TabsContent value="events" className="mt-6">
-                <Card className="bg-white/80 backdrop-blur-lg border-orange-200">
+                <Card className="bg-white/80 backdrop-blur-lg border-blue-200">
                   <CardHeader>
                     <CardTitle>Upcoming Events</CardTitle>
                   </CardHeader>
@@ -581,7 +581,7 @@ export const TerritoryProfile = () => {
                     ) : (
                       <div className="space-y-4">
                         {events.map((event) => (
-                          <Card key={event.id} className="border-orange-100 hover:shadow-md transition-shadow">
+                          <Card key={event.id} className="border-blue-100 hover:shadow-md transition-shadow">
                             <CardContent className="p-4">
                               <div className="flex justify-between items-start">
                                 <div>
@@ -594,7 +594,7 @@ export const TerritoryProfile = () => {
                                     {event.status}
                                   </Badge>
                                 </div>
-                                <Button size="sm" className="bg-gradient-to-r from-orange-500 to-orange-600">
+                                <Button size="sm" className="bg-gradient-to-r from-blue-500 to-blue-600">
                                   RSVP
                                 </Button>
                               </div>
