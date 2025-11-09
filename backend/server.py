@@ -212,6 +212,8 @@ class CommunityCreate(BaseModel):
     name: str
     description: Optional[str] = None
     territoryId: str
+    photo: Optional[str] = None
+    canJoin: bool = True
 
 class Community(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -219,6 +221,8 @@ class Community(BaseModel):
     name: str
     description: Optional[str] = None
     territoryId: str
+    photo: Optional[str] = None
+    canJoin: bool = True
     createdBy: str
     members: List[str] = []  # User IDs
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
