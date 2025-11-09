@@ -568,6 +568,66 @@ frontend:
         agent: "main"
         comment: "Event and Project dialogs now pre-select territory based on selectedTerritory when opening from Place Picker. Makes it easier to create items in specific territories."
 
+  - task: "AI suggestions popup on territory click"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Territory Circle Popup already shows comprehensive AI suggestions including: appreciationPercent, confidenceScore, demandPressure, and list of AI suggestions"
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Clicking territory circle opens popup with AI Insights section (Appreciation, Confidence, Demand) and AI Suggestions section. Screenshot shows full popup with all metrics."
+
+  - task: "AI suggestions tooltip on territory hover"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added permanent Tooltip to Circle component showing territory name and first AI suggestion (truncated to 50 chars). Styled with purple border and white background."
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Tooltips visible on all territories showing name and AI suggestion preview (e.g., 'Test Territory Ahmedabad - Strong livability - good for families...'). Multiple territory tooltips visible in screenshot."
+
+  - task: "Show ratings on all territory circles"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Rating badges already implemented as divIcon markers at territory center. Shows star rating with gradient purple background for territories with totalScore > 0."
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Rating badges visible on territories. Test Territory Ahmedabad shows rating. Territories without pins (0 rating) don't show badge to avoid clutter."
+
+  - task: "Project markers on map"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added project markers (grey pins) displaying at project location. Popup shows: name, developer, status (color-coded), price range, configuration, brochure link, location coordinates. Respects viewOnlySelected filter."
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Projects loaded from API and displayed as grey markers on map. Multiple marker types visible: pins (various colors), posts (violet), communities (gold), events (yellow), projects (grey)."
+
 metadata:
   created_by: "main_agent"
   version: "2.0"
