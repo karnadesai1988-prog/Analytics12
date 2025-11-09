@@ -254,14 +254,16 @@ export const TerritoriesUnified = () => {
     try {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
-      const [territoriesRes, pinsRes, commentsRes, communitiesRes] = await Promise.all([
+      const [territoriesRes, pinsRes, postsRes, commentsRes, communitiesRes] = await Promise.all([
         axios.get(`${BACKEND_URL}/api/territories`, { headers }),
         axios.get(`${BACKEND_URL}/api/pins`, { headers }),
+        axios.get(`${BACKEND_URL}/api/posts`, { headers }),
         axios.get(`${BACKEND_URL}/api/comments`, { headers }),
         axios.get(`${BACKEND_URL}/api/communities`, { headers }),
       ]);
       setTerritories(territoriesRes.data);
       setPins(pinsRes.data);
+      setPosts(postsRes.data);
       setComments(commentsRes.data);
       setCommunities(communitiesRes.data);
     } catch (error) {
