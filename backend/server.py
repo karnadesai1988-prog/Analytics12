@@ -345,7 +345,7 @@ class MetricsSubmission(BaseModel):
     maintenance_cost: Optional[float] = None  # Average monthly maintenance
     tenant_type: Optional[str] = None  # Family, Students, Working Professionals, etc.
     notes: Optional[str] = None
-    submittedBy: str
+    submittedBy: Optional[str] = None  # Will be set by endpoint from authenticated user
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class ShareLink(BaseModel):
