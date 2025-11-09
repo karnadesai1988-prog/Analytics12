@@ -403,9 +403,9 @@ class BackendTester:
     
     async def run_all_tests(self):
         """Run complete test suite"""
-        print("🚀 Starting R Territory AI Backend Tests")
+        print("🚀 Starting R Territory AI Backend Tests - COMPREHENSIVE SUITE")
         print(f"Testing against: {BACKEND_URL}")
-        print("=" * 60)
+        print("=" * 80)
         
         # Test 1: Admin user signup and login
         admin_email = "admin@test.com"
@@ -420,42 +420,100 @@ class BackendTester:
             print("❌ CRITICAL: Cannot proceed without admin authentication")
             return
         
-        # Test 2: API Configuration
-        await self.test_api_configuration(self.admin_token)
-        
-        # Test 3: Pincode boundary endpoint (expected to fail)
-        await self.test_pincode_boundary(self.admin_token)
-        
-        # Test 4: Territory creation and listing
-        territory_id = await self.test_territory_creation(self.admin_token)
-        await self.test_territory_listing(self.admin_token)
-        
-        # Test 5: Pin creation and listing (admin)
-        pin_id = await self.test_pin_creation_admin(self.admin_token, territory_id)
-        await self.test_pin_listing(self.admin_token)
-        
-        # Test 6: Pin filtering
-        if territory_id:
-            await self.test_pin_filtering_by_territory(self.admin_token, territory_id)
-        
-        # Test 7: AI insights calculation
-        await self.test_ai_insights_calculation(self.admin_token)
-        
-        # Test 8: Viewer user RBAC
+        # Test 2: Viewer and Partner users
         viewer_email = "viewer@test.com"
         viewer_password = "password123"
+        partner_email = "partner@test.com"
+        partner_password = "password123"
         
         self.viewer_token = await self.test_user_signup(viewer_email, viewer_password, "Viewer User", "viewer")
         if not self.viewer_token:
             self.viewer_token = await self.test_user_login(viewer_email, viewer_password, "viewer")
         
+        partner_token = await self.test_user_signup(partner_email, partner_password, "Partner User", "partner")
+        if not partner_token:
+            partner_token = await self.test_user_login(partner_email, partner_password, "partner")
+        
+        print("\n" + "=" * 80)
+        print("🔧 BASIC INFRASTRUCTURE TESTS")
+        print("=" * 80)
+        
+        # Test 3: API Configuration
+        await self.test_api_configuration(self.admin_token)
+        
+        # Test 4: Pincode boundary endpoint (expected to fail)
+        await self.test_pincode_boundary(self.admin_token)
+        
+        # Test 5: Territory creation and listing
+        territory_id = await self.test_territory_creation(self.admin_token)
+        await self.test_territory_listing(self.admin_token)
+        
+        # Test 6: Pin creation and listing (admin)
+        pin_id = await self.test_pin_creation_admin(self.admin_token, territory_id)
+        await self.test_pin_listing(self.admin_token)
+        
+        # Test 7: Pin filtering and RBAC
+        if territory_id:
+            await self.test_pin_filtering_by_territory(self.admin_token, territory_id)
+        
         if self.viewer_token:
             await self.test_pin_creation_viewer(self.viewer_token)
         
+        # Test 8: AI insights calculation
+        await self.test_ai_insights_calculation(self.admin_token)
+        
+        print("\n" + "=" * 80)
+        print("🏘️  COMMUNITY MANAGEMENT TESTS")
+        print("=" * 80)
+        
+        # Test 9: Community Management
+        community_id = await self.test_community_creation(self.admin_token, territory_id)
+        communities = await self.test_community_listing(self.admin_token)
+        
+        if community_id:
+            await self.test_community_get_single(self.admin_token, community_id)
+            
+            # Test community join with different user
+            if self.viewer_token:
+                await self.test_community_join(self.viewer_token, community_id)
+        
+        print("\n" + "=" * 80)
+        print("📝 POSTS MANAGEMENT TESTS")
+        print("=" * 80)
+        
+        # Test 10: Posts Management
+        post_id = None
+        if community_id:
+            post_id = await self.test_post_creation(self.admin_token, community_id)
+            await self.test_post_listing_by_community(self.admin_token, community_id)
+        
+        await self.test_post_listing(self.admin_token)
+        
+        print("\n" + "=" * 80)
+        print("🏢 TERRITORY PROFILE & SUPPORTING DATA TESTS")
+        print("=" * 80)
+        
+        # Test 11: Territory Profile
+        if territory_id:
+            await self.test_territory_profile(self.admin_token, territory_id)
+        
+        # Test 12: Supporting Data Endpoints
+        await self.test_professionals_listing(self.admin_token)
+        await self.test_projects_listing(self.admin_token)
+        await self.test_opportunities_listing(self.admin_token)
+        await self.test_events_listing(self.admin_token)
+        
+        # Test 13: Supporting Data Endpoints with Territory Filter
+        if territory_id:
+            await self.test_professionals_listing(self.admin_token, territory_id)
+            await self.test_projects_listing(self.admin_token, territory_id)
+            await self.test_opportunities_listing(self.admin_token, territory_id)
+            await self.test_events_listing(self.admin_token, territory_id)
+        
         # Summary
-        print("\n" + "=" * 60)
-        print("📊 TEST SUMMARY")
-        print("=" * 60)
+        print("\n" + "=" * 80)
+        print("📊 COMPREHENSIVE TEST SUMMARY")
+        print("=" * 80)
         
         passed = sum(1 for result in self.test_results if result["success"])
         total = len(self.test_results)
@@ -465,11 +523,33 @@ class BackendTester:
         print(f"Failed: {total - passed}")
         print(f"Success Rate: {(passed/total)*100:.1f}%")
         
-        if total - passed > 0:
-            print("\n❌ FAILED TESTS:")
-            for result in self.test_results:
-                if not result["success"]:
-                    print(f"  • {result['test']}: {result['message']}")
+        # Categorize results
+        critical_failures = []
+        minor_failures = []
+        
+        for result in self.test_results:
+            if not result["success"]:
+                if any(keyword in result["test"].lower() for keyword in ["auth", "login", "signup", "community", "post", "territory profile"]):
+                    critical_failures.append(result)
+                else:
+                    minor_failures.append(result)
+        
+        if critical_failures:
+            print(f"\n❌ CRITICAL FAILURES ({len(critical_failures)}):")
+            for result in critical_failures:
+                print(f"  • {result['test']}: {result['message']}")
+        
+        if minor_failures:
+            print(f"\n⚠️  MINOR ISSUES ({len(minor_failures)}):")
+            for result in minor_failures:
+                print(f"  • {result['test']}: {result['message']}")
+        
+        if passed == total:
+            print("\n🎉 ALL TESTS PASSED! Backend is fully functional.")
+        elif len(critical_failures) == 0:
+            print("\n✅ All critical functionality working. Minor issues can be addressed later.")
+        else:
+            print(f"\n🚨 {len(critical_failures)} critical issues need immediate attention.")
         
         return self.test_results
 
