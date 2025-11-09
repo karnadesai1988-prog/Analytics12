@@ -273,7 +273,7 @@ export const TerritoriesUnified = () => {
     }
   };
 
-  const handleCreatePin = async (e) => {
+  const handleSubmitPin = async (e) => {
     e.preventDefault();
     
     if (pinForm.type.length === 0) {
@@ -289,7 +289,6 @@ export const TerritoriesUnified = () => {
       });
       toast.success('Pin created successfully!');
       setShowPinDialog(false);
-      setIsPickingLocation(false);
       setPinForm({
         location: { lat: AHMEDABAD_CENTER[0], lng: AHMEDABAD_CENTER[1] },
         type: [],
