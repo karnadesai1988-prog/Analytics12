@@ -140,13 +140,13 @@ code {
   box-shadow: 0 2px 12px rgba(37, 99, 235, 0.3);
 }
 
-/* Orange Glow Effect */
-.glow-orange {
-  box-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+/* Blue Glow Effect */
+.glow-blue {
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
 }
 
-.glow-orange-strong {
-  box-shadow: 0 0 30px rgba(255, 107, 0, 0.8), 0 0 50px rgba(255, 107, 0, 0.4);
+.glow-blue-strong {
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.8), 0 0 50px rgba(37, 99, 235, 0.4);
 }
 
 /* Hover Animations */
