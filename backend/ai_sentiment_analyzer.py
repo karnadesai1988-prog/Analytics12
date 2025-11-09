@@ -468,7 +468,7 @@ async def analyze_territory_intelligence(
     }
     
     # Generate AI insight
-    ai_insight = generate_ai_insight(territory_intelligence)
+    ai_insight = generate_demo_ai_insight(territory_intelligence)
     territory_intelligence["ai_insight"] = ai_insight
     
     return territory_intelligence
