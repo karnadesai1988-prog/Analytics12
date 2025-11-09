@@ -1046,6 +1046,41 @@ async def get_territory_profile(territory_id: str, user: User = Depends(get_curr
         }
     }
 
+@api_router.get("/territories/{territory_id}/ai-insights")
+async def get_territory_ai_insights(territory_id: str, user: User = Depends(get_current_user)):
+    """Get AI-driven sentiment analysis and contextual intelligence for territory"""
+    territory = await db.territories.find_one({"id": territory_id})
+    if not territory:
+        raise HTTPException(status_code=404, detail="Territory not found")
+    
+    # Gather all territory data
+    pins = await db.pins.find({"territoryId": territory_id}).to_list(length=None)
+    communities = await db.communities.find({"territoryId": territory_id}).to_list(length=None)
+    community_ids = [c["id"] for c in communities]
+    posts = await db.posts.find({"communityId": {"$in": community_ids}}).to_list(length=None) if community_ids else []
+    events = await db.events.find({"territoryId": territory_id}).to_list(length=None)
+    projects = await db.projects.find({"territoryId": territory_id}).to_list(length=None)
+    
+    # Get territory rating
+    rating = territory.get('rating', {}).get('totalScore', 0)
+    
+    # Get RID (using pincode as RID)
+    rid = territory.get('pincode', territory.get('id', 'unknown'))
+    
+    # Perform AI analysis
+    ai_insights = await analyze_territory_intelligence(
+        territory_id=territory_id,
+        rid=rid,
+        posts=posts,
+        events=events,
+        pins=pins,
+        projects=projects,
+        communities=communities,
+        rating=rating
+    )
+    
+    return ai_insights
+
 @api_router.get("/professionals")
 async def get_professionals(user: User = Depends(get_current_user), territory_id: Optional[str] = Query(None), profession_type: Optional[str] = Query(None)):
     query = {}
