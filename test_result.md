@@ -451,6 +451,21 @@ frontend:
         agent: "main"
         comment: "✅ VERIFIED: Heat Map button toggles correctly. When active, button shows 'Show Map' with orange background. 'Only Show Selected' toggle appears in sidebar."
 
+  - task: "Post markers visible on map"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TerritoriesUnified.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added post markers to map. Posts are fetched from /api/posts and displayed as violet markers on map. Each post marker shows location, text, photo, and user info in popup. Posts respect viewOnlySelected territory filter."
+      - working: true
+        agent: "main"
+        comment: "✅ VERIFIED: Post markers are visible on map as violet/purple pins. Multiple post markers showing on Ahmedabad map. Posts load with territories and pins. Popup shows post text, photo, location coordinates, and creation date."
+
 metadata:
   created_by: "main_agent"
   version: "2.0"
