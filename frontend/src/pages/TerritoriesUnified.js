@@ -193,7 +193,7 @@ const DraggablePlusButton = ({ initialPosition, onLocationChange, onPlusClick })
     >
       <Popup>
         <div className="text-sm">
-          <strong className="text-orange-600">📍 Place Picker</strong><br/>
+          <strong className="text-blue-600">📍 Place Picker</strong><br/>
           <span className="text-xs text-gray-600">Drag to move • Click to create</span><br/>
           <div className="mt-2 p-2 bg-orange-50 rounded">
             <strong className="text-xs">Current Position:</strong><br/>
@@ -500,7 +500,7 @@ export const TerritoriesUnified = () => {
               onClick={() => setShowTerritoryDialog(true)}
               variant="default"
               size="sm"
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
             >
               <Plus className="w-4 h-4 mr-1" />
               Create Territory
@@ -519,7 +519,7 @@ export const TerritoriesUnified = () => {
               onClick={() => setShowHeatMap(!showHeatMap)}
               variant={showHeatMap ? "default" : "outline"}
               size="sm"
-              className={showHeatMap ? "bg-gradient-to-r from-orange-500 to-orange-600" : ""}
+              className={showHeatMap ? "bg-gradient-to-r from-blue-500 to-blue-600" : ""}
             >
               <Plus className="w-4 h-4 mr-1" />
               Place Picker
@@ -535,9 +535,9 @@ export const TerritoriesUnified = () => {
               AI Suggestions
             </Button>
             
-            <div className="text-xs text-gray-500 flex items-center gap-1 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
-              <Plus className="w-3 h-3 text-orange-600" />
-              <span>Drag <span className="font-semibold text-orange-600">+</span> to move, click to create</span>
+            <div className="text-xs text-gray-500 flex items-center gap-1 bg-orange-50 px-3 py-1 rounded-full border border-blue-200">
+              <Plus className="w-3 h-3 text-blue-600" />
+              <span>Drag <span className="font-semibold text-blue-600">+</span> to move, click to create</span>
             </div>
           </div>
         </div>
@@ -550,7 +550,7 @@ export const TerritoriesUnified = () => {
           <div className="p-4 space-y-4">
             {/* Toggle for selected territory view */}
             {selectedTerritory && (
-              <Card className="p-3 bg-orange-50 border-orange-200">
+              <Card className="p-3 bg-orange-50 border-blue-200">
                 <div className="flex items-center justify-between">
                   <Label className="text-sm font-medium">Only Show Selected</Label>
                   <Switch
@@ -572,7 +572,7 @@ export const TerritoriesUnified = () => {
                   <Card
                     key={territory.id}
                     className={`p-3 cursor-pointer transition-all hover:shadow-md ${
-                      selectedTerritory?.id === territory.id ? 'border-orange-500 border-2 bg-orange-50' : ''
+                      selectedTerritory?.id === territory.id ? 'border-blue-500 border-2 bg-orange-50' : ''
                     }`}
                     onClick={() => handleTerritoryClick(territory)}
                   >
@@ -585,7 +585,7 @@ export const TerritoriesUnified = () => {
                         </Badge>
                       </div>
                       {selectedTerritory?.id === territory.id && (
-                        <Eye className="w-4 h-4 text-orange-500" />
+                        <Eye className="w-4 h-4 text-blue-500" />
                       )}
                     </div>
                     <div className="mt-2 pt-2 border-t text-xs">
@@ -734,7 +734,7 @@ export const TerritoriesUnified = () => {
                         )}
                         
                         <div className="space-y-1">
-                          <h4 className="font-semibold text-xs text-orange-600">AI Insights</h4>
+                          <h4 className="font-semibold text-xs text-blue-600">AI Insights</h4>
                           <div className="grid grid-cols-2 gap-1 text-xs">
                             <span className="text-gray-600">Appreciation:</span>
                             <span className="font-semibold text-green-600">{territory.aiInsights?.appreciationPercent || 0}%</span>
@@ -888,7 +888,7 @@ export const TerritoriesUnified = () => {
                         )}
 
                         {isHighlighted && (
-                          <div className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded font-semibold">
+                          <div className="text-xs bg-blue-100 text-orange-800 px-2 py-1 rounded font-semibold">
                             📍 Inside selected territory
                           </div>
                         )}
@@ -1207,9 +1207,9 @@ export const TerritoriesUnified = () => {
 
       {/* Action Selection Dialog */}
       <Dialog open={showActionDialog} onOpenChange={setShowActionDialog}>
-        <DialogContent className="max-w-md bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-orange-200">
+        <DialogContent className="max-w-md bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg border-blue-200">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
               What would you like to create?
             </DialogTitle>
             <DialogDescription>
@@ -1219,10 +1219,10 @@ export const TerritoriesUnified = () => {
           <div className="grid grid-cols-2 gap-4 mt-4">
             <button
               onClick={handleCreatePin}
-              className="group p-5 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
+              className="group p-5 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-blue-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
             >
               <div className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <MapPin className="w-7 h-7 text-white" />
                 </div>
                 <div className="text-center">
@@ -1234,10 +1234,10 @@ export const TerritoriesUnified = () => {
             
             <button
               onClick={handleCreatePost}
-              className="group p-5 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
+              className="group p-5 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-blue-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
             >
               <div className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <MessageSquare className="w-7 h-7 text-white" />
                 </div>
                 <div className="text-center">
@@ -1249,10 +1249,10 @@ export const TerritoriesUnified = () => {
             
             <button
               onClick={handleCreateEvent}
-              className="group p-5 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
+              className="group p-5 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-blue-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
             >
               <div className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Calendar className="w-7 h-7 text-white" />
                 </div>
                 <div className="text-center">
@@ -1264,10 +1264,10 @@ export const TerritoriesUnified = () => {
             
             <button
               onClick={handleCreateProject}
-              className="group p-5 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
+              className="group p-5 bg-white hover:bg-gradient-to-br hover:from-white hover:to-orange-50 rounded-xl border-2 border-blue-200 hover:border-orange-400 transition-all duration-300 hover:shadow-lg hover:scale-105"
             >
               <div className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Building2 className="w-7 h-7 text-white" />
                 </div>
                 <div className="text-center">
@@ -1284,7 +1284,7 @@ export const TerritoriesUnified = () => {
       <Dialog open={showCommunityDialog} onOpenChange={setShowCommunityDialog}>
         <DialogContent className="max-w-md bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+            <DialogTitle className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
               Create Community
             </DialogTitle>
             <DialogDescription>
@@ -1324,14 +1324,14 @@ export const TerritoriesUnified = () => {
                 value={communityForm.name}
                 onChange={(e) => setCommunityForm({...communityForm, name: e.target.value})}
                 placeholder="e.g., Satellite Residents"
-                className="border-orange-200 focus:border-orange-400"
+                className="border-blue-200 focus:border-orange-400"
               />
             </div>
             
             <div>
               <Label>Select Territory *</Label>
               <Select value={communityForm.territoryId} onValueChange={(val) => setCommunityForm({...communityForm, territoryId: val})}>
-                <SelectTrigger className="border-orange-200 focus:border-orange-400">
+                <SelectTrigger className="border-blue-200 focus:border-orange-400">
                   <SelectValue placeholder="Choose territory" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1351,7 +1351,7 @@ export const TerritoriesUnified = () => {
                 onChange={(e) => setCommunityForm({...communityForm, description: e.target.value})}
                 placeholder="What's your community about?"
                 rows={3}
-                className="resize-none border-orange-200 focus:border-orange-400"
+                className="resize-none border-blue-200 focus:border-orange-400"
               />
             </div>
 
@@ -1359,8 +1359,8 @@ export const TerritoriesUnified = () => {
               <Label>Community Photo (Optional)</Label>
               {!communityForm.photoPreview ? (
                 <label className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-orange-300 rounded-lg cursor-pointer hover:bg-orange-50">
-                  <Upload className="w-4 h-4 text-orange-600" />
-                  <span className="text-sm text-orange-600">Upload Photo</span>
+                  <Upload className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm text-blue-600">Upload Photo</span>
                   <input type="file" accept="image/*" onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) {
@@ -1395,7 +1395,7 @@ export const TerritoriesUnified = () => {
             </div>
 
             <div className="flex gap-2 pt-2">
-              <Button type="submit" disabled={loading} className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600">
+              <Button type="submit" disabled={loading} className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600">
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -1681,8 +1681,8 @@ export const TerritoriesUnified = () => {
               <Label>Attach Photo (Optional)</Label>
               {!postForm.photoPreview ? (
                 <label className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-orange-300 rounded-lg cursor-pointer hover:bg-orange-50">
-                  <Upload className="w-4 h-4 text-orange-600" />
-                  <span className="text-sm text-orange-600">Upload Photo</span>
+                  <Upload className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm text-blue-600">Upload Photo</span>
                   <input type="file" accept="image/*" onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) {
@@ -1705,7 +1705,7 @@ export const TerritoriesUnified = () => {
               )}
             </div>
 
-            <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-orange-600">
+            <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-blue-600">
               <MessageSquare className="w-4 h-4 mr-2" />
               Create Post
             </Button>
@@ -1800,7 +1800,7 @@ export const TerritoriesUnified = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-orange-600">
+            <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-blue-600">
               <Calendar className="w-4 h-4 mr-2" />
               Create Event
             </Button>
@@ -1923,7 +1923,7 @@ export const TerritoriesUnified = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-orange-600">
+            <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-blue-600">
               <Building2 className="w-4 h-4 mr-2" />
               Create Project
             </Button>
