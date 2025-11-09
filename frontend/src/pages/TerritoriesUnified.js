@@ -236,6 +236,7 @@ export const TerritoriesUnified = () => {
   const [showActionDialog, setShowActionDialog] = useState(false);
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showHeatMap, setShowHeatMap] = useState(false);
+  const [showAISuggestions, setShowAISuggestions] = useState(true);
   
   const [selectedTerritory, setSelectedTerritory] = useState(null);
   const [viewOnlySelected, setViewOnlySelected] = useState(false);
