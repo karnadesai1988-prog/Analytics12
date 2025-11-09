@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Textarea } from '../components/ui/textarea';
 import { Badge } from '../components/ui/badge';
 import { toast } from 'sonner';
-import { MapPin, Plus, Filter, Eye, Loader2, MessageSquare, Upload, X, Flame, User, Calendar, Building2 } from 'lucide-react';
+import { MapPin, Plus, Filter, Eye, Loader2, MessageSquare, Upload, X, Flame, User, Calendar, Building2, Users } from 'lucide-react';
 import axios from 'axios';
 import L from 'leaflet';
 import '../pages/MapManagement.css';
