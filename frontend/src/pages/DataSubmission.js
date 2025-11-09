@@ -172,7 +172,7 @@ export const DataSubmission = () => {
                         <Label className="font-semibold" style={{color: '#1A1A1A'}}>{metric.label}</Label>
                         <p className="text-xs mt-0.5" style={{color: '#8C8C8C'}}>{metric.description}</p>
                       </div>
-                      <span className="text-2xl font-bold bg-gradient-to-br from-orange-500 to-orange-600 bg-clip-text text-transparent">
+                      <span className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-blue-600 bg-clip-text text-transparent">
                         {formData[metric.name]}
                       </span>
                     </div>
