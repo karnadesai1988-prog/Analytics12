@@ -304,11 +304,12 @@ export const TerritoriesUnified = () => {
     try {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
-      const [territoriesRes, pinsRes, postsRes, eventsRes, commentsRes, communitiesRes] = await Promise.all([
+      const [territoriesRes, pinsRes, postsRes, eventsRes, projectsRes, commentsRes, communitiesRes] = await Promise.all([
         axios.get(`${BACKEND_URL}/api/territories`, { headers }),
         axios.get(`${BACKEND_URL}/api/pins`, { headers }),
         axios.get(`${BACKEND_URL}/api/posts`, { headers }),
         axios.get(`${BACKEND_URL}/api/events`, { headers }),
+        axios.get(`${BACKEND_URL}/api/projects`, { headers }),
         axios.get(`${BACKEND_URL}/api/comments`, { headers }),
         axios.get(`${BACKEND_URL}/api/communities`, { headers }),
       ]);
@@ -316,6 +317,7 @@ export const TerritoriesUnified = () => {
       setPins(pinsRes.data);
       setPosts(postsRes.data);
       setEvents(eventsRes.data);
+      setProjects(projectsRes.data);
       setComments(commentsRes.data);
       setCommunities(communitiesRes.data);
     } catch (error) {
