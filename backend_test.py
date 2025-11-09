@@ -584,6 +584,30 @@ class BackendTester:
             await self.test_opportunities_listing(self.admin_token, territory_id)
             await self.test_events_listing(self.admin_token, territory_id)
         
+        print("\n" + "=" * 80)
+        print("🎯 SPECIFIC EVENTS & PROJECTS CREATION TESTS")
+        print("=" * 80)
+        
+        # Test 14: Specific Event and Project Creation (as requested)
+        if territory_id:
+            # Get first territory ID from territories list for testing
+            success, territories_data, status = await self.make_request("GET", "/territories", token=self.admin_token)
+            if success and isinstance(territories_data, list) and len(territories_data) > 0:
+                first_territory_id = territories_data[0]["id"]
+                print(f"Using first territory ID: {first_territory_id}")
+                
+                # Test specific event creation
+                event_id = await self.test_event_creation_specific(self.admin_token, first_territory_id)
+                if event_id:
+                    await self.test_event_appears_in_list(self.admin_token, event_id)
+                
+                # Test specific project creation
+                project_id = await self.test_project_creation_specific(self.admin_token, first_territory_id)
+                if project_id:
+                    await self.test_project_appears_in_list(self.admin_token, project_id)
+            else:
+                self.log_result("Territory ID Retrieval", False, "Could not get first territory ID for specific tests")
+        
         # Summary
         print("\n" + "=" * 80)
         print("📊 COMPREHENSIVE TEST SUMMARY")
