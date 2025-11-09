@@ -27,26 +27,26 @@ export const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{background: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%)'}}>
+    <div className="min-h-screen flex items-center justify-center p-4" style={{background: 'linear-gradient(135deg, #FFFFFF 0%, #F4F4F4 100%)'}}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-orange-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-orange-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-20 w-72 h-72 bg-orange-200/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-orange-100/40 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-orange-50/30 rounded-full blur-3xl" />
       </div>
 
-      <Card className="w-full max-w-md glass-panel-dark border-white/20 shadow-2xl relative z-10">
+      <Card className="w-full max-w-md glass-panel-light border shadow-2xl relative z-10" style={{borderColor: '#E0E0E0', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.12)'}}>
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center">
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 glow-orange-strong float-animation">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg float-animation" style={{boxShadow: '0 8px 24px rgba(255, 107, 0, 0.35)'}}>
               <Zap className="w-12 h-12 text-white" />
             </div>
           </div>
           <div>
-            <CardTitle className="text-3xl font-bold text-white mb-2">
+            <CardTitle className="text-3xl font-bold mb-2" style={{color: '#1A1A1A'}}>
               {isLogin ? 'Welcome Back' : 'Join Us'}
             </CardTitle>
-            <CardDescription className="text-gray-400 text-base">
+            <CardDescription className="text-base" style={{color: '#4F4F4F'}}>
               {isLogin ? 'Sign in to access your territory insights' : 'Create an account to get started'}
             </CardDescription>
           </div>
@@ -56,8 +56,8 @@ export const Auth = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div className="space-y-2">
-                <Label className="text-gray-300 flex items-center gap-2">
-                  <User className="w-4 h-4 text-orange-400" />
+                <Label className="flex items-center gap-2" style={{color: '#4F4F4F'}}>
+                  <User className="w-4 h-4 text-orange-500" />
                   Full Name
                 </Label>
                 <Input
@@ -65,15 +65,15 @@ export const Auth = () => {
                   placeholder="John Doe"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="input-glass text-white"
+                  className="input-glass"
                   required={!isLogin}
                 />
               </div>
             )}
 
             <div className="space-y-2">
-              <Label className="text-gray-300 flex items-center gap-2">
-                <Mail className="w-4 h-4 text-orange-400" />
+              <Label className="flex items-center gap-2" style={{color: '#4F4F4F'}}>
+                <Mail className="w-4 h-4 text-orange-500" />
                 Email Address
               </Label>
               <Input
@@ -81,14 +81,14 @@ export const Auth = () => {
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="input-glass text-white"
+                className="input-glass"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-gray-300 flex items-center gap-2">
-                <Lock className="w-4 h-4 text-orange-400" />
+              <Label className="flex items-center gap-2" style={{color: '#4F4F4F'}}>
+                <Lock className="w-4 h-4 text-orange-500" />
                 Password
               </Label>
               <Input
@@ -96,26 +96,26 @@ export const Auth = () => {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="input-glass text-white"
+                className="input-glass"
                 required
               />
             </div>
 
             {!isLogin && (
               <div className="space-y-2">
-                <Label className="text-gray-300 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-orange-400" />
+                <Label className="flex items-center gap-2" style={{color: '#4F4F4F'}}>
+                  <Sparkles className="w-4 h-4 text-orange-500" />
                   Role
                 </Label>
                 <select
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  className="input-glass w-full text-white"
+                  className="input-glass w-full"
                 >
-                  <option value="viewer" className="bg-gray-900">Viewer</option>
-                  <option value="admin" className="bg-gray-900">Admin</option>
-                  <option value="manager" className="bg-gray-900">Manager</option>
-                  <option value="community_head" className="bg-gray-900">Community Head</option>
+                  <option value="viewer">Viewer</option>
+                  <option value="admin">Admin</option>
+                  <option value="manager">Manager</option>
+                  <option value="community_head">Community Head</option>
                 </select>
               </div>
             )}
@@ -140,21 +140,21 @@ export const Auth = () => {
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
-              className="text-sm text-gray-400 hover:text-orange-400 transition-colors duration-300"
+              className="text-sm transition-colors duration-300" style={{color: '#8C8C8C'}}
             >
               {isLogin ? "Don't have an account? " : 'Already have an account? '}
-              <span className="text-orange-400 font-semibold underline">
+              <span className="text-orange-500 font-semibold underline hover:text-orange-600">
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </span>
             </button>
           </div>
 
           {/* Demo Credentials */}
-          <div className="glass-panel p-4 rounded-xl border border-white/10">
-            <p className="text-xs text-gray-400 mb-2 font-semibold">Demo Credentials:</p>
-            <div className="space-y-1 text-xs text-gray-500">
-              <p>Admin: <span className="text-orange-400">admin@test.com</span> / <span className="text-orange-400">password123</span></p>
-              <p>Viewer: <span className="text-orange-400">viewer@test.com</span> / <span className="text-orange-400">password123</span></p>
+          <div className="glass-panel p-4 rounded-xl border" style={{borderColor: '#E0E0E0'}}>
+            <p className="text-xs font-semibold mb-2" style={{color: '#4F4F4F'}}>Demo Credentials:</p>
+            <div className="space-y-1 text-xs" style={{color: '#8C8C8C'}}>
+              <p>Admin: <span className="text-orange-500 font-medium">admin@test.com</span> / <span className="text-orange-500 font-medium">password123</span></p>
+              <p>Viewer: <span className="text-orange-500 font-medium">viewer@test.com</span> / <span className="text-orange-500 font-medium">password123</span></p>
             </div>
           </div>
         </CardContent>

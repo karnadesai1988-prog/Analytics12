@@ -19,16 +19,16 @@ export const Sidebar = () => {
   const { connected } = useWebSocket();
 
   return (
-    <div className="flex h-screen w-64 flex-col glass-panel-dark border-r border-white/20" data-testid="sidebar" style={{background: 'rgba(10, 10, 10, 0.9)'}}>
+    <div className="flex h-screen w-64 flex-col glass-panel-light border-r" data-testid="sidebar" style={{background: 'rgba(255, 255, 255, 0.75)', borderColor: '#E0E0E0'}}>
       {/* Header */}
-      <div className="flex h-20 items-center justify-between px-6 border-b border-white/10">
+      <div className="flex h-20 items-center justify-between px-6 border-b" style={{borderColor: '#E5E5E5'}}>
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 glow-orange">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg" style={{boxShadow: '0 4px 12px rgba(255, 107, 0, 0.3)'}}>
             <Zap className="w-6 h-6 text-white" />
           </div>
           <div>
-            <span className="text-xl font-bold text-white">R Territory</span>
-            <p className="text-xs text-gray-400">AI Insights</p>
+            <span className="text-xl font-bold" style={{color: '#1A1A1A'}}>R Territory</span>
+            <p className="text-xs" style={{color: '#8C8C8C'}}>AI Insights</p>
           </div>
         </div>
       </div>
@@ -46,13 +46,14 @@ export const Sidebar = () => {
                 className={cn(
                   'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 group',
                   isActive 
-                    ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/50 transform scale-105' 
-                    : 'text-gray-300 hover:bg-white/5 hover:text-white hover:shadow-lg hover:shadow-white/10'
+                    ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white transform scale-105' 
+                    : 'text-gray-700 hover:bg-white/60 hover:text-orange-600'
                 )}
+                style={isActive ? {boxShadow: '0 4px 12px rgba(255, 107, 0, 0.3)'} : {}}
               >
                 <item.icon className={cn(
                   "w-5 h-5 transition-all duration-300",
-                  isActive ? "text-white drop-shadow-lg" : "text-gray-400 group-hover:text-orange-400"
+                  isActive ? "text-white" : "text-gray-500 group-hover:text-orange-500"
                 )} />
                 <span>{item.name}</span>
                 {isActive && (
@@ -65,31 +66,31 @@ export const Sidebar = () => {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-white/10 p-4 space-y-3">
+      <div className="border-t p-4 space-y-3" style={{borderColor: '#E5E5E5'}}>
         {/* Connection Status */}
         <div className={cn(
           "flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300",
           connected 
-            ? "glass-panel border border-green-500/30 bg-green-500/10" 
-            : "glass-panel border border-red-500/30 bg-red-500/10"
+            ? "glass-panel border border-green-400/40 bg-green-50/50" 
+            : "glass-panel border border-red-400/40 bg-red-50/50"
         )}>
           {connected ? (
             <>
-              <Wifi className="w-4 h-4 text-green-400 animate-pulse" />
-              <span className="text-xs font-medium text-green-300">Live Synced</span>
+              <Wifi className="w-4 h-4 text-green-600 animate-pulse" />
+              <span className="text-xs font-medium text-green-700">Live Synced</span>
             </>
           ) : (
             <>
-              <WifiOff className="w-4 h-4 text-red-400" />
-              <span className="text-xs font-medium text-red-300">Offline</span>
+              <WifiOff className="w-4 h-4 text-red-600" />
+              <span className="text-xs font-medium text-red-700">Offline</span>
             </>
           )}
         </div>
 
         {/* User Info */}
-        <div className="glass-panel px-4 py-3 rounded-xl border border-white/20">
-          <p className="text-sm font-semibold text-white">{user?.name}</p>
-          <p className="text-xs text-gray-400 capitalize mt-0.5">
+        <div className="glass-panel px-4 py-3 rounded-xl border" style={{borderColor: '#E0E0E0'}}>
+          <p className="text-sm font-semibold" style={{color: '#1A1A1A'}}>{user?.name}</p>
+          <p className="text-xs capitalize mt-0.5" style={{color: '#8C8C8C'}}>
             {user?.role?.replace('_', ' ')}
           </p>
         </div>
@@ -97,7 +98,7 @@ export const Sidebar = () => {
         {/* Settings Button */}
         <Button 
           onClick={() => window.location.href = '/settings'} 
-          className="w-full btn-glass justify-start hover:border-orange-500/50 rounded-xl"
+          className="w-full btn-glass justify-start rounded-xl"
         >
           <Settings className="w-4 h-4 mr-2" />
           <span>Settings</span>
@@ -106,7 +107,7 @@ export const Sidebar = () => {
         {/* Sign Out Button */}
         <Button 
           onClick={logout} 
-          className="w-full btn-glass justify-start hover:border-red-500/50 hover:text-red-400 rounded-xl" 
+          className="w-full btn-glass justify-start rounded-xl hover:border-red-400/50 hover:text-red-600" 
           data-testid="logout-button"
         >
           <LogOut className="w-4 h-4 mr-2" />
