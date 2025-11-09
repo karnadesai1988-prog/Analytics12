@@ -891,6 +891,64 @@ async def get_metrics_history(user: User = Depends(get_current_user), territory_
     history = await db.metrics_history.find(query).sort("timestamp", -1).to_list(length=100)
     return [MetricsHistory(**h) for h in history]
 
+@api_router.post("/communities")
+async def create_community(community: CommunityCreate, user: User = Depends(get_current_user)):
+    community_doc = {
+        "id": str(uuid.uuid4()),
+        **community.model_dump(),
+        "createdBy": user.id,
+        "members": [user.id],  # Creator is first member
+        "createdAt": datetime.now(timezone.utc).isoformat()
+    }
+    await db.communities.insert_one(community_doc)
+    return Community(**community_doc)
+
+@api_router.get("/communities", response_model=List[Community])
+async def get_communities(user: User = Depends(get_current_user)):
+    communities = await db.communities.find().to_list(length=None)
+    return [Community(**c) for c in communities]
+
+@api_router.get("/communities/{community_id}", response_model=Community)
+async def get_community(community_id: str, user: User = Depends(get_current_user)):
+    community = await db.communities.find_one({"id": community_id})
+    if not community:
+        raise HTTPException(status_code=404, detail="Community not found")
+    return Community(**community)
+
+@api_router.post("/communities/{community_id}/join")
+async def join_community(community_id: str, user: User = Depends(get_current_user)):
+    community = await db.communities.find_one({"id": community_id})
+    if not community:
+        raise HTTPException(status_code=404, detail="Community not found")
+    
+    if user.id not in community.get('members', []):
+        await db.communities.update_one(
+            {"id": community_id},
+            {"$push": {"members": user.id}}
+        )
+    return {"message": "Joined community successfully"}
+
+@api_router.post("/posts")
+async def create_post(post: PostCreate, user: User = Depends(get_current_user)):
+    post_doc = {
+        "id": str(uuid.uuid4()),
+        **post.model_dump(),
+        "userId": user.id,
+        "userName": user.name,
+        "createdAt": datetime.now(timezone.utc).isoformat()
+    }
+    await db.posts.insert_one(post_doc)
+    await manager.broadcast(json.dumps({"type": "post_created", "data": post_doc}))
+    return Post(**post_doc)
+
+@api_router.get("/posts", response_model=List[Post])
+async def get_posts(user: User = Depends(get_current_user), community_id: Optional[str] = Query(None)):
+    query = {}
+    if community_id:
+        query['communityId'] = community_id
+    posts = await db.posts.find(query).sort("createdAt", -1).to_list(length=None)
+    return [Post(**p) for p in posts]
+
 @api_router.get("/analytics/dashboard")
 async def get_dashboard_analytics(user: User = Depends(get_current_user)):
     territories = await db.territories.find().to_list(length=None)
