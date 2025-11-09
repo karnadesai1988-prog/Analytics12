@@ -448,8 +448,8 @@ export const TerritoriesUnified = () => {
               size="sm"
               className={showHeatMap ? "bg-gradient-to-r from-orange-500 to-orange-600" : ""}
             >
-              <Eye className="w-4 h-4 mr-1" />
-              {showHeatMap ? 'Show Map' : 'Heat Map'}
+              <Plus className="w-4 h-4 mr-1" />
+              Place Picker
             </Button>
             
             <div className="text-xs text-gray-500 flex items-center gap-1 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
