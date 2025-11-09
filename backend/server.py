@@ -19,6 +19,7 @@ import json
 import secrets
 from collections import defaultdict
 import httpx
+from ai_sentiment_analyzer import analyze_territory_intelligence
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
