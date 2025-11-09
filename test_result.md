@@ -766,9 +766,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Metrics submission endpoint (POST /api/metrics)"
-    - "Dashboard analytics endpoint (GET /api/analytics/dashboard)"
-    - "News scraping endpoint (GET /api/news/scraped)"
+    - "Create Project dialog and functionality"
+    - "Pre-select territory in event/project creation"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
