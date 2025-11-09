@@ -153,8 +153,8 @@ export const Auth = () => {
           <div className="glass-panel p-4 rounded-xl border" style={{borderColor: '#E0E0E0'}}>
             <p className="text-xs font-semibold mb-2" style={{color: '#4F4F4F'}}>Demo Credentials:</p>
             <div className="space-y-1 text-xs" style={{color: '#8C8C8C'}}>
-              <p>Admin: <span className="text-orange-500 font-medium">admin@test.com</span> / <span className="text-orange-500 font-medium">password123</span></p>
-              <p>Viewer: <span className="text-orange-500 font-medium">viewer@test.com</span> / <span className="text-orange-500 font-medium">password123</span></p>
+              <p>Admin: <span className="text-blue-500 font-medium">admin@test.com</span> / <span className="text-blue-500 font-medium">password123</span></p>
+              <p>Viewer: <span className="text-blue-500 font-medium">viewer@test.com</span> / <span className="text-blue-500 font-medium">password123</span></p>
             </div>
           </div>
         </CardContent>
