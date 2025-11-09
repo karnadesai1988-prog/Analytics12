@@ -23,9 +23,9 @@ const AppContent = () => {
   const { user } = useAuth();
   if (!user) return <Auth />;
   return (
-    <div className="flex h-screen overflow-hidden" style={{background: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%)'}}>
+    <div className="flex h-screen overflow-hidden" style={{background: 'linear-gradient(135deg, #FFFFFF 0%, #F4F4F4 100%)'}}>
       <Sidebar />
-      <main className="flex-1 overflow-y-auto" style={{background: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%)'}}>
+      <main className="flex-1 overflow-y-auto" style={{background: 'linear-gradient(135deg, #FFFFFF 0%, #F4F4F4 100%)'}}>
         <Routes>
           <Route path="/dashboard" element={<PrivateRoute><DashboardUnified /></PrivateRoute>} />
           <Route path="/territories" element={<PrivateRoute><TerritoriesUnified /></PrivateRoute>} />
