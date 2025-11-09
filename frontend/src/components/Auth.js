@@ -143,7 +143,7 @@ export const Auth = () => {
               className="text-sm transition-colors duration-300" style={{color: '#8C8C8C'}}
             >
               {isLogin ? "Don't have an account? " : 'Already have an account? '}
-              <span className="text-orange-500 font-semibold underline hover:text-orange-600">
+              <span className="text-blue-500 font-semibold underline hover:text-blue-600">
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </span>
             </button>
