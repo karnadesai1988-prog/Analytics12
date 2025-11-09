@@ -257,6 +257,16 @@ class Professional(BaseModel):
     userId: str
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class ProjectCreate(BaseModel):
+    name: str
+    status: str = "Under Construction"
+    developerName: str
+    priceRange: str
+    configuration: str
+    location: Dict[str, float]
+    territoryId: str
+    brochureUrl: Optional[str] = None
+
 class Project(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
