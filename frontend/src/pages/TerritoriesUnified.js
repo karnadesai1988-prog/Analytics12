@@ -1426,6 +1426,101 @@ export const TerritoriesUnified = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Create Event Dialog */}
+      <Dialog open={showEventDialog} onOpenChange={setShowEventDialog}>
+        <DialogContent className="max-w-md bg-gradient-to-br from-white to-orange-50 backdrop-blur-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">Create Event</DialogTitle>
+            <DialogDescription>
+              Schedule an event at this location
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            if (!eventForm.title.trim() || !eventForm.date || !eventForm.location || !eventForm.territoryId) {
+              toast.error('Please fill all required fields');
+              return;
+            }
+            try {
+              const token = localStorage.getItem('token');
+              await axios.post(`${BACKEND_URL}/api/events`, {
+                title: eventForm.title,
+                date: eventForm.date,
+                location: eventForm.location,
+                territoryId: eventForm.territoryId,
+                organizer: eventForm.organizer || 'Community'
+              }, { headers: { Authorization: `Bearer ${token}` }});
+              toast.success('Event created successfully!');
+              setEventForm({ title: '', date: '', location: '', territoryId: '', organizer: '' });
+              setShowEventDialog(false);
+              loadData();
+            } catch (error) {
+              toast.error('Failed to create event');
+            }
+          }} className="space-y-4">
+            <div>
+              <Label>Event Title *</Label>
+              <Input
+                value={eventForm.title}
+                onChange={(e) => setEventForm({...eventForm, title: e.target.value})}
+                placeholder="Enter event title"
+                required
+              />
+            </div>
+            
+            <div>
+              <Label>Date & Time *</Label>
+              <Input
+                type="datetime-local"
+                value={eventForm.date}
+                onChange={(e) => setEventForm({...eventForm, date: e.target.value})}
+                required
+              />
+            </div>
+
+            <div>
+              <Label>Location *</Label>
+              <Input
+                value={eventForm.location}
+                onChange={(e) => setEventForm({...eventForm, location: e.target.value})}
+                placeholder="Event venue/address"
+                required
+              />
+            </div>
+
+            <div>
+              <Label>Territory *</Label>
+              <Select value={eventForm.territoryId} onValueChange={(val) => setEventForm({...eventForm, territoryId: val})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select territory" />
+                </SelectTrigger>
+                <SelectContent>
+                  {territories.map(territory => (
+                    <SelectItem key={territory.id} value={territory.id}>
+                      {territory.name} ({territory.zone})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label>Organizer</Label>
+              <Input
+                value={eventForm.organizer}
+                onChange={(e) => setEventForm({...eventForm, organizer: e.target.value})}
+                placeholder="Organization or person name"
+              />
+            </div>
+
+            <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-orange-600">
+              <Calendar className="w-4 h-4 mr-2" />
+              Create Event
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       {/* Filter Dialog */}
       <Dialog open={showFilterDialog} onOpenChange={setShowFilterDialog}>
         <DialogContent className="max-w-md">
