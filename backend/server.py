@@ -208,6 +208,38 @@ class Comment(BaseModel):
     sentiment: Optional[str] = None
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class CommunityCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    territoryId: str
+
+class Community(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: Optional[str] = None
+    territoryId: str
+    createdBy: str
+    members: List[str] = []  # User IDs
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class PostCreate(BaseModel):
+    communityId: str
+    text: str
+    location: Dict[str, float]
+    photo: Optional[str] = None
+
+class Post(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    communityId: str
+    userId: str
+    userName: str
+    text: str
+    location: Dict[str, float]
+    photo: Optional[str] = None
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 class DataGatheringForm(BaseModel):
     territoryId: str
     data: Dict[str, Any]
