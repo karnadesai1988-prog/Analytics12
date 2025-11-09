@@ -422,7 +422,7 @@ export const TerritoriesUnified = () => {
             
             <div className="text-xs text-gray-500 flex items-center gap-1 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
               <Plus className="w-3 h-3 text-orange-600" />
-              <span>Click <span className="font-semibold text-orange-600">+</span> to add pin/post</span>
+              <span>Drag <span className="font-semibold text-orange-600">+</span> to move, click to create</span>
             </div>
           </div>
         </div>
