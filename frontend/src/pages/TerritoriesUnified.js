@@ -87,62 +87,46 @@ const MapUpdater = ({ center, zoom }) => {
   return null;
 };
 
-// Draggable Place Picker Component
-const DraggablePlacePicker = ({ initialPosition, onLocationChange, onMarkerClick }) => {
-  const [position, setPosition] = useState(initialPosition);
-  const markerRef = useRef(null);
-  
-  useEffect(() => {
-    setPosition(initialPosition);
-  }, [initialPosition]);
-  
-  const eventHandlers = useMemo(
-    () => ({
-      dragend() {
-        const marker = markerRef.current;
-        if (marker != null) {
-          const newPos = marker.getLatLng();
-          const location = { lat: newPos.lat, lng: newPos.lng };
-          setPosition(location);
-          onLocationChange(location);
-        }
-      },
-      click() {
-        // Open pin creation dialog when marker is clicked
-        onMarkerClick();
-      },
-    }),
-    [onLocationChange, onMarkerClick],
-  );
-
-  const placePickerIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-    iconSize: [35, 57],
-    iconAnchor: [17, 57],
-    popupAnchor: [1, -46],
+// Plus Button Component for Adding Pins/Posts
+const PlusButton = ({ position, onPlusClick }) => {
+  const plusIcon = L.divIcon({
+    className: 'plus-button-marker',
+    html: `
+      <div style="
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 237, 213, 0.95));
+        backdrop-filter: blur(10px);
+        border: 3px solid #f97316;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 8px 32px rgba(249, 115, 22, 0.3);
+        transition: all 0.3s ease;
+      "
+      onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 12px 48px rgba(249, 115, 22, 0.5)';"
+      onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 32px rgba(249, 115, 22, 0.3)';"
+      >
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </div>
+    `,
+    iconSize: [50, 50],
+    iconAnchor: [25, 25]
   });
 
   return (
     <Marker
-      draggable={true}
-      eventHandlers={eventHandlers}
       position={[position.lat, position.lng]}
-      ref={markerRef}
-      icon={placePickerIcon}
-    >
-      <Popup>
-        <div className="text-sm">
-          <strong>📍 Place Picker</strong><br/>
-          <span className="text-xs text-gray-600">Drag to move • Click to create pin</span><br/>
-          <div className="mt-2 p-2 bg-blue-50 rounded">
-            <strong>Current Position:</strong><br/>
-            Lat: {position.lat.toFixed(6)}<br/>
-            Lng: {position.lng.toFixed(6)}
-          </div>
-        </div>
-      </Popup>
-    </Marker>
+      icon={plusIcon}
+      eventHandlers={{
+        click: onPlusClick
+      }}
+    />
   );
 };
 
