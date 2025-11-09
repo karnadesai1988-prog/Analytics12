@@ -494,12 +494,26 @@ export const TerritoriesUnified = () => {
                       )}
                     </div>
                     <div className="mt-2 pt-2 border-t text-xs">
-                      <div className="flex justify-between">
+                      <div className="flex justify-between mb-2">
                         <span className="text-gray-600">Appreciation:</span>
                         <span className="font-semibold text-green-600">
                           {territory.aiInsights?.appreciationPercent || 0}%
                         </span>
                       </div>
+                      {selectedTerritory?.id === territory.id && (
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/territory/${territory.id}`);
+                          }}
+                          size="sm"
+                          variant="outline"
+                          className="w-full text-xs border-orange-300 hover:bg-orange-50"
+                        >
+                          <User className="w-3 h-3 mr-1" />
+                          View Profile
+                        </Button>
+                      )}
                     </div>
                   </Card>
                 ))}
