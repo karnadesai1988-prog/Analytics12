@@ -89,8 +89,33 @@ const MapUpdater = ({ center, zoom }) => {
   return null;
 };
 
-// Plus Button Component for Adding Pins/Posts
-const PlusButton = ({ position, onPlusClick }) => {
+// Draggable Plus Button Component for Adding Pins/Posts
+const DraggablePlusButton = ({ initialPosition, onLocationChange, onPlusClick }) => {
+  const [position, setPosition] = useState(initialPosition);
+  const markerRef = useRef(null);
+  
+  useEffect(() => {
+    setPosition(initialPosition);
+  }, [initialPosition]);
+  
+  const eventHandlers = useMemo(
+    () => ({
+      dragend() {
+        const marker = markerRef.current;
+        if (marker != null) {
+          const newPos = marker.getLatLng();
+          const location = { lat: newPos.lat, lng: newPos.lng };
+          setPosition(location);
+          onLocationChange(location);
+        }
+      },
+      click() {
+        onPlusClick();
+      },
+    }),
+    [onLocationChange, onPlusClick],
+  );
+
   const plusIcon = L.divIcon({
     className: 'plus-button-marker',
     html: `
@@ -104,7 +129,7 @@ const PlusButton = ({ position, onPlusClick }) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
+        cursor: move;
         box-shadow: 0 8px 32px rgba(249, 115, 22, 0.3);
         transition: all 0.3s ease;
       "
@@ -123,12 +148,25 @@ const PlusButton = ({ position, onPlusClick }) => {
 
   return (
     <Marker
+      draggable={true}
       position={[position.lat, position.lng]}
       icon={plusIcon}
-      eventHandlers={{
-        click: onPlusClick
-      }}
-    />
+      eventHandlers={eventHandlers}
+      ref={markerRef}
+    >
+      <Popup>
+        <div className="text-sm">
+          <strong className="text-orange-600">📍 Place Picker</strong><br/>
+          <span className="text-xs text-gray-600">Drag to move • Click to create</span><br/>
+          <div className="mt-2 p-2 bg-orange-50 rounded">
+            <strong className="text-xs">Current Position:</strong><br/>
+            <span className="text-xs font-mono">
+              {position.lat.toFixed(6)}, {position.lng.toFixed(6)}
+            </span>
+          </div>
+        </div>
+      </Popup>
+    </Marker>
   );
 };
 
