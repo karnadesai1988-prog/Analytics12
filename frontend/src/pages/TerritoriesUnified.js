@@ -525,6 +525,16 @@ export const TerritoriesUnified = () => {
               Place Picker
             </Button>
             
+            <Button
+              onClick={() => setShowAISuggestions(!showAISuggestions)}
+              variant={showAISuggestions ? "default" : "outline"}
+              size="sm"
+              className={showAISuggestions ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white" : ""}
+            >
+              <Flame className="w-4 h-4 mr-1" />
+              AI Suggestions
+            </Button>
+            
             <div className="text-xs text-gray-500 flex items-center gap-1 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
               <Plus className="w-3 h-3 text-orange-600" />
               <span>Drag <span className="font-semibold text-orange-600">+</span> to move, click to create</span>
