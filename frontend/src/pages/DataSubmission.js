@@ -117,7 +117,7 @@ export const DataSubmission = () => {
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-6">
         <div className="flex items-center gap-3 mb-2">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
             <ClipboardList className="w-6 h-6 text-white" />
           </div>
           <div>
